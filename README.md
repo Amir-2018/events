@@ -16,12 +16,26 @@
 2. Install deps: `npm install`
 3. Run: `npm run dev`
 
-Note: the API auto-creates the table `clients` if it doesn't exist.
+The API auto-creates:
+- `clients` (for auth)
+- `events`
+- `event_registrations` (client ↔ event)
 
 ## API
+### Auth
 - `POST /api/auth/register` body: `{ nom, prenom, email, tel, password }`
 - `POST /api/auth/login` body: `{ email, password }`
-- `GET /api/events` (header: `Authorization: Bearer <token>`)
+
+### Events
+Public (no token):
+- `POST /api/events` body: `{ nom, date?, image?, adresse? }`
+- `DELETE /api/events/:eventId`
+- `GET /api/events/:eventId/clients`
+
+Protected (requires header `Authorization: Bearer <token>`):
+- `GET /api/events` returns events + `clients` registered for each event
+- `GET /api/events/:eventId` returns event details + `clients`
+- `POST /api/events/:eventId/register` registers the logged-in client to the event
 
 ## Architecture
 - MVC with services layer

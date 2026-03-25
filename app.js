@@ -27,19 +27,21 @@ app.get('/health', async (req, res) => {
   }
 });
 
+app.get('/', (req, res) => {
+  res.json({
+    status: 'OK',
+    routes: {
+      register: 'POST /api/auth/register',
+      login: 'POST /api/auth/login',
+      events: 'GET /api/events (Bearer token)',
+      registerToEvent: 'POST /api/events/:eventId/register (Bearer token)',
+    },
+  });
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api', eventRoutes);
-
-app.get('/', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * from events');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: 'Database error' });
-  }
-});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
