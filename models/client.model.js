@@ -1,45 +1,22 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+const pool = require('../db/pool');
 
-const clientSchema = new mongoose.Schema({
-  nom: { 
-    type: String, 
-    required: [true, 'Nom is required']
-  },
-  prenom: { 
-    type: String, 
-    required: [true, 'Prénom is required']
-  },
-  email: { 
-    type: String, 
-    required: [true, 'Email is required'],
-    unique: true,
-    lowercase: true
-  },
-  tel: { 
-    type: String, 
-    required: [true, 'Téléphone is required']
-  },
-  password: { 
-    type: String, 
-    required: [true, 'Password is required'],
-    minlength: 6
-  }
-}, { 
-  timestamps: true 
-});
+async function findByEmail(email) {
+  const result = await pool.query(
+    'SELECT id, nom, prenom, email, tel, password FROM clients WHERE email = $1',
+    [email]
+  );
+  return result.rows[0] || null;
+}
 
-clientSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) {
-    next();
-  }
-  const salt = await bcrypt.genSalt(12);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+async function create({ nom, prenom, email, tel, password }) {
+  const result = await pool.query(
+    'INSERT INTO clients (nom, prenom, email, tel, password) VALUES ($1, $2, $3, $4, $5) RETURNING id, nom, prenom, email, tel',
+    [nom, prenom, email, tel, password]
+  );
+  return result.rows[0];
+}
 
-clientSchema.methods.comparePassword = async function(candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
+module.exports = {
+  findByEmail,
+  create,
 };
-
-module.exports = mongoose.model('Client', clientSchema);
