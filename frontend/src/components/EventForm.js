@@ -16,27 +16,65 @@ export default function EventForm({ onSubmit, onCancel }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    let finalFormData = { ...formData };
-    
-    // Si un fichier est sélectionné, l'uploader d'abord
-    if (uploadMethod === 'file' && imageFile) {
-      try {
-        setUploading(true);
-        const uploadFormData = new FormData();
-        uploadFormData.append('image', imageFile);
+    try {
+      setUploading(true);
+      
+      let finalFormData = { ...formData };
+      
+      // Si un fichier est sélectionné, utiliser la nouvelle méthode avec base64
+      if (uploadMethod === 'file' && imageFile) {
+        const response = await uploadAPI.createEventWithImage(formData, imageFile);
+        onSubmit(response.data.data);
+      } else {
+        // Si c'est une URL ou pas d'image, créer l'événement directement
+        // Pour les URLs, on les convertit en base64 côté client
+        if (uploadMethod === 'url' && formData.image) {
+          try {
+            // Convertir l'URL en base64
+            const base64 = await convertImageUrlToBase64(formData.image);
+            finalFormData.image = base64;
+          } catch (error) {
+            console.warn('Impossible de convertir l\'URL en base64, utilisation de l\'URL directe');
+          }
+        }
         
-        const response = await uploadAPI.uploadImage(uploadFormData);
-        finalFormData.image = response.data.data.url;
-      } catch (error) {
-        console.error('Erreur lors de l\'upload:', error);
-        alert('Erreur lors de l\'upload de l\'image');
-        return;
-      } finally {
-        setUploading(false);
+        const response = await eventsAPI.createEvent(finalFormData);
+        onSubmit(response.data.data);
       }
+    } catch (error) {
+      console.error('Erreur lors de la création:', error);
+      alert('Erreur lors de la création de l\'événement: ' + (error.response?.data?.message || error.message));
+    } finally {
+      setUploading(false);
     }
-    
-    onSubmit(finalFormData);
+  };
+
+  // Fonction pour convertir une URL d'image en base64
+  const convertImageUrlToBase64 = (url) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        ctx.drawImage(img, 0, 0);
+        
+        try {
+          const base64 = canvas.toDataURL('image/jpeg', 0.8);
+          resolve(base64);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      
+      img.onerror = () => reject(new Error('Impossible de charger l\'image'));
+      img.src = url;
+    });
   };
 
   const handleChange = (e) => {

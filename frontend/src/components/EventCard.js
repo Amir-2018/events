@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import EventImage from './EventImage';
 
 export default function EventCard({ event, onDelete, onViewClients }) {
   const formatDate = (dateString) => {
@@ -29,7 +30,7 @@ export default function EventCard({ event, onDelete, onViewClients }) {
       <div className="relative z-10">
         {event.image && (
           <div className="relative h-44 w-full mb-4 overflow-hidden rounded-xl">
-            <img 
+            <EventImage 
               src={event.image} 
               alt={event.nom}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"

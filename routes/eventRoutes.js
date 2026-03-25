@@ -11,6 +11,24 @@ router.post('/events', eventController.createEvent.bind(eventController));
 router.delete('/events/:eventId', eventController.deleteEvent.bind(eventController));
 router.get('/events/:eventId/clients', eventController.getEventClients.bind(eventController));
 
+// Route de test pour créer un événement avec base64
+router.post('/events/test-base64', (req, res) => {
+  console.log('=== TEST BASE64 ROUTE ===');
+  console.log('Headers:', req.headers);
+  console.log('Body keys:', Object.keys(req.body));
+  console.log('Body:', {
+    nom: req.body.nom,
+    date: req.body.date,
+    adresse: req.body.adresse,
+    imageType: typeof req.body.image,
+    imageLength: req.body.image ? req.body.image.length : 0,
+    imageStart: req.body.image ? req.body.image.substring(0, 30) : 'null'
+  });
+  
+  // Appeler le contrôleur normal
+  eventController.createEvent(req, res);
+});
+
 // Protected (token required)
 router.post(
   '/events/:eventId/register',

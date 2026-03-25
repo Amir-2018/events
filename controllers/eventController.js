@@ -48,13 +48,35 @@ class EventController {
   async createEvent(req, res) {
     try {
       const { nom, date, image, adresse } = req.body;
+      
+      // Debug logs
+      console.log('=== CREATE EVENT DEBUG ===');
+      console.log('Body received:', {
+        nom,
+        date,
+        adresse,
+        imageType: typeof image,
+        imageLength: image ? image.length : 0,
+        imagePreview: image ? image.substring(0, 50) + '...' : 'null'
+      });
+      
       const event = await eventService.createEvent({ nom, date, image, adresse });
+      
+      console.log('Event created:', {
+        id: event.id,
+        nom: event.nom,
+        imageStored: event.image ? 'YES' : 'NO',
+        imageLength: event.image ? event.image.length : 0
+      });
+      console.log('=== END DEBUG ===');
+      
       res.status(201).json({
         success: true,
         message: 'Event created successfully',
         data: event,
       });
     } catch (error) {
+      console.error('Error creating event:', error);
       res.status(400).json({
         success: false,
         message: error.message,

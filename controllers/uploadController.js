@@ -57,8 +57,13 @@ class UploadController {
         });
       }
 
-      // URL complète de l'image
-      const imageUrl = `${req.protocol}://${req.get('host')}/uploads/images/${req.file.filename}`;
+      // Lire le fichier et le convertir en base64
+      const filePath = req.file.path;
+      const fileBuffer = fs.readFileSync(filePath);
+      const base64String = `data:${req.file.mimetype};base64,${fileBuffer.toString('base64')}`;
+
+      // Supprimer le fichier temporaire après conversion
+      fs.unlinkSync(filePath);
 
       res.json({
         success: true,
@@ -67,10 +72,15 @@ class UploadController {
           filename: req.file.filename,
           originalName: req.file.originalname,
           size: req.file.size,
-          url: imageUrl
+          base64: base64String, // Image en base64 pour la base de données
+          mimetype: req.file.mimetype
         }
       });
     } catch (error) {
+      // Nettoyer le fichier en cas d'erreur
+      if (req.file && req.file.path && fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
       res.status(500).json({
         success: false,
         message: error.message

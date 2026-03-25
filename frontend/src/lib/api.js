@@ -50,6 +50,30 @@ export const uploadAPI = {
       'Content-Type': 'multipart/form-data',
     },
   }),
+  
+  // Créer un événement avec image base64 (comme sur mobile)
+  createEventWithImage: async (eventData, imageFile) => {
+    try {
+      let imageBase64 = null;
+      
+      // Upload de l'image si fournie et récupération du base64
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append('image', imageFile);
+        
+        const uploadResponse = await uploadAPI.uploadImage(formData);
+        imageBase64 = uploadResponse.data.data.base64;
+      }
+      
+      // Créer l'événement avec l'image en base64
+      return await publicAPI.post('/api/events', {
+        ...eventData,
+        image: imageBase64,
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default api;
