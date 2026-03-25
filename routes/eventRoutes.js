@@ -5,17 +5,13 @@ const authMiddleware = require('../middleware/authMiddleware');
 const router = express.Router();
 
 // Public (no token)
+router.get('/events', eventController.getEvents.bind(eventController));
+router.get('/events/:eventId', eventController.getEventDetails.bind(eventController));
 router.post('/events', eventController.createEvent.bind(eventController));
 router.delete('/events/:eventId', eventController.deleteEvent.bind(eventController));
 router.get('/events/:eventId/clients', eventController.getEventClients.bind(eventController));
 
 // Protected (token required)
-router.get('/events', authMiddleware, eventController.getEvents.bind(eventController));
-router.get(
-  '/events/:eventId',
-  authMiddleware,
-  eventController.getEventDetails.bind(eventController)
-);
 router.post(
   '/events/:eventId/register',
   authMiddleware,
