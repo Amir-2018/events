@@ -7,6 +7,7 @@ const initDb = require('./db/init');
 
 const authRoutes = require('./routes/authRoutes');
 const eventRoutes = require('./routes/eventRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,9 @@ let server;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Servir les fichiers statiques (images uploadées)
+app.use('/uploads', express.static('uploads'));
 
 // Health check
 app.get('/health', async (req, res) => {
@@ -42,6 +46,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api', eventRoutes);
+app.use('/api', uploadRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -4,40 +4,102 @@ import { fr } from 'date-fns/locale';
 export default function EventCard({ event, onDelete, onViewClients }) {
   const formatDate = (dateString) => {
     if (!dateString) return 'Date non définie';
-    return format(new Date(dateString), 'dd MMMM yyyy à HH:mm', { locale: fr });
+    try {
+      return format(new Date(dateString), 'dd MMMM yyyy à HH:mm', { locale: fr });
+    } catch (e) {
+      return 'Date invalide';
+    }
   };
 
-  return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-      {event.image && (
-        <img 
-          src={event.image} 
-          alt={event.nom}
-          className="w-full h-48 object-cover rounded-lg mb-4"
-        />
-      )}
-      
-      <h3 className="text-xl font-semibold text-gray-800 mb-2">{event.nom}</h3>
-      
-      <div className="space-y-2 text-gray-600 mb-4">
-        <p><span className="font-medium">Date:</span> {formatDate(event.date)}</p>
-        <p><span className="font-medium">Adresse:</span> {event.adresse || 'Non spécifiée'}</p>
-        <p><span className="font-medium">Inscrits:</span> {event.clients?.length || 0} client(s)</p>
-      </div>
+  const getInitials = (client) => {
+    const first = (client.prenom || '').charAt(0).toUpperCase();
+    const last = (client.nom || '').charAt(0).toUpperCase();
+    return `${first}${last}`;
+  };
 
-      <div className="flex gap-2">
-        <button
-          onClick={() => onViewClients(event.id)}
-          className="flex-1 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
-        >
-          Voir les inscrits
-        </button>
-        <button
-          onClick={() => onDelete(event.id)}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
-        >
-          Supprimer
-        </button>
+  const clients = event.clients || [];
+  const displayClients = clients.slice(0, 4);
+  const remainingCount = clients.length - displayClients.length;
+
+  return (
+    <div className="group bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 p-5 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+      {/* Background Gradient Detail */}
+      <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50/50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110 duration-500" />
+      
+      <div className="relative z-10">
+        {event.image && (
+          <div className="relative h-44 w-full mb-4 overflow-hidden rounded-xl">
+            <img 
+              src={event.image} 
+              alt={event.nom}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+          </div>
+        )}
+        
+        <div className="flex justify-between items-start mb-3">
+          <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1">
+            {event.nom}
+          </h3>
+          <button
+            onClick={() => onDelete(event.id)}
+            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all duration-200"
+            title="Supprimer l'événement"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+            </svg>
+          </button>
+        </div>
+        
+        <div className="space-y-2.5 mb-6">
+          <div className="flex items-center text-gray-500 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2 text-blue-500">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+            </svg>
+            {formatDate(event.date)}
+          </div>
+          <div className="flex items-center text-gray-500 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2 text-blue-500">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+            </svg>
+            {event.adresse || 'Lieu non spécifié'}
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between mt-auto">
+          <div className="flex -space-x-2 overflow-hidden">
+            {displayClients.map((client, idx) => (
+              <div 
+                key={client.id || idx} 
+                className="inline-flex items-center justify-center h-8 w-8 rounded-full ring-2 ring-white bg-gradient-to-br from-blue-500 to-blue-600 text-[10px] font-bold text-white shadow-sm"
+                title={`${client.prenom} ${client.nom}`}
+              >
+                {getInitials(client)}
+              </div>
+            ))}
+            {remainingCount > 0 && (
+              <div className="inline-flex items-center justify-center h-8 w-8 rounded-full ring-2 ring-white bg-gray-100 text-[10px] font-medium text-gray-600">
+                +{remainingCount}
+              </div>
+            )}
+            {clients.length === 0 && (
+              <span className="text-xs text-gray-400 italic">Aucun inscrit</span>
+            )}
+          </div>
+
+          <button
+            onClick={() => onViewClients(event.id)}
+            className="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center transition-colors group/btn"
+          >
+            Détails
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 ml-1 transition-transform group-hover/btn:translate-x-1">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );

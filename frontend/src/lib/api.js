@@ -44,4 +44,12 @@ export const eventsAPI = {
   registerToEvent: (eventId) => protectedAPI.post(`/api/events/${eventId}/register`),
 };
 
+export const uploadAPI = {
+  uploadImage: (formData) => publicAPI.post('/api/upload/image', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }),
+};
+
 export default api;

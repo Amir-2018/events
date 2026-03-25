@@ -3,3 +3,6 @@ node_modules/
 *.log
 .DS_Store
 
+# Uploads (garder le dossier mais ignorer les fichiers)
+uploads/images/*
+!uploads/images/.gitkeep
