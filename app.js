@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors'); // Add cors for testing
-
+const { Pool } = require('pg'); // PostgreSQL client
 const authRoutes = require('./routes/authRoutes');
 const eventRoutes = require('./routes/eventRoutes');
 
@@ -21,14 +21,35 @@ app.get('/health', (req, res) => res.json({ status: 'OK' }));
 app.use('/api/auth', authRoutes);
 app.use('/api', eventRoutes);
 
-// MongoDB connection with error handling
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('✅ MongoDB connected successfully');
-  })
-  .catch(err => {
-    console.error('❌ MongoDB connection error:', err);
-  });
+const {PGHOST, PGDATABASE, PGUSER, PGPASSWORD} = process.env; 
+const  pool  = new Pool({
+  host: PGHOST,
+  database: PGDATABASE,
+  user: PGUSER,
+  password: PGPASSWORD,
+  port: 5432,
+  ssl: {
+    require: true
+  }
+});
+
+
+app.get('/', async (req,res) => {
+    const client  = await pool.connect()
+
+    try {
+        const result = await client.query('SELECT * from events');
+        res.json(result.rows);
+    }catch (err) {
+        console.error(err);
+    }finally {
+        client.release();
+    }
+    res.status(404)
+  
+});
+
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
