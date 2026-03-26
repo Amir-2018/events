@@ -1,174 +1,231 @@
-const crypto = require('crypto');
-const pool = require('../db/pool');
+const Event = require('../models/event.model');
 
 class EventService {
-  async getEventsWithClients() {
-    const result = await pool.query(`
-      SELECT
-        e.id,
-        e.nom,
-        e.date,
-        e.image,
-        e.adresse,
-        e.type_evenement_id,
-        e.bien_id,
-        e.created_at,
-        e.updated_at,
-        te.nom as type_evenement_nom,
-        b.nom as bien_nom,
-        b.type as bien_type,
-        COALESCE(
-          json_agg(
-            json_build_object(
-              'id', c.id,
-              'nom', c.nom,
-              'prenom', c.prenom,
-              'email', c.email,
-              'tel', c.tel
-            )
-          ) FILTER (WHERE c.id IS NOT NULL),
-          '[]'::json
-        ) AS clients
-      FROM events e
-      LEFT JOIN types_evenements te ON te.id = e.type_evenement_id
-      LEFT JOIN biens b ON b.id = e.bien_id
-      LEFT JOIN event_registrations er ON er.event_id = e.id
-      LEFT JOIN clients c ON c.id = er.client_id
-      GROUP BY e.id, te.nom, b.nom, b.type
-      ORDER BY e.date DESC NULLS LAST;
-    `);
-
-    return result.rows;
-  }
-
-  async getEventDetails({ eventId }) {
-    const result = await pool.query(
-      `
-      SELECT
-        e.id,
-        e.nom,
-        e.date,
-        e.image,
-        e.adresse,
-        e.created_at,
-        e.updated_at,
-        COALESCE(
-          json_agg(
-            json_build_object(
-              'id', c.id,
-              'nom', c.nom,
-              'prenom', c.prenom,
-              'email', c.email,
-              'tel', c.tel
-            )
-          ) FILTER (WHERE c.id IS NOT NULL),
-          '[]'::json
-        ) AS clients
-      FROM events e
-      LEFT JOIN event_registrations er ON er.event_id = e.id
-      LEFT JOIN clients c ON c.id = er.client_id
-      WHERE e.id = $1
-      GROUP BY e.id
-      LIMIT 1;
-      `,
-      [eventId]
-    );
-
-    return result.rows[0] || null;
-  }
-
-  async getEventClients({ eventId }) {
-    const result = await pool.query(
-      `
-      SELECT c.id, c.nom, c.prenom, c.email, c.tel
-      FROM event_registrations er
-      JOIN clients c ON c.id = er.client_id
-      WHERE er.event_id = $1
-      ORDER BY c.nom ASC, c.prenom ASC;
-      `,
-      [eventId]
-    );
-
-    return result.rows;
-  }
-
-  async createEvent({ nom, date, image, adresse, type_evenement_id, bien_id }) {
-    if (!nom) throw new Error('Missing event name (nom)');
-
-    const id = crypto.randomUUID();
-    const result = await pool.query(
-      `
-      INSERT INTO events (id, nom, date, image, adresse, type_evenement_id, bien_id)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING id, nom, date, image, adresse, type_evenement_id, bien_id, created_at, updated_at;
-      `,
-      [id, nom, date || null, image || null, adresse || null, type_evenement_id || null, bien_id || null]
-    );
-
-    return result.rows[0];
-  }
-
-  async deleteEvent({ eventId }) {
-    const client = await pool.connect();
-    try {
-      await client.query('BEGIN');
-      await client.query('DELETE FROM event_registrations WHERE event_id = $1', [eventId]);
-      const del = await client.query(
-        'DELETE FROM events WHERE id = $1 RETURNING id, nom, date, image, adresse',
-        [eventId]
-      );
-      await client.query('COMMIT');
-      return del.rows[0] || null;
-    } catch (err) {
-      await client.query('ROLLBACK');
-      throw err;
-    } finally {
-      client.release();
-    }
-  }
-  async registerClientToEvent({ eventId, clientId }) {
-    const exists = await pool.query('SELECT 1 FROM events WHERE id = $1', [eventId]);
-    if (exists.rowCount === 0) {
-      throw new Error('Event not found');
+  static async createEvent(eventData) {
+    // Validation des données
+    if (!eventData.nom || !eventData.nom.trim()) {
+      throw new Error('Le nom de l\'événement est obligatoire');
     }
 
-    const insert = await pool.query(
-      `
-      INSERT INTO event_registrations (event_id, client_id)
-      VALUES ($1, $2)
-      ON CONFLICT (event_id, client_id) DO NOTHING
-      RETURNING event_id, client_id, created_at;
-      `,
-      [eventId, clientId]
-    );
-
-    if (insert.rowCount > 0) {
-      return {
-        registered: true,
-        alreadyRegistered: false,
-        registration: insert.rows[0],
-      };
+    // Validation de la date si fournie
+    if (eventData.date) {
+      const eventDate = new Date(eventData.date);
+      if (isNaN(eventDate.getTime())) {
+        throw new Error('Format de date invalide');
+      }
+      
+      // Vérifier que la date n'est pas dans le passé (optionnel)
+      // const now = new Date();
+      // if (eventDate < now) {
+      //   throw new Error('La date de l\'événement ne peut pas être dans le passé');
+      // }
     }
 
-    const existing = await pool.query(
-      'SELECT event_id, client_id, created_at FROM event_registrations WHERE event_id = $1 AND client_id = $2',
-      [eventId, clientId]
-    );
-
-    if (existing.rowCount > 0) {
-      return {
-        registered: true,
-        alreadyRegistered: true,
-        registration: existing.rows[0],
-      };
+    // Validation des IDs si fournis
+    if (eventData.type_evenement_id && !this.isValidUUID(eventData.type_evenement_id)) {
+      throw new Error('ID du type d\'événement invalide');
     }
 
-    return {
-      registered: false,
-      alreadyRegistered: false,
-      registration: null,
+    if (eventData.bien_id && !this.isValidUUID(eventData.bien_id)) {
+      throw new Error('ID du bien invalide');
+    }
+
+    return await Event.create(eventData);
+  }
+
+  static async getAllEvents() {
+    return await Event.getAll();
+  }
+
+  static async getEventById(id) {
+    if (!id) {
+      throw new Error('ID de l\'événement requis');
+    }
+
+    if (!this.isValidUUID(id)) {
+      throw new Error('ID de l\'événement invalide');
+    }
+    
+    const event = await Event.getById(id);
+    if (!event) {
+      throw new Error('Événement non trouvé');
+    }
+    
+    return event;
+  }
+
+  static async updateEvent(id, eventData) {
+    if (!id) {
+      throw new Error('ID de l\'événement requis');
+    }
+
+    if (!this.isValidUUID(id)) {
+      throw new Error('ID de l\'événement invalide');
+    }
+
+    // Vérifier que l'événement existe
+    const existingEvent = await Event.getById(id);
+    if (!existingEvent) {
+      throw new Error('Événement non trouvé');
+    }
+
+    // Validation des données (même que pour la création)
+    if (eventData.nom !== undefined && (!eventData.nom || !eventData.nom.trim())) {
+      throw new Error('Le nom de l\'événement est obligatoire');
+    }
+
+    if (eventData.date) {
+      const eventDate = new Date(eventData.date);
+      if (isNaN(eventDate.getTime())) {
+        throw new Error('Format de date invalide');
+      }
+    }
+
+    if (eventData.type_evenement_id && !this.isValidUUID(eventData.type_evenement_id)) {
+      throw new Error('ID du type d\'événement invalide');
+    }
+
+    if (eventData.bien_id && !this.isValidUUID(eventData.bien_id)) {
+      throw new Error('ID du bien invalide');
+    }
+
+    return await Event.update(id, eventData);
+  }
+
+  static async deleteEvent(id) {
+    if (!id) {
+      throw new Error('ID de l\'événement requis');
+    }
+
+    if (!this.isValidUUID(id)) {
+      throw new Error('ID de l\'événement invalide');
+    }
+
+    const event = await Event.getById(id);
+    if (!event) {
+      throw new Error('Événement non trouvé');
+    }
+
+    return await Event.delete(id);
+  }
+
+  static async getEventClients(eventId) {
+    if (!eventId) {
+      throw new Error('ID de l\'événement requis');
+    }
+
+    if (!this.isValidUUID(eventId)) {
+      throw new Error('ID de l\'événement invalide');
+    }
+
+    // Vérifier que l'événement existe
+    const event = await Event.getById(eventId);
+    if (!event) {
+      throw new Error('Événement non trouvé');
+    }
+
+    return await Event.getEventClients(eventId);
+  }
+
+  static async registerClientToEvent(eventId, clientId) {
+    if (!eventId || !clientId) {
+      throw new Error('ID de l\'événement et du client requis');
+    }
+
+    if (!this.isValidUUID(eventId) || !this.isValidUUID(clientId)) {
+      throw new Error('IDs invalides');
+    }
+
+    // Vérifier que l'événement existe
+    const event = await Event.getById(eventId);
+    if (!event) {
+      throw new Error('Événement non trouvé');
+    }
+
+    return await Event.registerClient(eventId, clientId);
+  }
+
+  static async unregisterClientFromEvent(eventId, clientId) {
+    if (!eventId || !clientId) {
+      throw new Error('ID de l\'événement et du client requis');
+    }
+
+    if (!this.isValidUUID(eventId) || !this.isValidUUID(clientId)) {
+      throw new Error('IDs invalides');
+    }
+
+    return await Event.unregisterClient(eventId, clientId);
+  }
+
+  // Méthodes de recherche et filtrage
+  static async getEventsByType(typeId) {
+    if (!typeId) {
+      throw new Error('ID du type d\'événement requis');
+    }
+
+    if (!this.isValidUUID(typeId)) {
+      throw new Error('ID du type d\'événement invalide');
+    }
+
+    return await Event.getByType(typeId);
+  }
+
+  static async getEventsByProperty(propertyId) {
+    if (!propertyId) {
+      throw new Error('ID du bien requis');
+    }
+
+    if (!this.isValidUUID(propertyId)) {
+      throw new Error('ID du bien invalide');
+    }
+
+    return await Event.getByProperty(propertyId);
+  }
+
+  static async searchEvents(searchTerm) {
+    if (!searchTerm || !searchTerm.trim()) {
+      return await this.getAllEvents();
+    }
+
+    return await Event.search(searchTerm.trim());
+  }
+
+  // Méthodes utilitaires
+  static isValidUUID(uuid) {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    return uuidRegex.test(uuid);
+  }
+
+  // Statistiques
+  static async getEventStats() {
+    const allEvents = await Event.getAll();
+    
+    const stats = {
+      total: allEvents.length,
+      withType: allEvents.filter(e => e.type_evenement_id).length,
+      withProperty: allEvents.filter(e => e.bien_id).length,
+      withDate: allEvents.filter(e => e.date).length,
+      withImage: allEvents.filter(e => e.image).length,
+      byType: {},
+      byProperty: {}
     };
+
+    // Grouper par type
+    allEvents.forEach(event => {
+      if (event.type_evenement_nom) {
+        stats.byType[event.type_evenement_nom] = (stats.byType[event.type_evenement_nom] || 0) + 1;
+      }
+    });
+
+    // Grouper par bien
+    allEvents.forEach(event => {
+      if (event.bien_nom) {
+        stats.byProperty[event.bien_nom] = (stats.byProperty[event.bien_nom] || 0) + 1;
+      }
+    });
+
+    return stats;
   }
 }
 
-module.exports = new EventService();
+module.exports = EventService;

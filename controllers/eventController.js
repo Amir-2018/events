@@ -1,14 +1,15 @@
-const eventService = require('../services/eventService');
+const EventService = require('../services/eventService');
 
 class EventController {
   async getEvents(req, res) {
     try {
-      const events = await eventService.getEventsWithClients();
+      const events = await EventService.getAllEvents();
       res.json({
         success: true,
         data: events,
       });
     } catch (error) {
+      console.error('Erreur lors de la récupération des événements:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -19,15 +20,17 @@ class EventController {
   async getEventDetails(req, res) {
     try {
       const { eventId } = req.params;
-      const event = await eventService.getEventDetails({ eventId });
-      if (!event) {
-        return res.status(404).json({ success: false, message: 'Event not found' });
-      }
-      res.json({ success: true, data: event });
+      const event = await EventService.getEventById(eventId);
+      res.json({ 
+        success: true, 
+        data: event 
+      });
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: error.message,
+      console.error('Erreur lors de la récupération de l\'événement:', error);
+      const status = error.message === 'Événement non trouvé' ? 404 : 500;
+      res.status(status).json({ 
+        success: false, 
+        message: error.message 
       });
     }
   }
@@ -35,10 +38,15 @@ class EventController {
   async getEventClients(req, res) {
     try {
       const { eventId } = req.params;
-      const clients = await eventService.getEventClients({ eventId });
-      res.json({ success: true, data: clients });
+      const clients = await EventService.getEventClients(eventId);
+      res.json({ 
+        success: true, 
+        data: clients 
+      });
     } catch (error) {
-      res.status(500).json({
+      console.error('Erreur lors de la récupération des clients:', error);
+      const status = error.message === 'Événement non trouvé' ? 404 : 500;
+      res.status(status).json({
         success: false,
         message: error.message,
       });
@@ -62,7 +70,7 @@ class EventController {
         imagePreview: image ? image.substring(0, 50) + '...' : 'null'
       });
       
-      const event = await eventService.createEvent({ 
+      const event = await EventService.createEvent({ 
         nom, 
         date, 
         image, 
@@ -83,12 +91,32 @@ class EventController {
       
       res.status(201).json({
         success: true,
-        message: 'Event created successfully',
+        message: 'Événement créé avec succès',
         data: event,
       });
     } catch (error) {
-      console.error('Error creating event:', error);
+      console.error('Erreur lors de la création de l\'événement:', error);
       res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  async updateEvent(req, res) {
+    try {
+      const { eventId } = req.params;
+      const event = await EventService.updateEvent(eventId, req.body);
+      
+      res.json({
+        success: true,
+        message: 'Événement mis à jour avec succès',
+        data: event,
+      });
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour de l\'événement:', error);
+      const status = error.message === 'Événement non trouvé' ? 404 : 400;
+      res.status(status).json({
         success: false,
         message: error.message,
       });
@@ -98,13 +126,16 @@ class EventController {
   async deleteEvent(req, res) {
     try {
       const { eventId } = req.params;
-      const deleted = await eventService.deleteEvent({ eventId });
-      if (!deleted) {
-        return res.status(404).json({ success: false, message: 'Event not found' });
-      }
-      res.json({ success: true, message: 'Event deleted', data: deleted });
+      const deleted = await EventService.deleteEvent(eventId);
+      res.json({ 
+        success: true, 
+        message: 'Événement supprimé avec succès', 
+        data: deleted 
+      });
     } catch (error) {
-      res.status(400).json({
+      console.error('Erreur lors de la suppression de l\'événement:', error);
+      const status = error.message === 'Événement non trouvé' ? 404 : 500;
+      res.status(status).json({
         success: false,
         message: error.message,
       });
@@ -119,33 +150,96 @@ class EventController {
       if (!clientId) {
         return res.status(401).json({
           success: false,
-          message: 'Please login first',
+          message: 'Veuillez vous connecter d\'abord',
         });
       }
 
       if (!eventId) {
         return res.status(400).json({
           success: false,
-          message: 'Missing eventId',
+          message: 'ID de l\'événement manquant',
         });
       }
 
-      const result = await eventService.registerClientToEvent({
-        eventId,
-        clientId,
-      });
-      const statusCode = result.alreadyRegistered ? 200 : 201;
-
-      res.status(statusCode).json({
+      const result = await EventService.registerClientToEvent(eventId, clientId);
+      
+      res.status(201).json({
         success: true,
-        message: result.alreadyRegistered
-          ? 'Already registered to this event'
-          : 'Registered to event successfully',
+        message: 'Inscription à l\'événement réussie',
         data: result,
       });
     } catch (error) {
-      const status = error.message === 'Event not found' ? 404 : 400;
+      console.error('Erreur lors de l\'inscription:', error);
+      const status = error.message === 'Événement non trouvé' ? 404 : 400;
       res.status(status).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  // Nouvelles méthodes pour les recherches et filtres
+  async searchEvents(req, res) {
+    try {
+      const { q } = req.query;
+      const events = await EventService.searchEvents(q);
+      res.json({
+        success: true,
+        data: events,
+      });
+    } catch (error) {
+      console.error('Erreur lors de la recherche:', error);
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  async getEventsByType(req, res) {
+    try {
+      const { typeId } = req.params;
+      const events = await EventService.getEventsByType(typeId);
+      res.json({
+        success: true,
+        data: events,
+      });
+    } catch (error) {
+      console.error('Erreur lors du filtrage par type:', error);
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  async getEventsByProperty(req, res) {
+    try {
+      const { propertyId } = req.params;
+      const events = await EventService.getEventsByProperty(propertyId);
+      res.json({
+        success: true,
+        data: events,
+      });
+    } catch (error) {
+      console.error('Erreur lors du filtrage par bien:', error);
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  async getEventStats(req, res) {
+    try {
+      const stats = await EventService.getEventStats();
+      res.json({
+        success: true,
+        data: stats,
+      });
+    } catch (error) {
+      console.error('Erreur lors de la récupération des statistiques:', error);
+      res.status(500).json({
         success: false,
         message: error.message,
       });

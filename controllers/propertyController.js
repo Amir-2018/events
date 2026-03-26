@@ -1,9 +1,9 @@
-const Property = require('../models/property.model');
+const PropertyService = require('../services/propertyService');
 
 class PropertyController {
   static async createProperty(req, res) {
     try {
-      const property = await Property.create(req.body);
+      const property = await PropertyService.createProperty(req.body);
       
       res.status(201).json({
         success: true,
@@ -12,17 +12,16 @@ class PropertyController {
       });
     } catch (error) {
       console.error('Erreur lors de la création du bien:', error);
-      res.status(500).json({
+      res.status(400).json({
         success: false,
-        message: 'Erreur lors de la création du bien',
-        error: error.message
+        message: error.message
       });
     }
   }
 
   static async getProperties(req, res) {
     try {
-      const properties = await Property.getAll();
+      const properties = await PropertyService.getAllProperties();
       
       res.json({
         success: true,
@@ -32,8 +31,7 @@ class PropertyController {
       console.error('Erreur lors de la récupération des biens:', error);
       res.status(500).json({
         success: false,
-        message: 'Erreur lors de la récupération des biens',
-        error: error.message
+        message: error.message
       });
     }
   }
@@ -41,14 +39,7 @@ class PropertyController {
   static async getProperty(req, res) {
     try {
       const { id } = req.params;
-      const property = await Property.getById(id);
-      
-      if (!property) {
-        return res.status(404).json({
-          success: false,
-          message: 'Bien non trouvé'
-        });
-      }
+      const property = await PropertyService.getPropertyById(id);
       
       res.json({
         success: true,
@@ -56,10 +47,10 @@ class PropertyController {
       });
     } catch (error) {
       console.error('Erreur lors de la récupération du bien:', error);
-      res.status(500).json({
+      const status = error.message === 'Bien non trouvé' ? 404 : 500;
+      res.status(status).json({
         success: false,
-        message: 'Erreur lors de la récupération du bien',
-        error: error.message
+        message: error.message
       });
     }
   }
@@ -67,14 +58,7 @@ class PropertyController {
   static async updateProperty(req, res) {
     try {
       const { id } = req.params;
-      const property = await Property.update(id, req.body);
-      
-      if (!property) {
-        return res.status(404).json({
-          success: false,
-          message: 'Bien non trouvé'
-        });
-      }
+      const property = await PropertyService.updateProperty(id, req.body);
       
       res.json({
         success: true,
@@ -83,10 +67,10 @@ class PropertyController {
       });
     } catch (error) {
       console.error('Erreur lors de la mise à jour du bien:', error);
-      res.status(500).json({
+      const status = error.message === 'Bien non trouvé' ? 404 : 400;
+      res.status(status).json({
         success: false,
-        message: 'Erreur lors de la mise à jour du bien',
-        error: error.message
+        message: error.message
       });
     }
   }
@@ -94,14 +78,7 @@ class PropertyController {
   static async deleteProperty(req, res) {
     try {
       const { id } = req.params;
-      const property = await Property.delete(id);
-      
-      if (!property) {
-        return res.status(404).json({
-          success: false,
-          message: 'Bien non trouvé'
-        });
-      }
+      await PropertyService.deleteProperty(id);
       
       res.json({
         success: true,
@@ -109,10 +86,10 @@ class PropertyController {
       });
     } catch (error) {
       console.error('Erreur lors de la suppression du bien:', error);
-      res.status(500).json({
+      const status = error.message === 'Bien non trouvé' ? 404 : 500;
+      res.status(status).json({
         success: false,
-        message: 'Erreur lors de la suppression du bien',
-        error: error.message
+        message: error.message
       });
     }
   }
