@@ -104,23 +104,59 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 selection:bg-blue-100">
-      {/* Progress Bar */}
-      {isProcessing && (
-        <div className="fixed top-0 left-0 right-0 h-1 z-[100] bg-blue-100">
-          <div className="h-full bg-blue-600 animate-progress"></div>
+    <div className="min-h-screen bg-white text-gray-900 selection:bg-blue-100 flex">
+      {/* Sidebar */}
+      <div className="w-80 bg-gradient-to-b from-blue-600 to-blue-800 text-white flex flex-col shadow-2xl">
+        <div className="p-8">
+          <div className="flex items-center mb-6">
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-3 mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold">Events</h1>
+            </div>
+          </div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+            <h2 className="text-xl font-bold mb-3">Gestion des Événements</h2>
+            <p className="text-blue-100 leading-relaxed">
+              Créez et gérez vos événements en toute simplicité
+            </p>
+          </div>
         </div>
-      )}
+        
+        {/* Navigation */}
+        <div className="flex-1 px-8">
+          <nav className="space-y-2">
+            <a href="#" className="flex items-center px-4 py-3 rounded-xl bg-white/20 backdrop-blur-sm text-white font-medium">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 mr-3">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+              </svg>
+              Tous les événements
+            </a>
+          </nav>
+        </div>
 
-      <div className="container mx-auto px-4 py-12 max-w-6xl">
-        <header className="mb-12">
-          <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">
-            Gestion des Événements
-          </h1>
-          <p className="text-gray-500 text-lg">
-            Créez et gérez vos événements en toute simplicité.
-          </p>
-        </header>
+        {/* Footer */}
+        <div className="p-8 border-t border-white/20">
+          <div className="flex items-center text-blue-100 text-sm">
+            <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+            Système en ligne
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1">
+        {/* Progress Bar */}
+        {isProcessing && (
+          <div className="fixed top-0 left-80 right-0 h-1 z-[100] bg-blue-100">
+            <div className="h-full bg-blue-600 animate-progress"></div>
+          </div>
+        )}
+
+        <div className="container mx-auto px-8 py-12 max-w-6xl">
 
         {events.length === 0 ? (
           <div className="text-center py-24 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
@@ -193,6 +229,7 @@ export default function Home() {
           cancelText="Annuler"
           type="danger"
         />
+        </div>
       </div>
     </div>
   );
