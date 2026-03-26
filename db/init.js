@@ -63,6 +63,37 @@ async function initDb() {
       date TIMESTAMP,
       image TEXT,
       adresse TEXT,
+      type_evenement_id UUID,
+      bien_id UUID,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  // Créer la table des types d'événements
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS types_evenements (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      nom VARCHAR(255) NOT NULL UNIQUE,
+      description TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  // Créer la table des biens
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS biens (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      nom VARCHAR(255) NOT NULL,
+      type VARCHAR(100) NOT NULL,
+      adresse TEXT,
+      description TEXT,
+      latitude DECIMAL(10, 8),
+      longitude DECIMAL(11, 8),
+      horaire_ouverture TIME,
+      horaire_fermeture TIME,
+      jours_ouverture VARCHAR(50) DEFAULT 'Lundi-Dimanche',
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
@@ -141,6 +172,43 @@ async function initDb() {
         ALTER TABLE event_registrations
           ADD CONSTRAINT fk_event_registrations_event
           FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE;
+      END IF;
+    END $$;
+  `);
+
+  // Ajouter les contraintes FK pour les nouvelles colonnes des événements
+  await pool.query(`
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.table_constraints
+        WHERE table_schema = 'public'
+          AND table_name = 'events'
+          AND constraint_type = 'FOREIGN KEY'
+          AND constraint_name = 'fk_events_type_evenement'
+      ) THEN
+        ALTER TABLE events
+          ADD CONSTRAINT fk_events_type_evenement
+          FOREIGN KEY (type_evenement_id) REFERENCES types_evenements(id) ON DELETE SET NULL;
+      END IF;
+    END $$;
+  `);
+
+  await pool.query(`
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.table_constraints
+        WHERE table_schema = 'public'
+          AND table_name = 'events'
+          AND constraint_type = 'FOREIGN KEY'
+          AND constraint_name = 'fk_events_bien'
+      ) THEN
+        ALTER TABLE events
+          ADD CONSTRAINT fk_events_bien
+          FOREIGN KEY (bien_id) REFERENCES biens(id) ON DELETE SET NULL;
       END IF;
     END $$;
   `);

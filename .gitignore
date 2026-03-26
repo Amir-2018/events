@@ -3,6 +3,14 @@ node_modules/
 *.log
 .DS_Store
 
+# Next.js cache files
+frontend/.next/
+frontend/.next/**
+!frontend/.next/static/
+frontend/.next/static/**
+frontend/.next/cache/
+frontend/.next/trace
+
 # Uploads (garder le dossier mais ignorer les fichiers)
 uploads/images/*
 !uploads/images/.gitkeep

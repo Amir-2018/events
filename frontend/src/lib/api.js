@@ -44,6 +44,22 @@ export const eventsAPI = {
   registerToEvent: (eventId) => protectedAPI.post(`/api/events/${eventId}/register`),
 };
 
+export const eventTypesAPI = {
+  getEventTypes: () => publicAPI.get('/api/event-types'),
+  getEventType: (id) => publicAPI.get(`/api/event-types/${id}`),
+  createEventType: (data) => publicAPI.post('/api/event-types', data),
+  updateEventType: (id, data) => publicAPI.put(`/api/event-types/${id}`, data),
+  deleteEventType: (id) => publicAPI.delete(`/api/event-types/${id}`),
+};
+
+export const propertiesAPI = {
+  getProperties: () => publicAPI.get('/api/properties'),
+  getProperty: (id) => publicAPI.get(`/api/properties/${id}`),
+  createProperty: (data) => publicAPI.post('/api/properties', data),
+  updateProperty: (id, data) => publicAPI.put(`/api/properties/${id}`, data),
+  deleteProperty: (id) => publicAPI.delete(`/api/properties/${id}`),
+};
+
 export const uploadAPI = {
   uploadImage: (formData) => publicAPI.post('/api/upload/image', formData, {
     headers: {

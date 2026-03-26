@@ -8,6 +8,8 @@ const initDb = require('./db/init');
 const authRoutes = require('./routes/authRoutes');
 const eventRoutes = require('./routes/eventRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const eventTypeRoutes = require('./routes/eventTypeRoutes');
+const propertyRoutes = require('./routes/propertyRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -47,6 +49,8 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api', eventRoutes);
 app.use('/api', uploadRoutes);
+app.use('/api/event-types', eventTypeRoutes);
+app.use('/api/properties', propertyRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
