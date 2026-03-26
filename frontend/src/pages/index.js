@@ -12,12 +12,12 @@ export default function Home() {
   const [showClients, setShowClients] = useState(false);
   const [selectedEventClients, setSelectedEventClients] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [error, setError] = useState('');
   
   // New States
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [eventIdToDelete, setEventIdToDelete] = useState(null);
+  const [loadingClients, setLoadingClients] = useState(false);
 
   useEffect(() => {
     loadEvents();
@@ -28,25 +28,24 @@ export default function Home() {
       setLoading(true);
       const response = await eventsAPI.getEvents();
       setEvents(response.data.data);
-      setError('');
     } catch (err) {
-      setError('Erreur lors du chargement des événements');
-      console.error(err);
+      console.error('Erreur lors du chargement des événements:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCreateEvent = async (eventData) => {
+  const handleCreateEvent = async (newEvent) => {
     try {
       setIsProcessing(true);
-      await eventsAPI.createEvent(eventData);
       setShowForm(false);
-      await loadEvents();
-      setError('');
+      
+      // Si un nouvel événement est fourni, l'ajouter directement à la liste
+      if (newEvent) {
+        setEvents(prevEvents => [newEvent, ...prevEvents]);
+      }
     } catch (err) {
-      setError('Erreur lors de la création de l\'événement');
-      console.error(err);
+      console.error('Erreur lors de la création de l\'événement:', err);
     } finally {
       setIsProcessing(false);
     }
@@ -63,12 +62,14 @@ export default function Home() {
     try {
       setIsDeleteModalOpen(false);
       setIsProcessing(true);
+      
+      // Supprimer l'événement côté serveur
       await eventsAPI.deleteEvent(eventIdToDelete);
-      await loadEvents();
-      setError('');
+      
+      // Supprimer l'événement de l'état local sans recharger tous les événements
+      setEvents(prevEvents => prevEvents.filter(event => event.id !== eventIdToDelete));
     } catch (err) {
-      setError('Erreur lors de la suppression de l\'événement');
-      console.error(err);
+      console.error('Erreur lors de la suppression de l\'événement:', err);
     } finally {
       setIsProcessing(false);
       setEventIdToDelete(null);
@@ -77,15 +78,17 @@ export default function Home() {
 
   const handleViewClients = async (eventId) => {
     try {
-      const response = await eventsAPI.getEventClients(eventId);
+      setLoadingClients(true);
       const event = events.find(e => e.id === eventId);
-      setSelectedEventClients(response.data.data);
       setSelectedEvent(event);
       setShowClients(true);
-      setError('');
+      
+      const response = await eventsAPI.getEventClients(eventId);
+      setSelectedEventClients(response.data.data);
     } catch (err) {
-      setError('Erreur lors du chargement des clients');
-      console.error(err);
+      console.error('Erreur lors du chargement des clients:', err);
+    } finally {
+      setLoadingClients(false);
     }
   };
 
@@ -118,15 +121,6 @@ export default function Home() {
             Créez et gérez vos événements en toute simplicité.
           </p>
         </header>
-
-        {error && (
-          <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-r-xl mb-8 flex items-center shadow-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-            </svg>
-            <span className="font-medium">{error}</span>
-          </div>
-        )}
 
         {events.length === 0 ? (
           <div className="text-center py-24 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
@@ -179,7 +173,12 @@ export default function Home() {
           <ClientsList
             clients={selectedEventClients}
             event={selectedEvent}
-            onClose={() => setShowClients(false)}
+            onClose={() => {
+              setShowClients(false);
+              setSelectedEventClients([]);
+              setSelectedEvent(null);
+            }}
+            loading={loadingClients}
           />
         )}
 

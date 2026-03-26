@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
-export default function ClientsList({ clients, event, onClose }) {
+export default function ClientsList({ clients, event, onClose, loading = false }) {
   if (!event) return null;
 
   const formatDate = (dateString) => {
@@ -74,13 +74,36 @@ export default function ClientsList({ clients, event, onClose }) {
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-bold text-gray-800 flex items-center">
               Participants
-              <span className="ml-2 bg-blue-100 text-blue-600 px-2.5 py-0.5 rounded-full text-xs">
-                {clients.length}
-              </span>
+              {!loading && (
+                <span className="ml-2 bg-blue-100 text-blue-600 px-2.5 py-0.5 rounded-full text-xs">
+                  {clients.length}
+                </span>
+              )}
             </h3>
           </div>
 
-          {clients.length === 0 ? (
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="w-full max-w-xs mb-6">
+                <div className="bg-blue-100 rounded-full h-2 overflow-hidden">
+                  <div className="bg-blue-600 h-full animate-pulse rounded-full" style={{
+                    animation: 'loading-bar 1.5s ease-in-out infinite'
+                  }}></div>
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-3"></div>
+                <p className="text-gray-500 font-medium">Chargement des participants...</p>
+              </div>
+              <style jsx>{`
+                @keyframes loading-bar {
+                  0% { width: 0%; margin-left: 0%; }
+                  50% { width: 75%; margin-left: 12.5%; }
+                  100% { width: 0%; margin-left: 100%; }
+                }
+              `}</style>
+            </div>
+          ) : clients.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <div className="bg-gray-100 rounded-full p-4 mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-gray-400">

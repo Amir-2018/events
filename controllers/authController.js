@@ -34,6 +34,21 @@ class AuthController {
       });
     }
   }
+  async getUser(req, res) {
+    try {
+      const { id } = req.params;
+      const user = await authService.getUserById(parseInt(id));
+      res.json({ 
+        success: true, 
+        data: user 
+      });
+    } catch (error) {
+      res.status(404).json({ 
+        success: false, 
+        message: error.message 
+      });
+    }
+  }
 }
 
 module.exports = new AuthController();

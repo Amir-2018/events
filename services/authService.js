@@ -60,6 +60,13 @@ class AuthService {
       token,
     };
   }
+  async getUserById(id) {
+    const client = await Client.getById(id);
+    if (!client) {
+      throw new Error('User not found');
+    }
+    return client;
+  }
 }
 
 module.exports = new AuthService();
