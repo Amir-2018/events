@@ -29,8 +29,8 @@ class PropertyService {
     return await Property.create(propertyData);
   }
 
-  static async getAllProperties() {
-    return await Property.getAll();
+  static async getAllProperties(userId = null, userRole = null) {
+    return await Property.getAll(userId, userRole);
   }
 
   static async getPropertyById(id) {

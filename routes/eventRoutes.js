@@ -4,17 +4,25 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Public (no token)
-router.get('/events', eventController.getEvents.bind(eventController));
+// Public (no token required typically, but controller handles optional auth)
+router.get('/events', authMiddleware.optional, eventController.getEvents.bind(eventController));
 router.get('/events/search', eventController.searchEvents.bind(eventController));
-router.get('/events/stats', eventController.getEventStats.bind(eventController));
-router.get('/events/by-type/:typeId', eventController.getEventsByType.bind(eventController));
-router.get('/events/by-property/:propertyId', eventController.getEventsByProperty.bind(eventController));
 router.get('/events/:eventId', eventController.getEventDetails.bind(eventController));
-router.post('/events', eventController.createEvent.bind(eventController));
-router.put('/events/:eventId', eventController.updateEvent.bind(eventController));
-router.delete('/events/:eventId', eventController.deleteEvent.bind(eventController));
-router.get('/events/:eventId/clients', eventController.getEventClients.bind(eventController));
+
+// Protected (auth required)
+router.get('/events/my-registrations', authMiddleware, eventController.getMyRegistrations.bind(eventController));
+router.get('/revenue-stats', authMiddleware, eventController.getRevenueStats.bind(eventController));
+router.post('/events', authMiddleware, eventController.createEvent.bind(eventController));
+router.put('/events/:eventId', authMiddleware, eventController.updateEvent.bind(eventController));
+router.delete('/events/:eventId', authMiddleware, eventController.deleteEvent.bind(eventController));
+router.get('/events/:eventId/clients', authMiddleware, eventController.getEventClients.bind(eventController));
+router.post('/events/:eventId/register', authMiddleware, eventController.registerToEvent.bind(eventController));
+router.delete('/events/:eventId/register', authMiddleware, eventController.unregisterFromEvent.bind(eventController));
+
+// Souvenirs routes (protected)
+router.post('/events/:eventId/souvenirs', authMiddleware, eventController.addSouvenir.bind(eventController));
+router.get('/events/:eventId/souvenirs', eventController.getSouvenirs.bind(eventController));
+router.delete('/souvenirs/:souvenirId', authMiddleware, eventController.deleteSouvenir.bind(eventController));
 
 // Route de test pour créer un événement avec base64
 router.post('/events/test-base64', (req, res) => {

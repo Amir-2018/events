@@ -18,6 +18,23 @@ class AuthController {
     }
   }
 
+  async registerAdmin(req, res) {
+    try {
+      const { username, password, nom, prenom, email } = req.body;
+      const result = await authService.registerAdmin(username, password, nom, prenom, email);
+      res.status(201).json({ 
+        success: true, 
+        message: 'Admin registered successfully and is pending approval',
+        data: result 
+      });
+    } catch (error) {
+      res.status(400).json({ 
+        success: false, 
+        message: error.message 
+      });
+    }
+  }
+
   async login(req, res) {
     try {
       const { email, password } = req.body;

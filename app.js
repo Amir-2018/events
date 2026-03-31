@@ -10,6 +10,13 @@ const eventRoutes = require('./routes/eventRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const eventTypeRoutes = require('./routes/eventTypeRoutes');
 const propertyRoutes = require('./routes/propertyRoutes');
+const typeBienRoutes = require('./routes/typeBienRoutes');
+const userRoutes = require('./routes/userRoutes');
+const clientRoutes = require('./routes/clientRoutes');
+const reclamationRoutes = require('./routes/reclamationRoutes');
+const profileRoutes = require('./routes/profileRoutes');
+const passwordResetRoutes = require('./routes/passwordResetRoutes');
+const ticketRoutes = require('./routes/ticketRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,8 +24,8 @@ let server;
 
 // Middleware
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ limit: '20mb', extended: true }));
 
 // Servir les fichiers statiques (images uploadées)
 app.use('/uploads', express.static('uploads'));
@@ -51,6 +58,12 @@ app.use('/api', eventRoutes);
 app.use('/api', uploadRoutes);
 app.use('/api/event-types', eventTypeRoutes);
 app.use('/api/properties', propertyRoutes);
+app.use('/api/type-biens', typeBienRoutes);
+app.use('/api', userRoutes);
+app.use('/api', reclamationRoutes);
+app.use('/api/profile', profileRoutes);
+app.use('/api/password-reset', passwordResetRoutes);
+app.use('/api', ticketRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

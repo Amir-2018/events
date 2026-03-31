@@ -1,9 +1,13 @@
 const EventService = require('../services/eventService');
+const TicketService = require('../services/ticketService');
 
 class EventController {
   async getEvents(req, res) {
     try {
-      const events = await EventService.getAllEvents();
+      const isManaged = req.query.managed === 'true';
+      const userId = (isManaged && req.user?.role !== 'superadmin') ? req.user.id : null;
+      
+      const events = await EventService.getAllEvents(userId);
       res.json({
         success: true,
         data: events,
@@ -55,39 +59,20 @@ class EventController {
 
   async createEvent(req, res) {
     try {
-      const { nom, date, image, adresse, type_evenement_id, bien_id } = req.body;
-      
-      // Debug logs
-      console.log('=== CREATE EVENT DEBUG ===');
-      console.log('Body received:', {
-        nom,
-        date,
-        adresse,
-        type_evenement_id,
-        bien_id,
-        imageType: typeof image,
-        imageLength: image ? image.length : 0,
-        imagePreview: image ? image.substring(0, 50) + '...' : 'null'
-      });
+      const { nom, date, date_fin, image, adresse, type_evenement_id, bien_id, prix } = req.body;
+      const user_id = req.user?.id;
       
       const event = await EventService.createEvent({ 
         nom, 
         date, 
+        date_fin,
         image, 
         adresse, 
         type_evenement_id, 
-        bien_id 
+        bien_id,
+        prix,
+        user_id
       });
-      
-      console.log('Event created:', {
-        id: event.id,
-        nom: event.nom,
-        type_evenement_id: event.type_evenement_id,
-        bien_id: event.bien_id,
-        imageStored: event.image ? 'YES' : 'NO',
-        imageLength: event.image ? event.image.length : 0
-      });
-      console.log('=== END DEBUG ===');
       
       res.status(201).json({
         success: true,
@@ -106,7 +91,12 @@ class EventController {
   async updateEvent(req, res) {
     try {
       const { eventId } = req.params;
-      const event = await EventService.updateEvent(eventId, req.body);
+      const eventData = { 
+        ...req.body, 
+        requestingUserId: req.user?.id, 
+        requestingUserRole: req.user?.role 
+      };
+      const event = await EventService.updateEvent(eventId, eventData);
       
       res.json({
         success: true,
@@ -126,7 +116,11 @@ class EventController {
   async deleteEvent(req, res) {
     try {
       const { eventId } = req.params;
-      const deleted = await EventService.deleteEvent(eventId);
+      const options = { 
+        requestingUserId: req.user?.id, 
+        requestingUserRole: req.user?.role 
+      };
+      const deleted = await EventService.deleteEvent(eventId, options);
       res.json({ 
         success: true, 
         message: 'Événement supprimé avec succès', 
@@ -138,6 +132,36 @@ class EventController {
       res.status(status).json({
         success: false,
         message: error.message,
+      });
+    }
+  }
+
+  async getRevenueStats(req, res) {
+    try {
+      const userId = req.user?.id;
+      const userRole = req.user?.role;
+      
+      // Seuls les admins et superadmins peuvent voir les statistiques de revenus
+      if (!userId || (userRole !== 'admin' && userRole !== 'superadmin')) {
+        return res.status(403).json({
+          success: false,
+          message: 'Accès non autorisé'
+        });
+      }
+      
+      // Les superadmins voient tout, les admins voient seulement leurs événements
+      const statsUserId = userRole === 'superadmin' ? null : userId;
+      const stats = await EventService.getRevenueStats(statsUserId);
+      
+      res.json({
+        success: true,
+        data: stats
+      });
+    } catch (error) {
+      console.error('Erreur lors de la récupération des statistiques de revenus:', error);
+      res.status(500).json({
+        success: false,
+        message: error.message
       });
     }
   }
@@ -161,12 +185,23 @@ class EventController {
         });
       }
 
+      // Inscrire le client à l'événement
       const result = await EventService.registerClientToEvent(eventId, clientId);
+      
+      // Récupérer les données de l'événement et du client pour créer le ticket
+      const event = await EventService.getEventById(eventId);
+      const clientData = req.user; // Les données du client sont dans req.user
+      
+      // Créer le ticket avec QR code
+      const ticket = await TicketService.createTicket(eventId, clientId, event, clientData);
       
       res.status(201).json({
         success: true,
         message: 'Inscription à l\'événement réussie',
-        data: result,
+        data: {
+          registration: result,
+          ticket: ticket
+        },
       });
     } catch (error) {
       console.error('Erreur lors de l\'inscription:', error);
@@ -174,6 +209,113 @@ class EventController {
       res.status(status).json({
         success: false,
         message: error.message,
+      });
+    }
+  }
+
+  async getMyRegistrations(req, res) {
+    try {
+      const clientId = req.user?.id;
+      if (!clientId) {
+        return res.status(401).json({
+          success: false,
+          message: 'Veuillez vous connecter d\'abord',
+        });
+      }
+
+      const events = await EventService.getRegistrationsByClient(clientId);
+      res.json({
+        success: true,
+        data: events,
+      });
+    } catch (error) {
+      console.error('Erreur lors de la récupération des inscriptions:', error);
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  async unregisterFromEvent(req, res) {
+    try {
+      const { eventId } = req.params;
+      const clientId = req.user?.id;
+
+      if (!clientId) {
+        return res.status(401).json({
+          success: false,
+          message: 'Veuillez vous connecter d\'abord',
+        });
+      }
+
+      const result = await EventService.unregisterClientFromEvent(eventId, clientId);
+      
+      res.status(200).json({
+        success: true,
+        message: 'Inscription annulée avec succès',
+        data: result,
+      });
+    } catch (error) {
+      console.error('Erreur lors de l\'annulation de l\'inscription:', error);
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  // Souvenirs methods
+  async addSouvenir(req, res) {
+    try {
+      const { eventId } = req.params;
+      const { url, type } = req.body;
+      const souvenir = await EventService.addSouvenir(eventId, url, type);
+      res.status(201).json({
+        success: true,
+        message: 'Souvenir ajouté avec succès',
+        data: souvenir
+      });
+    } catch (error) {
+      console.error('Erreur lors de l\'ajout du souvenir:', error);
+      res.status(400).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+
+  async getSouvenirs(req, res) {
+    try {
+      const { eventId } = req.params;
+      const souvenirs = await EventService.getSouvenirs(eventId);
+      res.json({
+        success: true,
+        data: souvenirs
+      });
+    } catch (error) {
+      console.error('Erreur lors de la récupération des souvenirs:', error);
+      res.status(400).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+
+  async deleteSouvenir(req, res) {
+    try {
+      const { souvenirId } = req.params;
+      const deleted = await EventService.deleteSouvenir(souvenirId);
+      res.json({
+        success: true,
+        message: 'Souvenir supprimé avec succès',
+        data: deleted
+      });
+    } catch (error) {
+      console.error('Erreur lors de la suppression du souvenir:', error);
+      res.status(400).json({
+        success: false,
+        message: error.message
       });
     }
   }
@@ -232,7 +374,9 @@ class EventController {
 
   async getEventStats(req, res) {
     try {
-      const stats = await EventService.getEventStats();
+      const isManaged = req.query.managed === 'true';
+      const userId = (isManaged && req.user?.role !== 'superadmin') ? req.user.id : null;
+      const stats = await EventService.getEventStats(userId);
       res.json({
         success: true,
         data: stats,

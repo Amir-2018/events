@@ -1,13 +1,14 @@
 const express = require('express');
 const PropertyController = require('../controllers/propertyController');
+const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
 // Routes pour les biens
-router.post('/', PropertyController.createProperty);
-router.get('/', PropertyController.getProperties);
-router.get('/:id', PropertyController.getProperty);
-router.put('/:id', PropertyController.updateProperty);
-router.delete('/:id', PropertyController.deleteProperty);
+router.post('/', authMiddleware, PropertyController.createProperty);
+router.get('/', authMiddleware.optional, PropertyController.getProperties);
+router.get('/:id', authMiddleware.optional, PropertyController.getProperty);
+router.put('/:id', authMiddleware, PropertyController.updateProperty);
+router.delete('/:id', authMiddleware, PropertyController.deleteProperty);
 
 module.exports = router;

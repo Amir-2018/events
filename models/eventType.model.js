@@ -1,33 +1,46 @@
 const pool = require('../db/pool');
+const { v4: uuidv4 } = require('uuid');
 
 class EventType {
   static async create(eventTypeData) {
-    const { nom, description } = eventTypeData;
+    const { nom, description, user_id, status = 'pending' } = eventTypeData;
+    const id = uuidv4();
     
     const query = `
-      INSERT INTO types_evenements (nom, description, created_at)
-      VALUES ($1, $2, NOW())
-      RETURNING *
+      INSERT INTO types_evenements (id, nom, description, user_id, status, created_at)
+      VALUES (?, ?, ?, ?, ?, NOW())
     `;
     
-    const result = await pool.query(query, [nom, description]);
-    return result.rows[0];
+    await pool.query(query, [id, nom, description, user_id, status]);
+    return { id, nom, description, user_id, status };
   }
 
-  static async getAll() {
-    const query = `
-      SELECT * FROM types_evenements 
-      ORDER BY nom ASC
-    `;
+  static async getAll(userId = null, userRole = null) {
+    let query = 'SELECT * FROM types_evenements';
+    let params = [];
     
-    const result = await pool.query(query);
+    if (userRole === 'superadmin') {
+      // Superadmin voit tout
+      query += ' WHERE 1=1';
+    } else if (userId) {
+      // Admin voit seulement ses propres créations
+      query += ' WHERE user_id = ?';
+      params.push(userId);
+    } else {
+      // Public voit seulement celles créées par superadmin (user_id = NULL)
+      query += ' WHERE user_id IS NULL';
+    }
+    
+    query += ' ORDER BY nom ASC';
+    
+    const result = await pool.query(query, params);
     return result.rows;
   }
 
   static async getById(id) {
     const query = `
       SELECT * FROM types_evenements 
-      WHERE id = $1
+      WHERE id = ?
     `;
     
     const result = await pool.query(query, [id]);
@@ -35,28 +48,33 @@ class EventType {
   }
 
   static async update(id, eventTypeData) {
-    const { nom, description } = eventTypeData;
+    const { nom, description, status } = eventTypeData;
     
-    const query = `
+    let query = `
       UPDATE types_evenements 
-      SET nom = $1, description = $2, updated_at = NOW()
-      WHERE id = $3
-      RETURNING *
+      SET nom = ?, description = ?, updated_at = NOW()
     `;
+    let params = [nom, description];
     
-    const result = await pool.query(query, [nom, description, id]);
-    return result.rows[0];
+    if (status) {
+      query += ', status = ?';
+      params.push(status);
+    }
+    
+    query += ' WHERE id = ?';
+    params.push(id);
+    
+    await pool.query(query, params);
+    return { id, nom, description, status };
   }
 
   static async delete(id) {
-    const query = `
-      DELETE FROM types_evenements 
-      WHERE id = $1
-      RETURNING *
-    `;
-    
-    const result = await pool.query(query, [id]);
-    return result.rows[0];
+    const eventType = await this.getById(id);
+    if (!eventType) return null;
+
+    const query = `DELETE FROM types_evenements WHERE id = ?`;
+    await pool.query(query, [id]);
+    return eventType;
   }
 }
 

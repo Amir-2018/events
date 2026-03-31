@@ -68,7 +68,6 @@ export default function ClientsList({ clients, event, onClose, loading = false }
             </div>
           </div>
         </div>
-
         {/* Clients List */}
         <div className="flex-1 overflow-y-auto p-6 sm:p-8 bg-gray-50/50">
           <div className="flex justify-between items-center mb-6">

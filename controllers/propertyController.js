@@ -3,7 +3,13 @@ const PropertyService = require('../services/propertyService');
 class PropertyController {
   static async createProperty(req, res) {
     try {
-      const property = await PropertyService.createProperty(req.body);
+      const propertyData = {
+        ...req.body,
+        user_id: req.user?.role === 'superadmin' ? null : req.user?.id,
+        status: req.user?.role === 'superadmin' ? 'accepted' : 'pending'
+      };
+      
+      const property = await PropertyService.createProperty(propertyData);
       
       res.status(201).json({
         success: true,
@@ -21,7 +27,10 @@ class PropertyController {
 
   static async getProperties(req, res) {
     try {
-      const properties = await PropertyService.getAllProperties();
+      const userId = req.user?.id;
+      const userRole = req.user?.role;
+      
+      const properties = await PropertyService.getAllProperties(userId, userRole);
       
       res.json({
         success: true,
@@ -58,6 +67,27 @@ class PropertyController {
   static async updateProperty(req, res) {
     try {
       const { id } = req.params;
+      const userId = req.user?.id;
+      const userRole = req.user?.role;
+      
+      console.log('🔍 DEBUG UPDATE PROPERTY:');
+      console.log('- Property ID:', id);
+      console.log('- User ID:', userId);
+      console.log('- User Role:', userRole);
+      
+      // Vérifier les permissions
+      const existingProperty = await PropertyService.getPropertyById(id);
+      console.log('- Existing Property user_id:', existingProperty?.user_id);
+      console.log('- Permission check:', userRole === 'superadmin' ? 'SUPERADMIN - ALLOWED' : existingProperty?.user_id === userId ? 'OWNER - ALLOWED' : 'DENIED');
+      
+      // Seul le superadmin peut modifier tous les biens, les admins ne peuvent modifier que les leurs
+      if (userRole !== 'superadmin' && existingProperty.user_id !== userId) {
+        return res.status(403).json({
+          success: false,
+          message: 'Vous n\'avez pas la permission de modifier ce bien'
+        });
+      }
+      
       const property = await PropertyService.updateProperty(id, req.body);
       
       res.json({
@@ -78,6 +108,27 @@ class PropertyController {
   static async deleteProperty(req, res) {
     try {
       const { id } = req.params;
+      const userId = req.user?.id;
+      const userRole = req.user?.role;
+      
+      console.log('🔍 DEBUG DELETE PROPERTY:');
+      console.log('- Property ID:', id);
+      console.log('- User ID:', userId);
+      console.log('- User Role:', userRole);
+      
+      // Vérifier les permissions
+      const existingProperty = await PropertyService.getPropertyById(id);
+      console.log('- Existing Property user_id:', existingProperty?.user_id);
+      console.log('- Permission check:', userRole === 'superadmin' ? 'SUPERADMIN - ALLOWED' : existingProperty?.user_id === userId ? 'OWNER - ALLOWED' : 'DENIED');
+      
+      // Seul le superadmin peut supprimer tous les biens, les admins ne peuvent supprimer que les leurs
+      if (userRole !== 'superadmin' && existingProperty.user_id !== userId) {
+        return res.status(403).json({
+          success: false,
+          message: 'Vous n\'avez pas la permission de supprimer ce bien'
+        });
+      }
+      
       await PropertyService.deleteProperty(id);
       
       res.json({

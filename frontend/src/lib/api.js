@@ -11,11 +11,13 @@ const api = axios.create({
 // API publique (sans token)
 const publicAPI = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 10000,
 });
 
 // API protégée (avec token)
 const protectedAPI = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 10000,
 });
 
 // Intercepteur pour ajouter le token d'authentification aux requêtes protégées
@@ -30,18 +32,31 @@ protectedAPI.interceptors.request.use((config) => {
 export const authAPI = {
   login: (credentials) => publicAPI.post('/api/auth/login', credentials),
   register: (userData) => publicAPI.post('/api/auth/register', userData),
+  registerAdmin: (userData) => publicAPI.post('/api/auth/register-admin', userData),
 };
 
 export const eventsAPI = {
-  // Endpoints publics
+  // Endpoints publics (Landing page, etc)
   getEvents: () => publicAPI.get('/api/events'),
   getEventDetails: (eventId) => publicAPI.get(`/api/events/${eventId}`),
-  getEventClients: (eventId) => publicAPI.get(`/api/events/${eventId}/clients`),
-  createEvent: (eventData) => publicAPI.post('/api/events', eventData),
-  deleteEvent: (eventId) => publicAPI.delete(`/api/events/${eventId}`),
+  getEventClients: (eventId) => protectedAPI.get(`/api/events/${eventId}/clients`),
   
-  // Endpoints protégés
+  // Endpoints de gestion (Dashboard)
+  getManagedEvents: () => protectedAPI.get('/api/events?managed=true'),
+  getRevenueStats: () => protectedAPI.get('/api/revenue-stats'),
+  createEvent: (eventData) => protectedAPI.post('/api/events', eventData),
+  updateEvent: (eventId, eventData) => protectedAPI.put(`/api/events/${eventId}`, eventData),
+  deleteEvent: (eventId) => protectedAPI.delete(`/api/events/${eventId}`),
+  
+  // Inscriptions
   registerToEvent: (eventId) => protectedAPI.post(`/api/events/${eventId}/register`),
+  getMyRegistrations: () => protectedAPI.get('/api/events/my-registrations'),
+  unregisterFromEvent: (eventId) => protectedAPI.delete(`/api/events/${eventId}/register`),
+  
+  // Souvenirs
+  getSouvenirs: (eventId) => publicAPI.get(`/api/events/${eventId}/souvenirs`),
+  addSouvenir: (eventId, data) => protectedAPI.post(`/api/events/${eventId}/souvenirs`, data),
+  deleteSouvenir: (souvenirId) => protectedAPI.delete(`/api/souvenirs/${souvenirId}`),
 };
 
 export const eventTypesAPI = {
@@ -52,12 +67,44 @@ export const eventTypesAPI = {
   deleteEventType: (id) => publicAPI.delete(`/api/event-types/${id}`),
 };
 
+export const clientsAPI = {
+  getAllClients: () => publicAPI.get('/api/clients'),
+  getClient: (id) => protectedAPI.get(`/api/clients/${id}`),
+  createClient: (data) => protectedAPI.post('/api/clients', data),
+  updateClient: (id, data) => protectedAPI.put(`/api/clients/${id}`, data),
+  deleteClient: (id) => protectedAPI.delete(`/api/clients/${id}`),
+  cancelRegistration: (clientId, eventId) => protectedAPI.delete(`/api/clients/${clientId}/events/${eventId}/registration`),
+};
+
 export const propertiesAPI = {
   getProperties: () => publicAPI.get('/api/properties'),
   getProperty: (id) => publicAPI.get(`/api/properties/${id}`),
   createProperty: (data) => publicAPI.post('/api/properties', data),
   updateProperty: (id, data) => publicAPI.put(`/api/properties/${id}`, data),
   deleteProperty: (id) => publicAPI.delete(`/api/properties/${id}`),
+};
+
+export const typeBiensAPI = {
+  getTypeBiens: () => publicAPI.get('/api/type-biens'),
+  getTypeBien: (id) => publicAPI.get(`/api/type-biens/${id}`),
+  createTypeBien: (data) => publicAPI.post('/api/type-biens', data),
+  updateTypeBien: (id, data) => publicAPI.put(`/api/type-biens/${id}`, data),
+  deleteTypeBien: (id) => publicAPI.delete(`/api/type-biens/${id}`),
+};
+
+export const usersAPI = {
+  getUsers: () => protectedAPI.get('/api/users'),
+  createUser: (userData) => protectedAPI.post('/api/users', userData),
+  updateUser: (id, userData) => protectedAPI.put(`/api/users/${id}`, userData),
+  updateUserStatus: (id, status) => protectedAPI.patch(`/api/users/${id}/status`, { status }),
+  deleteUser: (id) => protectedAPI.delete(`/api/users/${id}`),
+  getRoles: () => protectedAPI.get('/api/roles'),
+};
+
+export const reclamationsAPI = {
+  getReclamations: () => protectedAPI.get('/api/reclamations'),
+  updateReclamationStatus: (id, status) => protectedAPI.put(`/api/reclamations/${id}/status`, { status }),
+  createReclamation: (data) => publicAPI.post('/api/reclamations', data),
 };
 
 export const uploadAPI = {
@@ -82,7 +129,7 @@ export const uploadAPI = {
       }
       
       // Créer l'événement avec l'image en base64
-      return await publicAPI.post('/api/events', {
+      return await protectedAPI.post('/api/events', {
         ...eventData,
         image: imageBase64,
       });
@@ -90,6 +137,32 @@ export const uploadAPI = {
       throw error;
     }
   },
+};
+
+export const profileAPI = {
+  getProfile: (userId = null) => {
+    const endpoint = userId ? `/api/profile/${userId}` : '/api/profile';
+    return protectedAPI.get(endpoint);
+  },
+  updateProfile: (userId = null, data) => {
+    const endpoint = userId ? `/api/profile/${userId}` : '/api/profile';
+    return protectedAPI.put(endpoint, data);
+  },
+};
+export const passwordResetAPI = {
+  requestReset: (email) => publicAPI.post('/api/password-reset/request', { email }),
+  verifyCode: (email, code) => publicAPI.post('/api/password-reset/verify', { email, code }),
+  resetPassword: (email, code, newPassword) => publicAPI.post('/api/password-reset/reset', { email, code, newPassword }),
+};
+
+export const ticketsAPI = {
+  getMyTickets: () => protectedAPI.get('/api/my-tickets'),
+  getTicket: (ticketNumber) => publicAPI.get(`/api/tickets/${ticketNumber}`),
+  verifyTicket: (ticketNumber) => protectedAPI.post(`/api/tickets/${ticketNumber}/verify`),
+  cancelTicket: (ticketId) => protectedAPI.put(`/api/tickets/${ticketId}/cancel`),
+  getEventTicketsStats: () => protectedAPI.get('/api/event-tickets-stats'),
+  getEventTicketsList: (eventId) => protectedAPI.get(`/api/events/${eventId}/tickets`),
+  getFraudAttempts: () => protectedAPI.get('/api/fraud-attempts'),
 };
 
 export default api;

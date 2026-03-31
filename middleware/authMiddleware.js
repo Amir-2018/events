@@ -24,4 +24,24 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
+const optionalAuthMiddleware = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return next();
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    // Si le token est invalide on continue quand même pour l'accès public
+    next();
+  }
+};
+
+authMiddleware.optional = optionalAuthMiddleware;
 module.exports = authMiddleware;

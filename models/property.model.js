@@ -1,53 +1,77 @@
 const pool = require('../db/pool');
+const { v4: uuidv4 } = require('uuid');
 
 class Property {
   static async create(propertyData) {
     const { 
       nom, 
-      type, 
+      type_bien_id, 
       adresse, 
       description, 
       latitude, 
       longitude, 
       horaire_ouverture, 
       horaire_fermeture, 
-      jours_ouverture 
+      jours_ouverture,
+      user_id,
+      status = 'pending'
     } = propertyData;
     
+    const id = uuidv4();
     const query = `
-      INSERT INTO biens (nom, type, adresse, description, latitude, longitude, horaire_ouverture, horaire_fermeture, jours_ouverture, created_at)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW())
-      RETURNING *
+      INSERT INTO biens (id, nom, type_bien_id, adresse, description, latitude, longitude, horaire_ouverture, horaire_fermeture, jours_ouverture, user_id, status, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
     `;
     
-    const result = await pool.query(query, [
+    await pool.query(query, [
+      id,
       nom, 
-      type, 
+      type_bien_id, 
       adresse, 
       description, 
       latitude, 
       longitude, 
       horaire_ouverture, 
       horaire_fermeture, 
-      jours_ouverture || 'Lundi-Dimanche'
+      jours_ouverture || 'Lundi-Dimanche',
+      user_id,
+      status
     ]);
-    return result.rows[0];
+    return this.getById(id);
   }
 
-  static async getAll() {
-    const query = `
-      SELECT * FROM biens 
-      ORDER BY nom ASC
+  static async getAll(userId = null, userRole = null) {
+    let query = `
+      SELECT b.*, tb.nom as type_bien_nom, tb.description as type_bien_description
+      FROM biens b
+      LEFT JOIN type_biens tb ON b.type_bien_id = tb.id
     `;
+    let params = [];
     
-    const result = await pool.query(query);
+    if (userRole === 'superadmin') {
+      // Superadmin voit tout
+      query += ' WHERE 1=1';
+    } else if (userId) {
+      // Admin voit : ses propres créations + celles créées par superadmin (user_id = NULL)
+      query += ' WHERE b.user_id = ? OR b.user_id IS NULL';
+      params.push(userId);
+    } else {
+      // Public voit seulement celles créées par superadmin
+      query += ' WHERE b.user_id IS NULL';
+    }
+    
+    query += ' ORDER BY b.nom ASC';
+    
+    const result = await pool.query(query, params);
     return result.rows;
   }
 
   static async getById(id) {
     const query = `
-      SELECT * FROM biens 
-      WHERE id = $1
+      SELECT b.*, tb.nom as type_bien_nom, tb.description as type_bien_description
+      FROM biens b
+      LEFT JOIN type_biens tb ON b.type_bien_id = tb.id
+      WHERE b.id = ?
     `;
     
     const result = await pool.query(query, [id]);
@@ -57,48 +81,43 @@ class Property {
   static async update(id, propertyData) {
     const { 
       nom, 
-      type, 
+      type_bien_id, 
       adresse, 
       description, 
       latitude, 
       longitude, 
       horaire_ouverture, 
       horaire_fermeture, 
-      jours_ouverture 
+      jours_ouverture,
+      status
     } = propertyData;
     
-    const query = `
+    let query = `
       UPDATE biens 
-      SET nom = $1, type = $2, adresse = $3, description = $4, latitude = $5, longitude = $6, 
-          horaire_ouverture = $7, horaire_fermeture = $8, jours_ouverture = $9, updated_at = NOW()
-      WHERE id = $10
-      RETURNING *
+      SET nom = ?, type_bien_id = ?, adresse = ?, description = ?, latitude = ?, longitude = ?, 
+          horaire_ouverture = ?, horaire_fermeture = ?, jours_ouverture = ?, updated_at = NOW()
     `;
+    let params = [nom, type_bien_id, adresse, description, latitude, longitude, horaire_ouverture, horaire_fermeture, jours_ouverture];
     
-    const result = await pool.query(query, [
-      nom, 
-      type, 
-      adresse, 
-      description, 
-      latitude, 
-      longitude, 
-      horaire_ouverture, 
-      horaire_fermeture, 
-      jours_ouverture, 
-      id
-    ]);
-    return result.rows[0];
+    if (status) {
+      query += ', status = ?';
+      params.push(status);
+    }
+    
+    query += ' WHERE id = ?';
+    params.push(id);
+    
+    await pool.query(query, params);
+    return this.getById(id);
   }
 
   static async delete(id) {
-    const query = `
-      DELETE FROM biens 
-      WHERE id = $1
-      RETURNING *
-    `;
-    
-    const result = await pool.query(query, [id]);
-    return result.rows[0];
+    const property = await this.getById(id);
+    if (!property) return null;
+
+    const query = `DELETE FROM biens WHERE id = ?`;
+    await pool.query(query, [id]);
+    return property;
   }
 }
 
