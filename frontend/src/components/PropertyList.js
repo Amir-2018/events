@@ -160,32 +160,34 @@ export default function PropertyList({
 
   return (
     <div className="w-full">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-black text-gray-900 mb-2 uppercase tracking-tighter italic">Gestion des biens</h1>
-          <p className="text-gray-500 font-medium tracking-tight">Gérez les lieux et salles disponibles pour vos événements</p>
+          <h1 className="text-xl font-bold text-gray-900 mb-1">Gestion des biens</h1>
+          <p className="text-xs text-gray-500">Gérez les lieux et salles disponibles pour vos événements</p>
         </div>
         
-        <div className="flex items-center gap-4">
-          <div className="flex items-center bg-white p-1 rounded-2xl shadow-sm border border-gray-100">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200">
             <button 
               onClick={() => setViewMode('list')}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                 viewMode === 'list' 
-                  ? 'bg-[#31a7df] text-white shadow-lg shadow-gray-200' 
-                  : 'text-gray-400 hover:text-gray-600'
+                  ? 'bg-white text-white shadow-sm' 
+                  : 'text-gray-500 hover:text-gray-700'
               }`}
+              style={viewMode === 'list' ? { backgroundColor: '#31a7df' } : {}}
             >
               <i className="fas fa-list"></i>
               Liste
             </button>
             <button 
               onClick={() => setViewMode('calendar')}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                 viewMode === 'calendar' 
-                  ? 'bg-[#31a7df] text-white shadow-lg shadow-gray-200' 
-                  : 'text-gray-400 hover:text-gray-600'
+                  ? 'bg-white text-white shadow-sm' 
+                  : 'text-gray-500 hover:text-gray-700'
               }`}
+              style={viewMode === 'calendar' ? { backgroundColor: '#31a7df' } : {}}
             >
               <i className="fas fa-calendar-alt"></i>
               Agenda
@@ -193,9 +195,10 @@ export default function PropertyList({
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-[#31a7df] text-white px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#2596d1] shadow-xl shadow-gray-100 transition-all flex items-center gap-2"
+            className="flex items-center gap-2 px-4 py-2.5 text-white rounded-lg font-medium text-sm hover:opacity-90 transition-all shadow-md active:scale-95"
+            style={{ backgroundColor: '#31a7df' }}
           >
-            <i className="fas fa-plus"></i>
+            <i className="fas fa-plus text-xs"></i>
             Ajouter un bien
           </button>
         </div>
@@ -203,114 +206,132 @@ export default function PropertyList({
 
       {viewMode === 'list' ? (
         <>
-          <div className="bg-white rounded-[2rem] shadow-xl border border-gray-100 p-8 mb-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-end">
-              <div className="lg:col-span-2">
-                <label className="block text-[10px] font-black text-gray-400 mb-3 ml-1 uppercase tracking-[0.2em]">Rechercher</label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Nom, type ou adresse..."
-                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all"
-                  />
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 absolute left-5 top-1/2 -translate-y-1/2 text-gray-300">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                  </svg>
-                </div>
-              </div>
-              <div>
-                <label className="block text-[10px] font-black text-gray-400 mb-3 ml-1 uppercase tracking-[0.2em]">Filtrer par type</label>
-                <select
-                  value={filterType}
-                  onChange={(e) => setFilterType(e.target.value)}
-                  className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold transition-all appearance-none cursor-pointer"
-                >
-                  <option value="">Tous les types</option>
-                  {bienTypes.map(type => (
-                    <option key={type.id} value={type.nom}>{type.nom}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="bg-[#31a7df] rounded-2xl p-5 flex items-center justify-between shadow-xl shadow-gray-100">
-                 <span className="text-[10px] font-black text-blue-100 uppercase tracking-widest">Total Biens</span>
-                 <span className="text-2xl font-black text-white tracking-tighter">{filteredProperties.length}</span>
-              </div>
+      {/* Filters Bar - Same as EventsSection */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Rechercher</label>
+            <div className="relative">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Nom, type ou adresse..."
+                className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:border-gray-400 text-sm transition-all"
+                style={{ '--tw-ring-color': '#31a7df', '--tw-ring-opacity': '0.2' }}
+                onFocus={(e) => e.target.style.borderColor = '#31a7df'}
+                onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+              </svg>
             </div>
           </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Type</label>
+            <select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 text-sm transition-all"
+              style={{ '--tw-ring-color': '#31a7df', '--tw-ring-opacity': '0.2' }}
+              onFocus={(e) => e.target.style.borderColor = '#31a7df'}
+              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+            >
+              <option value="">Tous</option>
+              {bienTypes.map(type => (
+                <option key={type.id} value={type.nom}>{type.nom}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Total Biens</label>
+            <div className="flex items-center px-3 py-2 bg-blue-50 border border-blue-200 rounded-lg">
+              <i className="fas fa-building text-[#31a7df] mr-2"></i>
+              <span className="font-bold text-[#2596d1] text-sm">{filteredProperties.length}</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div className="bg-white rounded-[2rem] shadow-xl overflow-hidden border border-gray-100 mb-12">
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead>
-                  <tr className="bg-gray-50/50 border-b border-gray-100">
-                    <th className="text-left px-8 py-6 font-black text-gray-400 uppercase text-[10px] tracking-widest">Bien / Lieu</th>
-                    <th className="text-left py-6 font-black text-gray-400 uppercase text-[10px] tracking-widest">Type</th>
-                    <th className="text-left py-6 font-black text-gray-400 uppercase text-[10px] tracking-widest">Localisation</th>
-                    <th className="text-right px-8 py-6 font-black text-gray-400 uppercase text-[10px] tracking-widest">Actions</th>
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                      <i className="fas fa-building mr-2"></i>
+                      Bien / Lieu
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                      <i className="fas fa-tag mr-2"></i>
+                      Type
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                      <i className="fas fa-map-marker-alt mr-2"></i>
+                      Localisation
+                    </th>
+                    <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-gray-200">
                   {filteredProperties.map((property) => (
-                    <tr key={property.id} className="hover:bg-blue-50/30 transition-colors group">
-                      <td className="px-8 py-6">
-                        <div className="flex items-center">
-                          <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-[#31a7df] font-bold mr-4 border border-blue-100 group-hover:bg-white transition-colors">
-                            <i className={getPropertyTypeIcon(property.type_bien_nom || 'Autre')}></i>
+                    <tr key={property.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i className={`${getPropertyTypeIcon(property.type_bien_nom || 'Autre')} text-[#31a7df]`}></i>
                           </div>
                           <div>
-                            <span className="font-black text-gray-900 block truncate max-w-[200px]">{property.nom}</span>
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">ID: {property.id.toString().slice(0, 8)}</span>
+                            <div className="font-bold text-gray-900 line-clamp-1">{property.nom}</div>
+                            <div className="text-sm text-gray-500">ID: {property.id.toString().slice(0, 8)}...</div>
                           </div>
                         </div>
                       </td>
-                      <td className="py-6">
-                        <span className="px-4 py-1.5 bg-blue-50 text-[#31a7df] rounded-xl text-[10px] font-black uppercase tracking-widest border border-blue-100">
-                          {property.type_bien_nom || 'Non défini'}
-                        </span>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <i className="fas fa-tag text-gray-400"></i>
+                          <span className="text-sm text-gray-600">{property.type_bien_nom || 'Non défini'}</span>
+                        </div>
                       </td>
-                      <td className="py-6 font-bold text-gray-500 max-w-xs truncate italic">
-                        {property.adresse || 'N/A'}
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <i className="fas fa-map-marker-alt text-gray-400"></i>
+                          <span className="text-sm text-gray-600 line-clamp-1">{property.adresse || 'N/A'}</span>
+                        </div>
                       </td>
-                      <td className="px-8 py-6 text-right flex justify-end gap-3">
-                        <button 
-                          onClick={() => setPropertySchedule(property)}
-                          className="p-3 text-[#31a7df] hover:bg-white hover:shadow-md rounded-2xl transition-all border border-transparent hover:border-blue-100"
-                          title="Agenda"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                          </svg>
-                        </button>
-                        <button 
-                          onClick={() => setSelectedProperty(property)}
-                          className="p-3 text-gray-400 hover:text-[#31a7df] hover:bg-white hover:shadow-md rounded-2xl transition-all border border-transparent hover:border-blue-100"
-                          title="Détails"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178Z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                          </svg>
-                        </button>
-                        <button 
-                          onClick={() => setEditingProperty(property)}
-                          className="p-3 text-gray-400 hover:text-amber-600 hover:bg-white hover:shadow-md rounded-2xl transition-all border border-transparent hover:border-amber-100"
-                          title="Modifier"
-                        >
-                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                          </svg>
-                        </button>
-                        <button 
-                          onClick={() => handleDeleteClick(property)}
-                          className="p-3 text-gray-400 hover:text-red-600 hover:bg-white hover:shadow-md rounded-2xl transition-all border border-transparent hover:border-red-100"
-                          title="Supprimer"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                          </svg>
-                        </button>
+                      <td className="px-6 py-4 text-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <button 
+                            onClick={() => setPropertySchedule(property)}
+                            className="inline-flex items-center gap-1 px-3 py-1 bg-[#31a7df] text-white rounded-lg text-xs font-bold hover:bg-[#2596d1] transition-colors"
+                            title="Agenda"
+                          >
+                            <i className="fas fa-calendar-alt"></i>
+                          </button>
+                          <button 
+                            onClick={() => setSelectedProperty(property)}
+                            className="inline-flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 transition-colors"
+                            title="Détails"
+                          >
+                            <i className="fas fa-eye"></i>
+                          </button>
+                          <button 
+                            onClick={() => setEditingProperty(property)}
+                            className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-600 text-white rounded-lg text-xs font-bold hover:bg-yellow-700 transition-colors"
+                            title="Modifier"
+                          >
+                            <i className="fas fa-edit"></i>
+                          </button>
+                          <button 
+                            onClick={() => handleDeleteClick(property)}
+                            className="inline-flex items-center gap-1 px-3 py-1 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700 transition-colors"
+                            title="Supprimer"
+                          >
+                            <i className="fas fa-trash"></i>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

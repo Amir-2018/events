@@ -28,24 +28,24 @@ export default function EventTypeForm({ onSubmit, onCancel, initialData = null }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-lg">
-        <div className="text-center mb-8">
-          <div className="bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8 text-[#31a7df]">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[70]">
+      <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg">
+        <div className="text-center mb-6">
+          <div className="bg-blue-50 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-[#31a7df]">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6Z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-xl font-bold text-gray-900 mb-1">
             {initialData ? 'Modifier le type d\'événement' : 'Nouveau type d\'événement'}
           </h2>
-          <p className="text-gray-500">Définissez les caractéristiques du type</p>
+          <p className="text-gray-500 text-xs">Définissez les caractéristiques du type</p>
         </div>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
               Nom du type *
             </label>
             <input
@@ -55,12 +55,12 @@ export default function EventTypeForm({ onSubmit, onCancel, initialData = null }
               onChange={handleChange}
               required
               placeholder="Ex: Conférence, Concert, Formation..."
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#31a7df] focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all text-sm"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
               Description
             </label>
             <textarea
@@ -69,23 +69,24 @@ export default function EventTypeForm({ onSubmit, onCancel, initialData = null }
               onChange={handleChange}
               rows={3}
               placeholder="Description du type d'événement..."
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#31a7df] focus:border-transparent transition-all resize-none"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all resize-none text-sm"
             />
           </div>
 
-          <div className="flex gap-3 pt-6">
+          <div className="flex gap-3 pt-4">
             <button
               type="button"
               onClick={onCancel}
               disabled={loading}
-              className="flex-1 px-6 py-3 border border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all disabled:opacity-50"
+              className="flex-1 px-4 py-2.5 border border-gray-200 text-gray-700 font-semibold text-sm rounded-lg hover:bg-gray-50 transition-all disabled:opacity-50"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={loading || !formData.nom.trim()}
-              className="flex-1 bg-[#31a7df] text-white py-3 px-6 rounded-xl font-semibold hover:bg-[#2596d1] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="flex-1 text-white py-2.5 px-4 rounded-lg font-semibold text-sm hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              style={{ backgroundColor: '#31a7df' }}
             >
               {loading ? (
                 <>

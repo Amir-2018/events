@@ -69,76 +69,78 @@ export default function BienTypesSection({
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-black text-gray-900 mb-1 uppercase tracking-tighter">Types de biens</h1>
-          <p className="text-sm text-gray-500 font-medium tracking-tight">Gérez les catégories de lieux pour vos événements</p>
+          <h1 className="text-xl font-bold text-gray-900 mb-1">Types de biens</h1>
+          <p className="text-xs text-gray-500">Gérez les catégories de lieux pour vos événements</p>
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="bg-[#31a7df] text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#2596d1] shadow-lg hover:shadow-gray-200 transition-all flex items-center gap-3"
+          className="text-white px-4 py-2.5 rounded-lg font-semibold text-sm hover:opacity-90 shadow-lg transition-all flex items-center gap-2"
+          style={{ backgroundColor: '#31a7df' }}
         >
-          <i className="fas fa-plus"></i>
+          <i className="fas fa-plus text-xs"></i>
           Nouvelle catégorie
         </button>
       </div>
 
       {bienTypes.length === 0 ? (
-        <div className="text-center py-24 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
-          <div className="bg-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-            <i className="fas fa-home text-gray-400 text-2xl"></i>
+        <div className="text-center py-16 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+          <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+            <i className="fas fa-home text-gray-400 text-xl"></i>
           </div>
-          <p className="text-gray-500 text-lg font-medium mb-8">Aucun type de bien enregistré</p>
+          <p className="text-gray-500 text-sm font-medium mb-6">Aucun type de bien enregistré</p>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-[#31a7df] text-white px-8 py-3 rounded-full font-bold hover:bg-[#2596d1] transition-all shadow-lg"
+            className="text-white px-6 py-2.5 rounded-lg font-semibold text-sm hover:opacity-90 transition-all shadow-lg"
+            style={{ backgroundColor: '#31a7df' }}
           >
             Créer la première catégorie
           </button>
         </div>
       ) : (
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-100">
-                  <th className="text-left px-8 py-5 font-bold text-gray-700 uppercase text-xs tracking-wider">Catégorie</th>
-                  <th className="text-left py-5 font-bold text-gray-700 uppercase text-xs tracking-wider">Description</th>
-                  <th className="text-left py-5 font-bold text-gray-700 uppercase text-xs tracking-wider">Mise à jour</th>
-                  <th className="text-right px-8 py-5 font-bold text-gray-700 uppercase text-xs tracking-wider">Actions</th>
+                  <th className="text-left px-6 py-3 font-semibold text-gray-700 text-xs">Catégorie</th>
+                  <th className="text-left py-3 font-semibold text-gray-700 text-xs">Description</th>
+                  <th className="text-left py-3 font-semibold text-gray-700 text-xs">Mise à jour</th>
+                  <th className="text-right px-6 py-3 font-semibold text-gray-700 text-xs">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {bienTypes.map((type) => (
                   <tr key={type.id} className="hover:bg-blue-50/30 transition-colors">
-                    <td className="px-8 py-5">
+                    <td className="px-6 py-3">
                       <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#2596d1] font-bold mr-4">
+                        <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-[#2596d1] text-sm mr-3">
                           <i className="fas fa-home"></i>
                         </div>
-                        <span className="font-bold text-gray-900">{type.nom}</span>
+                        <span className="font-medium text-gray-900 text-sm">{type.nom}</span>
                       </div>
                     </td>
-                    <td className="py-5 font-medium text-gray-500 max-w-md truncate">
+                    <td className="py-3 text-gray-500 max-w-md truncate text-sm">
                       {type.description || 'Aucune description'}
                     </td>
-                    <td className="py-5 text-gray-400 font-medium text-sm">
+                    <td className="py-3 text-gray-400 text-xs">
                       {new Date(type.updated_at || type.created_at || Date.now()).toLocaleDateString()}
                     </td>
-                    <td className="px-8 py-5 text-right flex justify-end gap-2">
+                    <td className="px-6 py-3 text-right flex justify-end gap-1">
                       <button 
                         onClick={() => handleEdit(type)}
-                        className="p-2 text-[#31a7df] hover:bg-blue-50 rounded-lg transition-colors"
+                        className="p-1.5 text-[#31a7df] hover:bg-blue-50 rounded-lg transition-colors"
                         title="Modifier"
                       >
-                        <i className="fas fa-edit"></i>
+                        <i className="fas fa-edit text-xs"></i>
                       </button>
                       <button 
                         onClick={() => handleDelete(type)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                         title="Supprimer"
                       >
-                        <i className="fas fa-trash"></i>
+                        <i className="fas fa-trash text-xs"></i>
                       </button>
                     </td>
                   </tr>
@@ -160,10 +162,10 @@ export default function BienTypesSection({
       />
 
       {showForm && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[90] animate-in fade-in duration-300">
-          <div className="bg-white rounded-[2.5rem] shadow-2xl p-10 w-full max-w-lg transform animate-in zoom-in duration-300">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[70] animate-in fade-in duration-300">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg transform animate-in zoom-in duration-300">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-900">
                 {editingType ? 'Modifier catégorie' : 'Nouvelle catégorie'}
               </h2>
               <button 
@@ -172,17 +174,17 @@ export default function BienTypesSection({
                   setEditingType(null);
                   setFormData({ nom: '', description: '' });
                 }} 
-                className="w-10 h-10 flex items-center justify-center rounded-2xl bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all border border-gray-100"
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
             
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-[10px] font-black text-gray-400 mb-3 ml-1 uppercase tracking-[0.2em]">Nom du type</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Nom du type</label>
                 <input
                   type="text"
                   name="nom"
@@ -190,23 +192,23 @@ export default function BienTypesSection({
                   onChange={handleChange}
                   required
                   placeholder="Ex: Villa, Bureau, Loft..."
-                  className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all text-lg"
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] text-sm transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-black text-gray-400 mb-3 ml-1 uppercase tracking-[0.2em]">Description</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Description</label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
-                  rows="4"
+                  rows="3"
                   placeholder="Décrivez ce type de bien..."
-                  className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all text-lg resize-none"
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] text-sm transition-all resize-none"
                 />
               </div>
 
-              <div className="flex gap-4 pt-4">
+              <div className="flex gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => {
@@ -214,16 +216,17 @@ export default function BienTypesSection({
                     setEditingType(null);
                     setFormData({ nom: '', description: '' });
                   }}
-                  className="flex-1 py-5 px-8 bg-gray-50 text-gray-400 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-gray-100 transition-all border border-gray-100"
+                  className="flex-1 py-2.5 px-4 bg-gray-50 text-gray-600 rounded-lg font-semibold text-sm hover:bg-gray-100 transition-all"
                 >
                   Annuler
                 </button>
                 <button
                   type="submit"
                   disabled={isProcessing || !formData.nom.trim()}
-                  className="flex-[2] bg-[#31a7df] text-white py-5 px-8 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#2596d1] shadow-xl shadow-gray-200 disabled:opacity-50 transition-all active:scale-[0.98]"
+                  className="flex-[2] text-white py-2.5 px-4 rounded-lg font-semibold text-sm hover:opacity-90 shadow-lg disabled:opacity-50 transition-all active:scale-[0.98]"
+                  style={{ backgroundColor: '#31a7df' }}
                 >
-                  {isProcessing ? 'Sauvegarde...' : editingType ? 'Mettre à jour' : 'Confirmer la création'}
+                  {isProcessing ? 'Sauvegarde...' : editingType ? 'Mettre à jour' : 'Créer'}
                 </button>
               </div>
             </form>

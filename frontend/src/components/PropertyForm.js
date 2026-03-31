@@ -123,38 +123,38 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center p-6 z-[110] animate-in fade-in duration-300">
-      <div className="bg-white rounded-[3rem] shadow-2xl p-10 w-full max-w-5xl max-h-[92vh] overflow-y-auto transform animate-in zoom-in duration-300 border border-white/20">
-        <div className="flex items-center justify-between mb-10">
-          <div className="flex items-center gap-6">
-            <div className="w-16 h-16 rounded-[2rem] bg-[#31a7df] flex items-center justify-center text-white shadow-xl shadow-gray-200">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[70] animate-in fade-in duration-300">
+      <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto transform animate-in zoom-in duration-300">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-[#31a7df] flex items-center justify-center text-white shadow-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m2.25-18v18m13.5-18v18M6.75 9.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.75m-.75 3h.75m-.75 3h.75m-3.75-16.5h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75" />
               </svg>
             </div>
             <div>
-              <h2 className="text-4xl font-black text-gray-900 uppercase tracking-tighter italic leading-none">
+              <h2 className="text-xl font-bold text-gray-900">
                 {initialData ? 'Modifier le bien' : 'Nouveau bien'}
               </h2>
-              <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-2">Configuration de l'emplacement et des horaires</p>
+              <p className="text-gray-500 text-xs">Configuration de l'emplacement et des horaires</p>
             </div>
           </div>
           <button 
             onClick={onCancel}
-            className="w-14 h-14 flex items-center justify-center rounded-[1.5rem] bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all border border-gray-100 group"
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 group-hover:rotate-90 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
         
-        <form onSubmit={handleSubmit} className="space-y-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div className="space-y-8">
-               <div className="bg-gray-50/50 p-8 rounded-[2rem] border border-gray-100 space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+               <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4">
                   <div>
-                    <label className="block text-[10px] font-black text-gray-400 mb-3 ml-1 uppercase tracking-[0.2em]">Nom du bien *</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">Nom du bien *</label>
                     <input
                       type="text"
                       name="nom"
@@ -162,18 +162,18 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                       onChange={handleChange}
                       required
                       placeholder="Ex: Stade Municipal, Salle des Fêtes..."
-                      className="w-full px-6 py-4 bg-white border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all text-lg shadow-sm"
+                      className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] text-sm transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-black text-gray-400 mb-3 ml-1 uppercase tracking-[0.2em]">Catégorie *</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">Catégorie *</label>
                     <select
                       name="type"
                       value={formData.type}
                       onChange={handleChange}
                       required
-                      className="w-full px-6 py-4 bg-white border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold transition-all text-lg shadow-sm appearance-none cursor-pointer"
+                      className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] text-sm transition-all appearance-none"
                     >
                       <option value="">Sélectionnez un type</option>
                       {bienTypes.map(type => (
@@ -183,32 +183,32 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-black text-gray-400 mb-3 ml-1 uppercase tracking-[0.2em]">Adresse physique</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">Adresse physique</label>
                     <input
                       type="text"
                       name="adresse"
                       value={formData.adresse}
                       onChange={handleChange}
                       placeholder="Adresse complète du lieu"
-                      className="w-full px-6 py-4 bg-white border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all text-lg shadow-sm"
+                      className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] text-sm transition-all"
                     />
                   </div>
                </div>
 
-               <div className="bg-gray-900 p-8 rounded-[2rem] shadow-2xl space-y-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-[#31a7df] animate-pulse"></div>
-                    <h3 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em]">Horaires de fonctionnement</h3>
+               <div className="bg-gray-900 p-4 rounded-lg space-y-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#31a7df]"></div>
+                    <h3 className="text-xs font-semibold text-blue-400">Horaires de fonctionnement</h3>
                   </div>
                   
-                  <div className="grid grid-cols-1 gap-6">
+                  <div className="space-y-4">
                     <div>
-                      <label className="block text-[10px] font-black text-gray-500 mb-3 ml-1 uppercase tracking-[0.2em]">Disponibilité hebdomadaire</label>
+                      <label className="block text-xs font-semibold text-gray-400 mb-1.5">Disponibilité hebdomadaire</label>
                       <select
                         name="jours_ouverture"
                         value={formData.jours_ouverture}
                         onChange={handleChange}
-                        className="w-full px-6 py-4 bg-gray-800 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/20 text-white font-bold transition-all appearance-none cursor-pointer"
+                        className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 text-white text-sm transition-all appearance-none"
                       >
                         {JOURS_SEMAINE.map(jour => (
                           <option key={jour} value={jour}>{jour}</option>
@@ -216,26 +216,26 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                       </select>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[10px] font-black text-gray-500 mb-3 ml-1 uppercase tracking-[0.2em]">Ouverture</label>
+                        <label className="block text-xs font-semibold text-gray-400 mb-1.5">Ouverture</label>
                         <input
                           type="time"
                           name="horaire_ouverture"
                           value={formData.horaire_ouverture}
                           onChange={handleChange}
-                          className="w-full px-6 py-4 bg-gray-800 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/20 text-white font-bold transition-all [color-scheme:dark]"
+                          className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 text-white text-sm transition-all [color-scheme:dark]"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[10px] font-black text-gray-500 mb-3 ml-1 uppercase tracking-[0.2em]">Fermeture</label>
+                        <label className="block text-xs font-semibold text-gray-400 mb-1.5">Fermeture</label>
                         <input
                           type="time"
                           name="horaire_fermeture"
                           value={formData.horaire_fermeture}
                           onChange={handleChange}
-                          className="w-full px-6 py-4 bg-gray-800 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/20 text-white font-bold transition-all [color-scheme:dark]"
+                          className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 text-white text-sm transition-all [color-scheme:dark]"
                         />
                       </div>
                     </div>
@@ -243,29 +243,29 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                </div>
             </div>
 
-            <div className="space-y-8">
-               <div className="bg-white p-2 rounded-[2.5rem] border-4 border-gray-50 shadow-inner relative group">
+            <div className="space-y-4">
+               <div className="bg-white p-2 rounded-lg border-2 border-gray-100 relative">
                   <div 
                     id="property-map" 
-                    className="w-full h-[400px] rounded-[2rem] overflow-hidden grayscale-[0.2] contrast-[1.1] z-10"
+                    className="w-full h-[300px] rounded-lg overflow-hidden"
                   >
                     {!mapLoaded && (
-                      <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-[2rem]">
+                      <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg">
                         <div className="text-center">
-                          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                          <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Chargement de la carte...</p>
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-3"></div>
+                          <p className="text-gray-400 text-xs font-medium">Chargement de la carte...</p>
                         </div>
                       </div>
                     )}
                   </div>
-                  <div className="absolute top-6 left-6 z-20 bg-white/90 backdrop-blur px-4 py-2 rounded-xl border border-gray-100 shadow-xl">
-                    <p className="text-[10px] font-black text-gray-900 uppercase tracking-widest">Coordonnées GPS</p>
+                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg border border-gray-100 shadow-lg">
+                    <p className="text-xs font-semibold text-gray-900">Coordonnées GPS</p>
                   </div>
                </div>
 
-               <div className="grid grid-cols-2 gap-6">
+               <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[10px] font-black text-gray-400 mb-3 ml-1 uppercase tracking-[0.2em]">Latitude</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">Latitude</label>
                     <input
                       type="number"
                       step="0.000001"
@@ -273,12 +273,12 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                       value={formData.latitude}
                       onChange={handleCoordinateChange}
                       placeholder="36.8065"
-                      className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all shadow-sm"
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] text-sm transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-black text-gray-400 mb-3 ml-1 uppercase tracking-[0.2em]">Longitude</label>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">Longitude</label>
                     <input
                       type="number"
                       step="0.000001"
@@ -286,50 +286,51 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                       value={formData.longitude}
                       onChange={handleCoordinateChange}
                       placeholder="10.1815"
-                      className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all shadow-sm"
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] text-sm transition-all"
                     />
                   </div>
                </div>
             </div>
           </div>
 
-          <div className="bg-blue-50/50 p-8 rounded-[2rem] border border-blue-100/50">
-            <label className="block text-[10px] font-black text-blue-400 mb-4 ml-1 uppercase tracking-[0.2em]">Description & Equipements</label>
+          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <label className="block text-xs font-semibold text-blue-700 mb-2">Description & Equipements</label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              rows={4}
+              rows={3}
               placeholder="Décrivez le lieu, sa capacité, ses équipements spécifiques..."
-              className="w-full px-8 py-6 bg-white border-none rounded-3xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all text-lg shadow-sm resize-none"
+              className="w-full px-4 py-2.5 bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] text-sm transition-all resize-none"
             />
           </div>
 
-          <div className="flex gap-6 pt-4">
+          <div className="flex gap-3 pt-4">
             <button
               type="button"
               onClick={onCancel}
               disabled={loading}
-              className="flex-1 py-6 px-10 bg-gray-50 text-gray-400 rounded-3xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-gray-100 transition-all border border-gray-100 active:scale-95"
+              className="flex-1 py-2.5 px-4 bg-gray-50 text-gray-600 rounded-lg font-semibold text-sm hover:bg-gray-100 transition-all active:scale-95"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={loading || !formData.nom.trim() || !formData.type}
-              className="flex-[2] bg-[#31a7df] text-white py-6 px-10 rounded-3xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-[#2596d1] shadow-2xl shadow-gray-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4 active:scale-95 transition-all"
+              className="flex-[2] text-white py-2.5 px-4 rounded-lg font-semibold text-sm hover:opacity-90 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-95 transition-all"
+              style={{ backgroundColor: '#31a7df' }}
             >
               {loading ? (
                 <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white/20 border-b-white"></div>
-                  <span>Traitement en cours...</span>
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-b-white"></div>
+                  <span>Traitement...</span>
                 </>
               ) : (
                 <>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>
-                  <span>{initialData ? 'Mettre à jour le bien' : 'Confirmer la création'}</span>
+                  <span>{initialData ? 'Mettre à jour' : 'Créer'}</span>
                 </>
               )}
             </button>
