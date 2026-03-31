@@ -14,14 +14,14 @@ export default function PropertyDetails({ property, onClose, onEdit, onDelete })
         {/* Header Section */}
         <div className="p-8 bg-gray-50/50 border-b border-gray-100 flex justify-between items-center shrink-0">
           <div className="flex items-center gap-6">
-            <div className="w-14 h-14 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-xl shadow-blue-100">
+            <div className="w-14 h-14 rounded-2xl bg-[#31a7df] flex items-center justify-center text-white shadow-xl shadow-gray-100">
                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-7 h-7">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m2.25-18v18m13.5-18v18" />
                </svg>
             </div>
             <div>
               <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic leading-none">{property.nom}</h2>
-              <p className="text-blue-600 font-black uppercase tracking-widest text-[10px] mt-2">{property.type}</p>
+              <p className="text-[#31a7df] font-black uppercase tracking-widest text-[10px] mt-2">{property.type}</p>
             </div>
           </div>
           
@@ -64,14 +64,14 @@ export default function PropertyDetails({ property, onClose, onEdit, onDelete })
             <div className="space-y-10">
               <section>
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></div>
+                  <div className="w-2 h-2 rounded-full bg-[#31a7df] animate-pulse"></div>
                   <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">À propos du bien</h3>
                 </div>
                 
                 <div className="space-y-6">
                   {property.adresse && (
                     <div className="flex items-start gap-4 p-5 bg-gray-50 rounded-2xl border border-gray-100">
-                      <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-blue-600 shadow-sm">
+                      <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#31a7df] shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
@@ -86,7 +86,7 @@ export default function PropertyDetails({ property, onClose, onEdit, onDelete })
 
                   {property.description && (
                     <div className="flex items-start gap-4 p-5 bg-gray-50 rounded-2xl border border-gray-100">
-                      <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-blue-600 shadow-sm">
+                      <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#31a7df] shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                         </svg>
@@ -104,7 +104,7 @@ export default function PropertyDetails({ property, onClose, onEdit, onDelete })
             <div className="space-y-10">
               <section>
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></div>
+                  <div className="w-2 h-2 rounded-full bg-[#31a7df] animate-pulse"></div>
                   <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Disponibilités & Accès</h3>
                 </div>
                 
@@ -114,7 +114,7 @@ export default function PropertyDetails({ property, onClose, onEdit, onDelete })
                       <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-3">Jours ouverts</p>
                       <p className="text-white font-black uppercase tracking-tighter text-sm italic">{property.jours_ouverture || 'Tous les jours'}</p>
                     </div>
-                    <div className="p-6 bg-blue-600 rounded-[1.5rem] shadow-xl shadow-blue-100 flex flex-col justify-center">
+                    <div className="p-6 bg-[#31a7df] rounded-[1.5rem] shadow-xl shadow-gray-100 flex flex-col justify-center">
                       <p className="text-[10px] font-black text-blue-100 uppercase tracking-widest mb-3">Plage horaire</p>
                       <p className="text-white font-black tracking-tighter text-lg leading-none italic">
                         {formatTime(property.horaire_ouverture)} <span className="text-blue-200">➟</span> {formatTime(property.horaire_fermeture)}
@@ -126,14 +126,14 @@ export default function PropertyDetails({ property, onClose, onEdit, onDelete })
                     <div className="p-6 bg-gray-50 rounded-[1.5rem] border border-gray-100">
                       <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Navigation GPS</p>
                       <div className="flex items-center justify-between">
-                        <code className="text-[10px] font-black text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100 uppercase">
+                        <code className="text-[10px] font-black text-[#31a7df] bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100 uppercase">
                           {property.latitude.toString().slice(0, 8)}, {property.longitude.toString().slice(0, 8)}
                         </code>
                         <a 
                           href={`https://www.openstreetmap.org/?mlat=${property.latitude}&mlon=${property.longitude}&zoom=15`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-[10px] font-black text-gray-900 uppercase tracking-widest hover:text-blue-600 transition-colors"
+                          className="flex items-center gap-2 text-[10px] font-black text-gray-900 uppercase tracking-widest hover:text-[#31a7df] transition-colors"
                         >
                           Ouvrir la carte
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
@@ -152,7 +152,7 @@ export default function PropertyDetails({ property, onClose, onEdit, onDelete })
           {(property.latitude && property.longitude) && (
             <section className="mt-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></div>
+                <div className="w-2 h-2 rounded-full bg-[#31a7df] animate-pulse"></div>
                 <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Visualisation spatiale</h3>
               </div>
               <div className="rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-gray-50 relative group">

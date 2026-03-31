@@ -126,8 +126,8 @@ export default function RoomForm({ onSubmit, onCancel }) {
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto transform transition-all animate-in zoom-in-95 duration-200">
         <div className="text-center p-8 border-b border-gray-100">
-          <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8 text-blue-600">
+          <div className="bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8 text-[#31a7df]">
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m2.25-18v18m13.5-18v18m2.25-18v18M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v3M21 10.5h.75m-.75 3h.75m-.75 3h.75m-3-6h.75m-.75 3h.75m-.75 3h.75" />
             </svg>
           </div>
@@ -152,7 +152,7 @@ export default function RoomForm({ onSubmit, onCancel }) {
                   onChange={handleChange}
                   required
                   placeholder="Ex: Salle de conférence A"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#31a7df] focus:border-transparent transition-all"
                 />
               </div>
 
@@ -167,7 +167,7 @@ export default function RoomForm({ onSubmit, onCancel }) {
                   onChange={handleChange}
                   required
                   placeholder="123 Rue de la Paix, Paris"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#31a7df] focus:border-transparent transition-all"
                 />
               </div>
 
@@ -183,7 +183,7 @@ export default function RoomForm({ onSubmit, onCancel }) {
                   required
                   min="1"
                   placeholder="50"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#31a7df] focus:border-transparent transition-all"
                 />
               </div>
 
@@ -199,7 +199,7 @@ export default function RoomForm({ onSubmit, onCancel }) {
                     name="latitude"
                     value={formData.latitude}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#31a7df] focus:border-transparent transition-all"
                   />
                 </div>
                 <div>
@@ -212,7 +212,7 @@ export default function RoomForm({ onSubmit, onCancel }) {
                     name="longitude"
                     value={formData.longitude}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#31a7df] focus:border-transparent transition-all"
                   />
                 </div>
               </div>
@@ -253,7 +253,7 @@ export default function RoomForm({ onSubmit, onCancel }) {
                         type="time"
                         value={formData.horaires[key].ouverture}
                         onChange={(e) => handleHoraireChange(key, 'ouverture', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-[#31a7df]"
                       />
                     </div>
                     <div>
@@ -262,7 +262,7 @@ export default function RoomForm({ onSubmit, onCancel }) {
                         type="time"
                         value={formData.horaires[key].fermeture}
                         onChange={(e) => handleHoraireChange(key, 'fermeture', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-[#31a7df]"
                       />
                     </div>
                   </div>
@@ -283,7 +283,7 @@ export default function RoomForm({ onSubmit, onCancel }) {
             <button
               type="submit"
               disabled={!formData.nom.trim() || !formData.adresse.trim() || !formData.capaciteMax}
-              className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-[#31a7df] text-white py-3 px-6 rounded-xl font-semibold hover:bg-[#2596d1] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Créer la salle
             </button>

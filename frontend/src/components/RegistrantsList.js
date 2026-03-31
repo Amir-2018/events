@@ -65,7 +65,7 @@ export default function RegistrantsList({ clients, loading = false, onClose, onR
         {onRefresh && (
           <button
             onClick={onRefresh}
-            className="px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-colors flex items-center gap-2"
+            className="px-6 py-3 bg-[#31a7df] text-white rounded-2xl font-bold hover:bg-[#2596d1] transition-colors flex items-center gap-2"
           >
             <i className="fas fa-sync-alt"></i>
             Actualiser
@@ -94,7 +94,7 @@ export default function RegistrantsList({ clients, loading = false, onClose, onR
                     <h3 className="text-2xl font-black text-gray-900">
                       {client.prenom} {client.nom}
                     </h3>
-                    <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-bold rounded-full">
+                    <span className="px-3 py-1 bg-blue-50 text-blue-800 text-sm font-bold rounded-full">
                       <i className="fas fa-calendar-check mr-1"></i>
                       {client.events.length} événement{client.events.length > 1 ? 's' : ''}
                     </span>
@@ -115,7 +115,7 @@ export default function RegistrantsList({ clients, loading = false, onClose, onR
                   {client.events.length > 0 ? (
                     <div>
                       <h4 className="font-bold text-gray-900 mb-4 flex items-center">
-                        <i className="fas fa-calendar-alt w-5 h-5 mr-2 text-blue-600"></i>
+                        <i className="fas fa-calendar-alt w-5 h-5 mr-2 text-[#31a7df]"></i>
                         Événements inscrits
                       </h4>
                       <div className="space-y-3">

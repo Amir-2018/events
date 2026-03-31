@@ -18,6 +18,8 @@ import TicketScannerSection from '../components/TicketScannerSection';
 import RevenueStatsSection from '../components/RevenueStatsSection';
 import { useAuth } from '../context/AuthContext';
 import ClientEventsSection from '../components/ClientEventsSection';
+import InvitationsSection from '../components/InvitationsSection';
+import EventEditModal from '../components/EventEditModal';
 
 export default function Home() {
   const { user } = useAuth();
@@ -40,6 +42,7 @@ export default function Home() {
   const [showDetails, setShowDetails] = useState(false);
   const [selectedEventForDetails, setSelectedEventForDetails] = useState(null);
   const [eventToEdit, setEventToEdit] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const [eventForMap, setEventForMap] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -221,6 +224,28 @@ export default function Home() {
 
   const handleEditEvent = (event) => {
     setEventToEdit(event);
+    setShowEditModal(true);
+  };
+
+  const handleSaveEditedEvent = async (updatedEvent) => {
+    try {
+      setIsProcessing(true);
+      
+      // Recharger tous les événements depuis le serveur pour être sûr d'avoir les données à jour
+      await loadEvents();
+      
+      // Afficher le message de succès
+      setSuccessMessage("L'événement a été mis à jour avec succès.");
+      setShowSuccess(true);
+      
+      // Réinitialiser l'état d'édition
+      setEventToEdit(null);
+      setShowEditModal(false);
+    } catch (err) {
+      console.error('Erreur lors de la mise à jour de l\'événement:', err);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleViewMap = (event) => {
@@ -349,7 +374,7 @@ export default function Home() {
     }
   };
   return (
-    <div className="min-h-screen bg-white text-gray-900 selection:bg-blue-100 flex">
+    <div className="min-h-screen bg-white text-gray-900 selection:bg-blue-50 flex">
       {/* Sidebar Component - ALWAYS VISIBLE */}
       <Sidebar 
         activeSection={activeSection} 
@@ -360,8 +385,8 @@ export default function Home() {
       <div className="flex-1 relative bg-gray-50/50 ml-72">
         {/* Progress Bar for secondary operations */}
         {isProcessing && (
-          <div className="fixed top-0 left-80 right-0 h-1 z-[100] bg-blue-100">
-            <div className="h-full bg-blue-600 animate-progress"></div>
+          <div className="fixed top-0 left-80 right-0 h-1 z-[100] bg-blue-50">
+            <div className="h-full bg-[#31a7df] animate-progress"></div>
           </div>
         )}
 
@@ -371,7 +396,7 @@ export default function Home() {
             <div className="relative">
               <div className="animate-spin rounded-full h-20 w-20 border-b-2 border-blue-600"></div>
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="h-4 w-4 bg-blue-600 rounded-full animate-pulse"></div>
+                <div className="h-4 w-4 bg-[#31a7df] rounded-full animate-pulse"></div>
               </div>
             </div>
             <p className="mt-8 text-lg font-black text-gray-900 uppercase tracking-tighter">Initialisation du système...</p>
@@ -466,6 +491,9 @@ export default function Home() {
             {activeSection === 'revenue-stats' && (
               <RevenueStatsSection />
             )}
+            {activeSection === 'invitations' && user?.role === 'client' && (
+              <InvitationsSection />
+            )}
           </div>
         )}
 
@@ -510,8 +538,8 @@ export default function Home() {
                    <h3 className="font-black text-gray-900 uppercase tracking-tighter italic text-lg">{eventForMap.bien_nom || eventForMap.nom}</h3>
                    <p className="text-gray-500 text-xs font-medium mt-1 leading-tight">{eventForMap.adresse || eventForMap.bien_adresse}</p>
                    <div className="mt-2 flex items-center justify-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></div>
-                      <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">Position en direct</span>
+                      <div className="w-2 h-2 rounded-full bg-[#31a7df] animate-pulse"></div>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-[#31a7df]">Position en direct</span>
                    </div>
                 </div>
 
@@ -530,13 +558,15 @@ export default function Home() {
         )}
 
         {eventToEdit && (
-          <EventForm
+          <EventEditModal
             event={eventToEdit}
             events={events}
-            onSubmit={handleCreateEvent}
-            onCancel={() => {
+            onSave={handleSaveEditedEvent}
+            onClose={() => {
               setEventToEdit(null);
+              setShowEditModal(false);
             }}
+            isOpen={showEditModal}
           />
         )}
         <ConfirmationModal

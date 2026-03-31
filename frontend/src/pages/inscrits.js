@@ -101,7 +101,7 @@ export default function InscritsList() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center">
-              <i className="fas fa-users text-blue-600 mr-3"></i>
+              <i className="fas fa-users text-[#31a7df] mr-3"></i>
               Gestion des Inscrits
             </h1>
             <p className="text-gray-600">Gérez tous les clients inscrits aux événements</p>
@@ -109,7 +109,7 @@ export default function InscritsList() {
           
           <button
             onClick={handleCreate}
-            className="px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2"
+            className="px-6 py-3 bg-[#31a7df] text-white rounded-xl font-semibold hover:bg-[#2596d1] transition-colors flex items-center gap-2"
           >
             <i className="fas fa-plus"></i>
             Nouvel Inscrit
@@ -125,7 +125,7 @@ export default function InscritsList() {
               placeholder="Rechercher par nom, prénom ou email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-transparent"
             />
           </div>
         </div>
@@ -138,8 +138,8 @@ export default function InscritsList() {
                 <p className="text-gray-500 text-sm font-medium">Total Inscrits</p>
                 <p className="text-3xl font-bold text-gray-900">{clients.length}</p>
               </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <i className="fas fa-users text-blue-600 text-xl"></i>
+              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
+                <i className="fas fa-users text-[#31a7df] text-xl"></i>
               </div>
             </div>
           </div>
@@ -246,7 +246,7 @@ export default function InscritsList() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center">
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-800">
                             <i className="fas fa-calendar-check mr-1"></i>
                             {client.events?.length || 0} événement{(client.events?.length || 0) > 1 ? 's' : ''}
                           </span>
@@ -260,7 +260,7 @@ export default function InscritsList() {
                         <div className="flex items-center justify-end space-x-2">
                           <button
                             onClick={() => handleView(client)}
-                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="p-2 text-[#31a7df] hover:bg-blue-50 rounded-lg transition-colors"
                             title="Voir les détails"
                           >
                             <i className="fas fa-eye"></i>
@@ -364,7 +364,7 @@ function ClientModal({ client, mode, onClose, onSave }) {
                   value={formData.prenom}
                   onChange={(e) => setFormData({...formData, prenom: e.target.value})}
                   disabled={isReadOnly}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-transparent disabled:bg-gray-50"
                   required
                 />
               </div>
@@ -378,7 +378,7 @@ function ClientModal({ client, mode, onClose, onSave }) {
                   value={formData.nom}
                   onChange={(e) => setFormData({...formData, nom: e.target.value})}
                   disabled={isReadOnly}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-transparent disabled:bg-gray-50"
                   required
                 />
               </div>
@@ -393,7 +393,7 @@ function ClientModal({ client, mode, onClose, onSave }) {
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
                 disabled={isReadOnly}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-transparent disabled:bg-gray-50"
                 required
               />
             </div>
@@ -407,7 +407,7 @@ function ClientModal({ client, mode, onClose, onSave }) {
                 value={formData.tel}
                 onChange={(e) => setFormData({...formData, tel: e.target.value})}
                 disabled={isReadOnly}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-transparent disabled:bg-gray-50"
               />
             </div>
 
@@ -420,7 +420,7 @@ function ClientModal({ client, mode, onClose, onSave }) {
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-transparent"
                   required
                   minLength="6"
                 />
@@ -470,7 +470,7 @@ function ClientModal({ client, mode, onClose, onSave }) {
               {!isReadOnly && (
                 <button
                   type="submit"
-                  className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
+                  className="px-6 py-3 bg-[#31a7df] text-white rounded-xl hover:bg-[#2596d1] transition-colors"
                 >
                   <i className="fas fa-save mr-2"></i>
                   {mode === 'create' ? 'Créer' : 'Sauvegarder'}

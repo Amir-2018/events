@@ -17,6 +17,7 @@ const reclamationRoutes = require('./routes/reclamationRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const passwordResetRoutes = require('./routes/passwordResetRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
+const invitationRoutes = require('./routes/invitationRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -60,10 +61,12 @@ app.use('/api/event-types', eventTypeRoutes);
 app.use('/api/properties', propertyRoutes);
 app.use('/api/type-biens', typeBienRoutes);
 app.use('/api', userRoutes);
+app.use('/api', clientRoutes);
 app.use('/api', reclamationRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/password-reset', passwordResetRoutes);
 app.use('/api', ticketRoutes);
+app.use('/api', invitationRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

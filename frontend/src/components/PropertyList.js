@@ -172,7 +172,7 @@ export default function PropertyList({
               onClick={() => setViewMode('list')}
               className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                 viewMode === 'list' 
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' 
+                  ? 'bg-[#31a7df] text-white shadow-lg shadow-gray-200' 
                   : 'text-gray-400 hover:text-gray-600'
               }`}
             >
@@ -183,7 +183,7 @@ export default function PropertyList({
               onClick={() => setViewMode('calendar')}
               className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                 viewMode === 'calendar' 
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' 
+                  ? 'bg-[#31a7df] text-white shadow-lg shadow-gray-200' 
                   : 'text-gray-400 hover:text-gray-600'
               }`}
             >
@@ -193,7 +193,7 @@ export default function PropertyList({
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-blue-600 text-white px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 shadow-xl shadow-blue-100 transition-all flex items-center gap-2"
+            className="bg-[#31a7df] text-white px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#2596d1] shadow-xl shadow-gray-100 transition-all flex items-center gap-2"
           >
             <i className="fas fa-plus"></i>
             Ajouter un bien
@@ -213,7 +213,7 @@ export default function PropertyList({
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Nom, type ou adresse..."
-                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-gray-900 font-bold placeholder-gray-300 transition-all"
+                    className="w-full pl-14 pr-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all"
                   />
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 absolute left-5 top-1/2 -translate-y-1/2 text-gray-300">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -225,7 +225,7 @@ export default function PropertyList({
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
-                  className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-gray-900 font-bold transition-all appearance-none cursor-pointer"
+                  className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold transition-all appearance-none cursor-pointer"
                 >
                   <option value="">Tous les types</option>
                   {bienTypes.map(type => (
@@ -233,7 +233,7 @@ export default function PropertyList({
                   ))}
                 </select>
               </div>
-              <div className="bg-blue-600 rounded-2xl p-5 flex items-center justify-between shadow-xl shadow-blue-100">
+              <div className="bg-[#31a7df] rounded-2xl p-5 flex items-center justify-between shadow-xl shadow-gray-100">
                  <span className="text-[10px] font-black text-blue-100 uppercase tracking-widest">Total Biens</span>
                  <span className="text-2xl font-black text-white tracking-tighter">{filteredProperties.length}</span>
               </div>
@@ -256,7 +256,7 @@ export default function PropertyList({
                     <tr key={property.id} className="hover:bg-blue-50/30 transition-colors group">
                       <td className="px-8 py-6">
                         <div className="flex items-center">
-                          <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 font-bold mr-4 border border-blue-100 group-hover:bg-white transition-colors">
+                          <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-[#31a7df] font-bold mr-4 border border-blue-100 group-hover:bg-white transition-colors">
                             <i className={getPropertyTypeIcon(property.type_bien_nom || 'Autre')}></i>
                           </div>
                           <div>
@@ -266,7 +266,7 @@ export default function PropertyList({
                         </div>
                       </td>
                       <td className="py-6">
-                        <span className="px-4 py-1.5 bg-blue-50 text-blue-600 rounded-xl text-[10px] font-black uppercase tracking-widest border border-blue-100">
+                        <span className="px-4 py-1.5 bg-blue-50 text-[#31a7df] rounded-xl text-[10px] font-black uppercase tracking-widest border border-blue-100">
                           {property.type_bien_nom || 'Non défini'}
                         </span>
                       </td>
@@ -276,7 +276,7 @@ export default function PropertyList({
                       <td className="px-8 py-6 text-right flex justify-end gap-3">
                         <button 
                           onClick={() => setPropertySchedule(property)}
-                          className="p-3 text-blue-600 hover:bg-white hover:shadow-md rounded-2xl transition-all border border-transparent hover:border-blue-100"
+                          className="p-3 text-[#31a7df] hover:bg-white hover:shadow-md rounded-2xl transition-all border border-transparent hover:border-blue-100"
                           title="Agenda"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
@@ -285,7 +285,7 @@ export default function PropertyList({
                         </button>
                         <button 
                           onClick={() => setSelectedProperty(property)}
-                          className="p-3 text-gray-400 hover:text-blue-600 hover:bg-white hover:shadow-md rounded-2xl transition-all border border-transparent hover:border-blue-100"
+                          className="p-3 text-gray-400 hover:text-[#31a7df] hover:bg-white hover:shadow-md rounded-2xl transition-all border border-transparent hover:border-blue-100"
                           title="Détails"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">

@@ -3,7 +3,7 @@ import { reclamationsAPI } from '../lib/api';
 
 const STATUS_COLORS = {
   'En attente': 'bg-amber-100 text-amber-700 border-amber-200',
-  'En cours': 'bg-blue-100 text-blue-700 border-blue-200',
+  'En cours': 'bg-blue-50 text-[#2596d1] border-blue-200',
   'Terminé': 'bg-green-100 text-green-700 border-green-200',
   'Résolu': 'bg-emerald-100 text-emerald-700 border-emerald-200',
   'Rejeté': 'bg-red-100 text-red-700 border-red-200'
@@ -61,7 +61,7 @@ export default function ReclamationsSection() {
           <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-3">Suivi et résolution des retours clients</p>
         </div>
         <div className="bg-blue-50 px-6 py-3 rounded-2xl border border-blue-100">
-          <span className="text-blue-600 font-black text-sm">{reclamations.length} total</span>
+          <span className="text-[#31a7df] font-black text-sm">{reclamations.length} total</span>
         </div>
       </div>
 
@@ -82,7 +82,7 @@ export default function ReclamationsSection() {
                 <tr key={r.id} className="hover:bg-blue-50/20 transition-colors group">
                   <td className="px-8 py-7">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-black text-sm shadow-lg shadow-blue-100 transition-transform group-hover:scale-110">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-black text-sm shadow-lg shadow-gray-100 transition-transform group-hover:scale-110">
                         {r.client_prenom?.[0] || '?'}{r.client_nom?.[0] || '?'}
                       </div>
                       <div>
@@ -140,7 +140,7 @@ export default function ReclamationsSection() {
                               className={`p-2.5 rounded-xl transition-all border ${
                                 r.status === 'En cours' 
                                 ? 'bg-gray-50 text-gray-300 border-gray-100' 
-                                : 'bg-white text-blue-600 border-blue-100 hover:bg-blue-600 hover:text-white hover:shadow-lg hover:shadow-blue-100'
+                                : 'bg-white text-[#31a7df] border-blue-100 hover:bg-[#31a7df] hover:text-white hover:shadow-lg hover:shadow-gray-100'
                               }`}
                               title="Mettre en cours"
                             >

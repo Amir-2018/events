@@ -13,13 +13,14 @@ class Event {
       bien_id,
       max_participants,
       prix,
-      user_id
+      user_id,
+      is_private
     } = eventData;
     
     const id = uuidv4();
     const query = `
-      INSERT INTO events (id, nom, date, date_fin, image, adresse, type_evenement_id, bien_id, max_participants, prix, user_id, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+      INSERT INTO events (id, nom, date, date_fin, image, adresse, type_evenement_id, bien_id, max_participants, prix, user_id, is_private, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
     `;
     
     await pool.query(query, [
@@ -33,7 +34,8 @@ class Event {
       bien_id || null,
       max_participants || 0,
       prix || 0.00,
-      user_id || null
+      user_id || null,
+      is_private || false
     ]);
     
     return this.getById(id);
@@ -129,13 +131,14 @@ class Event {
       type_evenement_id, 
       bien_id,
       max_participants,
-      prix
+      prix,
+      is_private
     } = eventData;
     
     const query = `
       UPDATE events 
       SET nom = ?, date = ?, date_fin = ?, image = ?, adresse = ?, 
-          type_evenement_id = ?, bien_id = ?, max_participants = ?, prix = ?, updated_at = NOW()
+          type_evenement_id = ?, bien_id = ?, max_participants = ?, prix = ?, is_private = ?, updated_at = NOW()
       WHERE id = ?
     `;
     
@@ -149,6 +152,7 @@ class Event {
       bien_id || null, 
       max_participants || 0,
       prix || 0.00,
+      is_private || false,
       id
     ]);
     return this.getById(id);
@@ -316,6 +320,126 @@ class Event {
     const searchPattern = `%${searchTerm}%`;
     const result = await pool.query(query, [searchPattern, searchPattern, searchPattern, searchPattern]);
     return result.rows;
+  }
+
+  // Méthodes pour événements privés
+  static async getPublicEvents(userId = null) {
+    let query = `
+      SELECT 
+        e.*,
+        te.nom as type_evenement_nom,
+        te.description as type_evenement_description,
+        b.nom as bien_nom,
+        tb.nom as bien_type,
+        b.adresse as bien_adresse,
+        b.latitude as bien_latitude,
+        b.longitude as bien_longitude,
+        COUNT(er.client_id) as current_participants
+      FROM events e
+      LEFT JOIN types_evenements te ON e.type_evenement_id = te.id
+      LEFT JOIN biens b ON e.bien_id = b.id
+      LEFT JOIN type_biens tb ON b.type_bien_id = tb.id
+      LEFT JOIN event_registrations er ON e.id = er.event_id
+      WHERE e.is_private = FALSE
+    `;
+    
+    const params = [];
+    if (userId) {
+      query += ` OR e.user_id = ? `;
+      params.push(userId);
+    }
+    
+    query += ` GROUP BY e.id ORDER BY e.date DESC, e.created_at DESC `;
+    
+    const result = await pool.query(query, params);
+    const events = result.rows;
+    
+    // Pour chaque événement, récupérer les clients inscrits
+    for (const event of events) {
+      const clientsResult = await pool.query(`
+        SELECT 
+          c.id,
+          c.nom,
+          c.prenom,
+          c.email,
+          c.tel,
+          er.created_at as registration_date
+        FROM event_registrations er
+        JOIN clients c ON er.client_id = c.id
+        WHERE er.event_id = ?
+        ORDER BY er.created_at DESC
+      `, [event.id]);
+      
+      event.clients = clientsResult.rows;
+    }
+    
+    return events;
+  }
+
+  static async canClientAccessEvent(eventId, clientId) {
+    // Vérifier si l'événement est public
+    const event = await this.getById(eventId);
+    if (!event) return false;
+    if (!event.is_private) return true;
+    
+    // Si privé, vérifier si le client a une invitation acceptée
+    const invitationQuery = `
+      SELECT * FROM event_invitations 
+      WHERE event_id = ? AND client_id = ? AND status = 'accepted'
+    `;
+    const result = await pool.query(invitationQuery, [eventId, clientId]);
+    return result.rows.length > 0;
+  }
+
+  static async getAccessibleEvents(clientId) {
+    const query = `
+      SELECT DISTINCT
+        e.*,
+        te.nom as type_evenement_nom,
+        te.description as type_evenement_description,
+        b.nom as bien_nom,
+        tb.nom as bien_type,
+        b.adresse as bien_adresse,
+        b.latitude as bien_latitude,
+        b.longitude as bien_longitude,
+        COUNT(er.client_id) as current_participants,
+        ei.status as invitation_status
+      FROM events e
+      LEFT JOIN types_evenements te ON e.type_evenement_id = te.id
+      LEFT JOIN biens b ON e.bien_id = b.id
+      LEFT JOIN type_biens tb ON b.type_bien_id = tb.id
+      LEFT JOIN event_registrations er ON e.id = er.event_id
+      LEFT JOIN event_invitations ei ON e.id = ei.event_id AND ei.client_id = ?
+      WHERE 
+        e.is_private = FALSE 
+        OR (e.is_private = TRUE AND ei.status = 'accepted')
+      GROUP BY e.id 
+      ORDER BY e.date DESC, e.created_at DESC
+    `;
+    
+    const result = await pool.query(query, [clientId]);
+    const events = result.rows;
+    
+    // Pour chaque événement, récupérer les clients inscrits
+    for (const event of events) {
+      const clientsResult = await pool.query(`
+        SELECT 
+          c.id,
+          c.nom,
+          c.prenom,
+          c.email,
+          c.tel,
+          er.created_at as registration_date
+        FROM event_registrations er
+        JOIN clients c ON er.client_id = c.id
+        WHERE er.event_id = ?
+        ORDER BY er.created_at DESC
+      `, [event.id]);
+      
+      event.clients = clientsResult.rows;
+    }
+    
+    return events;
   }
 }
 

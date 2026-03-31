@@ -56,7 +56,7 @@ export default function MyTickets() {
       case 'cancelled':
         return 'bg-red-100 text-red-700 border-red-200';
       default:
-        return 'bg-blue-100 text-blue-700 border-blue-200';
+        return 'bg-blue-50 text-[#2596d1] border-blue-200';
     }
   };
 
@@ -111,7 +111,7 @@ export default function MyTickets() {
               <p className="text-gray-600 mb-6">Vous n'avez pas encore de tickets d'événements.</p>
               <button
                 onClick={() => router.push('/')}
-                className="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-blue-700 transition-colors"
+                className="bg-[#31a7df] text-white px-6 py-3 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-[#2596d1] transition-colors"
               >
                 Découvrir les événements
               </button>
@@ -169,7 +169,7 @@ export default function MyTickets() {
                     {/* Actions */}
                     <button
                       onClick={() => handleViewTicket(ticket)}
-                      className="w-full bg-blue-600 text-white py-3 px-4 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-blue-700 transition-colors"
+                      className="w-full bg-[#31a7df] text-white py-3 px-4 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-[#2596d1] transition-colors"
                     >
                       Voir le ticket
                     </button>

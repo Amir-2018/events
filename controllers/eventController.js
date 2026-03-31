@@ -5,9 +5,17 @@ class EventController {
   async getEvents(req, res) {
     try {
       const isManaged = req.query.managed === 'true';
+      const isPublicOnly = req.query.public === 'true';
       const userId = (isManaged && req.user?.role !== 'superadmin') ? req.user.id : null;
+      const clientId = req.user?.role === 'client' ? req.user.id : null;
       
-      const events = await EventService.getAllEvents(userId);
+      let events;
+      if (isPublicOnly) {
+        events = await EventService.getPublicEvents(userId);
+      } else {
+        events = await EventService.getAllEvents(userId, clientId);
+      }
+      
       res.json({
         success: true,
         data: events,
@@ -59,7 +67,7 @@ class EventController {
 
   async createEvent(req, res) {
     try {
-      const { nom, date, date_fin, image, adresse, type_evenement_id, bien_id, prix } = req.body;
+      const { nom, date, date_fin, image, adresse, type_evenement_id, bien_id, prix, is_private } = req.body;
       const user_id = req.user?.id;
       
       const event = await EventService.createEvent({ 
@@ -71,7 +79,8 @@ class EventController {
         type_evenement_id, 
         bien_id,
         prix,
-        user_id
+        user_id,
+        is_private
       });
       
       res.status(201).json({

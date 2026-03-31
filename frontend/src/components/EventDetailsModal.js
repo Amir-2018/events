@@ -84,7 +84,7 @@ export default function EventDetailsModal({ event, onClose }) {
     
     if (now < startDate) return { label: 'À venir', classes: 'border-amber-200 text-amber-700 bg-amber-50' };
     if (now >= startDate && now <= endDate) return { label: 'En cours', classes: 'border-green-200 text-green-700 bg-green-50 animate-pulse' };
-    return { label: 'Terminé', classes: 'border-blue-200 text-blue-700 bg-blue-50' };
+    return { label: 'Terminé', classes: 'border-blue-200 text-[#2596d1] bg-blue-50' };
   };
 
   const status = getEventStatus();
@@ -97,7 +97,7 @@ export default function EventDetailsModal({ event, onClose }) {
         <div className="p-8 border-b border-gray-100 flex justify-between items-start bg-gradient-to-r from-gray-50 to-white">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
-              <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
+              <span className="px-3 py-1 bg-blue-50 text-[#2596d1] rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
                 {event.type_evenement_nom}
               </span>
               <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest leading-none border ${status.classes}`}>
@@ -106,7 +106,7 @@ export default function EventDetailsModal({ event, onClose }) {
             </div>
             <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tighter leading-none">{event.nom}</h2>
             <div className="flex items-center text-gray-500 text-sm mt-3 font-medium">
-               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 mr-2 text-blue-500">
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 mr-2 text-[#31a7df]">
                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                </svg>
                {formatDate(event.date)}
@@ -127,19 +127,19 @@ export default function EventDetailsModal({ event, onClose }) {
         <div className="flex border-b border-gray-100 px-8 bg-gray-50/50">
           <button
             onClick={() => setActiveTab('infos')}
-            className={`py-4 px-6 font-bold text-sm uppercase tracking-widest transition-all border-b-2 ${activeTab === 'infos' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200'}`}
+            className={`py-4 px-6 font-bold text-sm uppercase tracking-widest transition-all border-b-2 ${activeTab === 'infos' ? 'border-blue-600 text-[#31a7df]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200'}`}
           >
             Informations & Inscrits
           </button>
           <button
             onClick={() => setActiveTab('map')}
-            className={`py-4 px-6 font-bold text-sm uppercase tracking-widest transition-all border-b-2 ${activeTab === 'map' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200'}`}
+            className={`py-4 px-6 font-bold text-sm uppercase tracking-widest transition-all border-b-2 ${activeTab === 'map' ? 'border-blue-600 text-[#31a7df]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200'}`}
           >
             Emplacement
           </button>
           <button
             onClick={() => setActiveTab('souvenirs')}
-            className={`py-4 px-6 font-bold text-sm uppercase tracking-widest transition-all border-b-2 ${activeTab === 'souvenirs' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200'}`}
+            className={`py-4 px-6 font-bold text-sm uppercase tracking-widest transition-all border-b-2 ${activeTab === 'souvenirs' ? 'border-blue-600 text-[#31a7df]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-200'}`}
           >
             Souvenirs
           </button>
@@ -167,7 +167,7 @@ export default function EventDetailsModal({ event, onClose }) {
                    <div className="bg-blue-50 rounded-3xl p-6 border border-blue-100">
                       <h4 className="text-xs font-black text-blue-400 uppercase tracking-widest mb-2">Capacité</h4>
                       <div className="flex items-end gap-2">
-                         <span className="text-3xl font-black text-blue-600 leading-none">{clients.length}</span>
+                         <span className="text-3xl font-black text-[#31a7df] leading-none">{clients.length}</span>
                          <span className="text-blue-400 font-bold mb-1">/ {event.max_participants || '∞'} participants</span>
                       </div>
                    </div>
@@ -192,7 +192,7 @@ export default function EventDetailsModal({ event, onClose }) {
                             {clients.map(client => (
                                <li key={client.id} className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
                                   <div className="flex items-center gap-3">
-                                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 text-blue-700 font-bold flex items-center justify-center text-sm shadow-inner">
+                                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 text-[#2596d1] font-bold flex items-center justify-center text-sm shadow-inner">
                                         {client.prenom[0]}{client.nom[0]}
                                      </div>
                                      <div>
@@ -219,8 +219,8 @@ export default function EventDetailsModal({ event, onClose }) {
                          <h3 className="font-black text-gray-900 uppercase tracking-tighter italic text-lg line-clamp-1">{event.bien_nom}</h3>
                          <p className="text-gray-500 text-xs font-medium mt-1 leading-tight line-clamp-2">{event.adresse || event.bien_adresse}</p>
                          <div className="mt-2 flex items-center justify-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></div>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">Position</span>
+                            <div className="w-2 h-2 rounded-full bg-[#31a7df] animate-pulse"></div>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-[#31a7df]">Position</span>
                          </div>
                       </div>
                       <iframe 
@@ -259,7 +259,7 @@ export default function EventDetailsModal({ event, onClose }) {
           {activeTab === 'souvenirs' && (
              <div className="p-8">
                 <form onSubmit={handleAddSouvenir} className="mb-10 p-6 bg-blue-50 rounded-3xl border border-blue-100">
-                  <h3 className="text-xs font-black text-blue-600 uppercase tracking-widest mb-4">Ajouter une image souvenir</h3>
+                  <h3 className="text-xs font-black text-[#31a7df] uppercase tracking-widest mb-4">Ajouter une image souvenir</h3>
                   <div className="flex flex-col md:flex-row gap-4 items-center">
                     <div className="flex-grow w-full">
                       <label 
@@ -269,16 +269,16 @@ export default function EventDetailsModal({ event, onClose }) {
                           <div className="absolute inset-0 z-10">
                             <img src={newSouvenir.url} className="w-full h-full object-cover opacity-50" alt="Preview" />
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                              <span className="text-blue-700 font-bold text-sm bg-white/80 px-3 py-1 rounded-lg">Image sélectionnée</span>
-                              <span className="text-xs text-blue-500 mt-1">Cliquez pour changer</span>
+                              <span className="text-[#2596d1] font-bold text-sm bg-white/80 px-3 py-1 rounded-lg">Image sélectionnée</span>
+                              <span className="text-xs text-[#31a7df] mt-1">Cliquez pour changer</span>
                             </div>
                           </div>
                         ) : (
                           <div className="flex flex-col items-center justify-center">
-                            <svg className="w-6 h-6 text-blue-400 group-hover:text-blue-500 mb-2 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-6 h-6 text-blue-400 group-hover:text-[#31a7df] mb-2 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path>
                             </svg>
-                            <span className="text-sm font-bold text-gray-500 group-hover:text-blue-600 transition-colors">Choisir une image depuis votre appareil</span>
+                            <span className="text-sm font-bold text-gray-500 group-hover:text-[#31a7df] transition-colors">Choisir une image depuis votre appareil</span>
                           </div>
                         )}
                         <input
@@ -302,7 +302,7 @@ export default function EventDetailsModal({ event, onClose }) {
                       <button
                         type="submit"
                         disabled={isSubmittingSouvenir || !newSouvenir.url}
-                        className="px-8 py-4 h-full bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:from-blue-700 hover:to-blue-900 transition-all shadow-lg shadow-blue-200 disabled:opacity-50 disabled:shadow-none active:scale-95"
+                        className="px-8 py-4 h-full bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:from-blue-700 hover:to-blue-900 transition-all shadow-lg shadow-gray-200 disabled:opacity-50 disabled:shadow-none active:scale-95"
                       >
                         {isSubmittingSouvenir ? 'Envoi...' : 'Partager'}
                       </button>

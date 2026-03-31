@@ -27,8 +27,8 @@ export default function Reclamations() {
         <div className="min-h-screen bg-gray-50 pt-20">
           <div className="max-w-4xl mx-auto px-4 py-16 text-center">
             <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-12">
-              <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-10 h-10 text-blue-600">
+              <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-10 h-10 text-[#31a7df]">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                 </svg>
               </div>
@@ -41,7 +41,7 @@ export default function Reclamations() {
               </p>
               <button
                 onClick={() => router.push('/login')}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl"
+                className="bg-[#31a7df] hover:bg-[#2596d1] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl"
               >
                 Se connecter
               </button>
@@ -187,7 +187,7 @@ export default function Reclamations() {
                   type="text"
                   value={formData.sujet}
                   onChange={(e) => handleInputChange('sujet', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-[#31a7df] outline-none transition-all"
                   placeholder="Résumé de votre réclamation"
                   required
                 />
@@ -248,7 +248,7 @@ export default function Reclamations() {
                   value={formData.description}
                   onChange={(e) => handleInputChange('description', e.target.value)}
                   rows={6}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all resize-none"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-[#31a7df] outline-none transition-all resize-none"
                   placeholder="Décrivez votre problème en détail..."
                   required
                 />
@@ -261,7 +261,7 @@ export default function Reclamations() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 px-6 rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-[#31a7df] hover:bg-[#2596d1] text-white py-4 px-6 rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <div className="flex items-center justify-center gap-2">

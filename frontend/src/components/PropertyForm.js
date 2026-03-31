@@ -127,7 +127,7 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
       <div className="bg-white rounded-[3rem] shadow-2xl p-10 w-full max-w-5xl max-h-[92vh] overflow-y-auto transform animate-in zoom-in duration-300 border border-white/20">
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-6">
-            <div className="w-16 h-16 rounded-[2rem] bg-blue-600 flex items-center justify-center text-white shadow-xl shadow-blue-200">
+            <div className="w-16 h-16 rounded-[2rem] bg-[#31a7df] flex items-center justify-center text-white shadow-xl shadow-gray-200">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m2.25-18v18m13.5-18v18M6.75 9.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.75m-.75 3h.75m-.75 3h.75m-3.75-16.5h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75" />
               </svg>
@@ -162,7 +162,7 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                       onChange={handleChange}
                       required
                       placeholder="Ex: Stade Municipal, Salle des Fêtes..."
-                      className="w-full px-6 py-4 bg-white border-none rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-gray-900 font-bold placeholder-gray-300 transition-all text-lg shadow-sm"
+                      className="w-full px-6 py-4 bg-white border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all text-lg shadow-sm"
                     />
                   </div>
 
@@ -173,7 +173,7 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                       value={formData.type}
                       onChange={handleChange}
                       required
-                      className="w-full px-6 py-4 bg-white border-none rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-gray-900 font-bold transition-all text-lg shadow-sm appearance-none cursor-pointer"
+                      className="w-full px-6 py-4 bg-white border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold transition-all text-lg shadow-sm appearance-none cursor-pointer"
                     >
                       <option value="">Sélectionnez un type</option>
                       {bienTypes.map(type => (
@@ -190,14 +190,14 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                       value={formData.adresse}
                       onChange={handleChange}
                       placeholder="Adresse complète du lieu"
-                      className="w-full px-6 py-4 bg-white border-none rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-gray-900 font-bold placeholder-gray-300 transition-all text-lg shadow-sm"
+                      className="w-full px-6 py-4 bg-white border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all text-lg shadow-sm"
                     />
                   </div>
                </div>
 
                <div className="bg-gray-900 p-8 rounded-[2rem] shadow-2xl space-y-6">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                    <div className="w-2 h-2 rounded-full bg-[#31a7df] animate-pulse"></div>
                     <h3 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em]">Horaires de fonctionnement</h3>
                   </div>
                   
@@ -208,7 +208,7 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                         name="jours_ouverture"
                         value={formData.jours_ouverture}
                         onChange={handleChange}
-                        className="w-full px-6 py-4 bg-gray-800 border-none rounded-2xl focus:ring-4 focus:ring-blue-500/20 text-white font-bold transition-all appearance-none cursor-pointer"
+                        className="w-full px-6 py-4 bg-gray-800 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/20 text-white font-bold transition-all appearance-none cursor-pointer"
                       >
                         {JOURS_SEMAINE.map(jour => (
                           <option key={jour} value={jour}>{jour}</option>
@@ -224,7 +224,7 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                           name="horaire_ouverture"
                           value={formData.horaire_ouverture}
                           onChange={handleChange}
-                          className="w-full px-6 py-4 bg-gray-800 border-none rounded-2xl focus:ring-4 focus:ring-blue-500/20 text-white font-bold transition-all [color-scheme:dark]"
+                          className="w-full px-6 py-4 bg-gray-800 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/20 text-white font-bold transition-all [color-scheme:dark]"
                         />
                       </div>
 
@@ -235,7 +235,7 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                           name="horaire_fermeture"
                           value={formData.horaire_fermeture}
                           onChange={handleChange}
-                          className="w-full px-6 py-4 bg-gray-800 border-none rounded-2xl focus:ring-4 focus:ring-blue-500/20 text-white font-bold transition-all [color-scheme:dark]"
+                          className="w-full px-6 py-4 bg-gray-800 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/20 text-white font-bold transition-all [color-scheme:dark]"
                         />
                       </div>
                     </div>
@@ -273,7 +273,7 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                       value={formData.latitude}
                       onChange={handleCoordinateChange}
                       placeholder="36.8065"
-                      className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-gray-900 font-bold placeholder-gray-300 transition-all shadow-sm"
+                      className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all shadow-sm"
                     />
                   </div>
 
@@ -286,7 +286,7 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
                       value={formData.longitude}
                       onChange={handleCoordinateChange}
                       placeholder="10.1815"
-                      className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-gray-900 font-bold placeholder-gray-300 transition-all shadow-sm"
+                      className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all shadow-sm"
                     />
                   </div>
                </div>
@@ -301,7 +301,7 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
               onChange={handleChange}
               rows={4}
               placeholder="Décrivez le lieu, sa capacité, ses équipements spécifiques..."
-              className="w-full px-8 py-6 bg-white border-none rounded-3xl focus:ring-4 focus:ring-blue-500/10 text-gray-900 font-bold placeholder-gray-300 transition-all text-lg shadow-sm resize-none"
+              className="w-full px-8 py-6 bg-white border-none rounded-3xl focus:ring-4 focus:ring-[#31a7df]/10 text-gray-900 font-bold placeholder-gray-300 transition-all text-lg shadow-sm resize-none"
             />
           </div>
 
@@ -317,7 +317,7 @@ export default function PropertyForm({ onSubmit, onCancel, initialData = null, b
             <button
               type="submit"
               disabled={loading || !formData.nom.trim() || !formData.type}
-              className="flex-[2] bg-blue-600 text-white py-6 px-10 rounded-3xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-blue-700 shadow-2xl shadow-blue-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4 active:scale-95 transition-all"
+              className="flex-[2] bg-[#31a7df] text-white py-6 px-10 rounded-3xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-[#2596d1] shadow-2xl shadow-gray-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4 active:scale-95 transition-all"
             >
               {loading ? (
                 <>

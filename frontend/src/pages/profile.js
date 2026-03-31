@@ -230,7 +230,7 @@ export default function Profile() {
                   name="nom"
                   value={formData.nom}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                  className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-[#31a7df] transition-colors ${
                     errors.nom ? 'border-red-300' : 'border-gray-300'
                   }`}
                   placeholder="Votre nom"
@@ -250,7 +250,7 @@ export default function Profile() {
                   name="prenom"
                   value={formData.prenom}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                  className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-[#31a7df] transition-colors ${
                     errors.prenom ? 'border-red-300' : 'border-gray-300'
                   }`}
                   placeholder="Votre prénom"
@@ -271,7 +271,7 @@ export default function Profile() {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-[#31a7df] transition-colors ${
                   errors.email ? 'border-red-300' : 'border-gray-300'
                 }`}
                 placeholder="votre@email.com"
@@ -297,7 +297,7 @@ export default function Profile() {
                     name="currentPassword"
                     value={formData.currentPassword}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-[#31a7df] transition-colors ${
                       errors.currentPassword ? 'border-red-300' : 'border-gray-300'
                     }`}
                     placeholder="Votre mot de passe actuel"
@@ -319,7 +319,7 @@ export default function Profile() {
                     name="newPassword"
                     value={formData.newPassword}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-[#31a7df] transition-colors ${
                       errors.newPassword ? 'border-red-300' : 'border-gray-300'
                     }`}
                     placeholder="Nouveau mot de passe"
@@ -339,7 +339,7 @@ export default function Profile() {
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-[#31a7df] transition-colors ${
                       errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
                     }`}
                     placeholder="Confirmer le mot de passe"

@@ -16,14 +16,14 @@ export default function ClientEventsSection({ events, onUnregister, isProcessing
     <div className="space-y-8">
       <div className="flex justify-between items-end mb-12">
         <div>
-          <h2 className="text-4xl font-black uppercase tracking-tighter text-gray-900 mb-2 italic">Mes <span className="text-blue-600">Inscriptions</span></h2>
+          <h2 className="text-4xl font-black uppercase tracking-tighter text-gray-900 mb-2 italic">Mes <span className="text-[#31a7df]">Inscriptions</span></h2>
           <p className="text-gray-500 font-medium tracking-wide">Gérez vos participations aux événements à venir.</p>
         </div>
       </div>
 
       {events.length === 0 ? (
         <div className="bg-white border-2 border-dashed border-gray-100 p-16 rounded-[40px] text-center max-w-2xl mx-auto shadow-sm">
-          <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-600 shadow-inner">
+          <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 text-[#31a7df] shadow-inner">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zM15 12h.008v.008H15v-.008zM15 15h.008v.008H15v-.008zM9 12h.008v.008H9v-.008zM9 15h.008v.008H9V15z" />
             </svg>
@@ -47,7 +47,7 @@ export default function ClientEventsSection({ events, onUnregister, isProcessing
                   </div>
                 )}
                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-2xl shadow-lg border border-white/50">
-                  <span className="text-xs font-black uppercase tracking-widest text-blue-600">
+                  <span className="text-xs font-black uppercase tracking-widest text-[#31a7df]">
                     {event.type_evenement_nom || 'Événement'}
                   </span>
                 </div>

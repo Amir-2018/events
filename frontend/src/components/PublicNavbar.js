@@ -48,12 +48,11 @@ export default function PublicNavbar() {
           {/* Left Section: Logo + Links */}
           <div className="flex items-center space-x-6">
             <Link href={isAdmin ? "/dashboard" : "/"} className="flex items-center group">
-               <div className="bg-blue-600 p-2 rounded-xl mr-3 group-hover:rotate-12 transition-transform shadow-lg">
+               <div className="bg-[#31a7df] p-2 rounded-xl group-hover:rotate-12 transition-transform shadow-lg">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="white" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 8.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25a2.25 2.25 0 0 1-2.25 2.25h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z" />
                   </svg>
                </div>
-               <span className="text-xl font-black uppercase tracking-tighter text-gray-900 italic">Event<span className="text-blue-600">Pro</span></span>
             </Link>
 
             {!isAdmin && (
@@ -62,7 +61,7 @@ export default function PublicNavbar() {
                   <Link 
                     key={link.name} 
                     href={link.href}
-                    className={`text-[10px] font-black uppercase tracking-widest transition-all hover:text-blue-600 flex items-center gap-2 ${router.pathname === link.href ? 'text-blue-600' : 'text-gray-400'}`}
+                    className={`text-[10px] font-black uppercase tracking-widest transition-all hover:text-[#31a7df] flex items-center gap-2 ${router.pathname === link.href ? 'text-[#31a7df]' : 'text-gray-400'}`}
                   >
                     {link.icon && <i className={`${link.icon} text-sm`}></i>}
                     {link.name}
@@ -73,12 +72,12 @@ export default function PublicNavbar() {
             {!isDashboard && isAuthenticated && isAdmin && (
               <Link 
                 href="/dashboard"
-                className={`ml-4 text-[10px] font-black uppercase tracking-widest transition-all text-blue-600 hover:text-blue-700 bg-blue-50 px-4 py-2 rounded-lg border border-blue-100 flex items-center gap-2`}
+                className={`ml-4 text-[10px] font-black uppercase tracking-widest transition-all text-[#31a7df] hover:text-[#2596d1] bg-blue-50 px-4 py-2 rounded-lg border border-blue-100 flex items-center gap-2`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 8.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25a2.25 2.25 0 0 1-2.25 2.25h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z" />
                 </svg>
-                Gestion
+                Dashboard
               </Link>
             )}
           </div>
@@ -91,7 +90,7 @@ export default function PublicNavbar() {
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="flex items-center gap-3 group focus:outline-none"
                 >
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white font-black text-xs shadow-xl shadow-blue-100 border-2 border-white ring-1 ring-blue-100 group-hover:scale-105 transition-transform">
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white font-black text-xs shadow-xl shadow-gray-100 border-2 border-white ring-1 ring-blue-100 group-hover:scale-105 transition-transform">
                     {userInitials}
                   </div>
                   <div className="hidden sm:flex flex-col items-start translate-y-[-1px]">
@@ -116,12 +115,12 @@ export default function PublicNavbar() {
                     <Link 
                       href="/dashboard" 
                       onClick={() => setIsDropdownOpen(false)}
-                      className="flex items-center px-4 py-3 text-[10px] font-black uppercase tracking-widest text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors gap-3"
+                      className="flex items-center px-4 py-3 text-[10px] font-black uppercase tracking-widest text-gray-700 hover:bg-gray-50 hover:text-[#31a7df] transition-colors gap-3"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 8.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25a2.25 2.25 0 0 1-2.25 2.25h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z" />
                       </svg>
-                      Espace Gestion
+                      Tableau de bord
                     </Link>
 
                     <button 
@@ -144,7 +143,7 @@ export default function PublicNavbar() {
                 <div className="flex items-center gap-4">
                   <Link 
                     href="/login" 
-                    className="bg-blue-600 text-white px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all hover:shadow-xl hover:shadow-blue-200 active:scale-95"
+                    className="bg-[#31a7df] text-white px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-[#2596d1] transition-all hover:shadow-xl hover:shadow-gray-200 active:scale-95"
                   >
                     Connexion
                   </Link>

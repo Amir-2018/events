@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import EventCard from './EventCard';
 import EventForm from './EventForm';
 import CalendarView from './CalendarView';
+import Pagination from './Pagination';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
@@ -17,10 +18,14 @@ export default function EventsSection({
   isProcessing 
 }) {
   const [showForm, setShowForm] = useState(false);
-  const [viewMode, setViewMode] = useState('grid'); // 'grid', 'table' or 'calendar'
+  const [viewMode, setViewMode] = useState('table'); // 'grid', 'table' or 'calendar' - Default to table
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('');
   const [filterStatus, setFilterStatus] = useState(''); // '', 'futur', 'en_cours', 'termine'
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleCreateEvent = async (eventData) => {
     await onCreateEvent(eventData);
@@ -46,14 +51,14 @@ export default function EventsSection({
     } else if (startDate && startDate <= now && (!endDate || endDate >= now)) {
       return { status: 'en_cours', label: 'En cours', color: 'bg-green-100 text-green-700' };
     } else {
-      return { status: 'futur', label: 'À venir', color: 'bg-blue-100 text-blue-700' };
+      return { status: 'futur', label: 'À venir', color: 'bg-blue-50 text-[#2596d1]' };
     }
   };
 
   const filteredEvents = useMemo(() => {
     const now = new Date();
     
-    return events.filter(event => {
+    const filtered = events.filter(event => {
       // Calcul du statut
       const startDate = event.date ? new Date(event.date) : null;
       const endDate = event.date_fin ? new Date(event.date_fin) : (startDate ? new Date(startDate.getTime() + 2 * 60 * 60 * 1000) : null);
@@ -72,58 +77,80 @@ export default function EventsSection({
       
       return matchesSearch && matchesType && matchesStatus;
     });
+
+    setTotalItems(filtered.length);
+    return filtered;
   }, [events, searchTerm, filterType, filterStatus]);
+
+  // Pagination logic
+  const paginatedEvents = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredEvents.slice(startIndex, endIndex);
+  }, [filteredEvents, currentPage, itemsPerPage]);
+
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  // Reset to first page when filters change
+  const handleFilterChange = (filterFn) => {
+    setCurrentPage(1);
+    filterFn();
+  };
 
   return (
     <div className="w-full">
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
+      {/* Header Section - Optimized */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-black text-gray-900 mb-2 uppercase tracking-tighter">Événements</h1>
-          <p className="text-gray-500 font-medium tracking-tight">Gérez et suivez tous vos événements en un coup d'œil</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-1">Événements</h1>
+          <p className="text-sm text-gray-500">Gestion des événements</p>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => setShowForm(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-2xl font-semibold text-sm uppercase tracking-wide hover:from-blue-700 hover:to-blue-900 transition-all shadow-xl shadow-blue-200/50 active:scale-95 border border-white/20"
+            className="flex items-center gap-2 px-4 py-2 text-white rounded-lg font-medium text-sm hover:opacity-90 transition-all shadow-md active:scale-95"
+            style={{ backgroundColor: '#31a7df' }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3.5 h-3.5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
-            Ajouter un événement
+            Ajouter
           </button>
           
-          <div className="flex items-center bg-gray-100 p-1.5 rounded-2xl border border-gray-200 shadow-inner">
+          <div className="flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200">
           <button 
             onClick={() => setViewMode('grid')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               viewMode === 'grid' 
-                ? 'bg-white text-blue-600 shadow-md' 
-                : 'text-gray-400 hover:text-gray-600'
+                ? 'bg-white text-white shadow-sm' 
+                : 'text-gray-500 hover:text-gray-700'
             }`}
+            style={viewMode === 'grid' ? { backgroundColor: '#31a7df' } : {}}
           >
             <i className="fas fa-th-large"></i>
             Cartes
           </button>
           <button 
             onClick={() => setViewMode('table')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               viewMode === 'table' 
-                ? 'bg-white text-blue-600 shadow-md' 
-                : 'text-gray-400 hover:text-gray-600'
+                ? 'bg-white text-white shadow-sm' 
+                : 'text-gray-500 hover:text-gray-700'
             }`}
+            style={viewMode === 'table' ? { backgroundColor: '#31a7df' } : {}}
           >
             <i className="fas fa-table"></i>
             Tableau
           </button>
           <button 
             onClick={() => setViewMode('calendar')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               viewMode === 'calendar' 
-                ? 'bg-white text-blue-600 shadow-md' 
-                : 'text-gray-400 hover:text-gray-600'
+                ? 'bg-white text-white shadow-sm' 
+                : 'text-gray-500 hover:text-gray-700'
             }`}
+            style={viewMode === 'calendar' ? { backgroundColor: '#31a7df' } : {}}
           >
             <i className="fas fa-calendar-alt"></i>
             Agenda
@@ -132,45 +159,54 @@ export default function EventsSection({
         </div>
       </div>
 
-      {/* Filters Bar */}
-      <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 mb-10 overflow-hidden relative">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
-          <div className="md:col-span-2">
-            <label className="block text-xs font-black text-gray-400 mb-2 uppercase tracking-widest">Rechercher</label>
+      {/* Filters Bar - Optimized */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Rechercher</label>
             <div className="relative">
               <input
                 type="text"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Nom ou adresse de l'événement..."
-                className="w-full pl-12 pr-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-gray-900 font-medium placeholder-gray-400 transition-all"
+                onChange={(e) => handleFilterChange(() => setSearchTerm(e.target.value))}
+                placeholder="Nom ou adresse..."
+                className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:border-gray-400 text-sm transition-all"
+                style={{ '--tw-ring-color': '#31a7df', '--tw-ring-opacity': '0.2' }}
+                onFocus={(e) => e.target.style.borderColor = '#31a7df'}
+                onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
               />
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
               </svg>
             </div>
           </div>
           <div>
-            <label className="block text-xs font-black text-gray-400 mb-2 uppercase tracking-widest">Type d'événement</label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Type</label>
             <select
               value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
-              className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-gray-900 font-medium transition-all"
+              onChange={(e) => handleFilterChange(() => setFilterType(e.target.value))}
+              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 text-sm transition-all"
+              style={{ '--tw-ring-color': '#31a7df', '--tw-ring-opacity': '0.2' }}
+              onFocus={(e) => e.target.style.borderColor = '#31a7df'}
+              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
             >
-              <option value="">Tous les types</option>
+              <option value="">Tous</option>
               {eventTypes?.map(type => (
                 <option key={type.id} value={type.nom}>{type.nom}</option>
               ))}
             </select>
           </div>
           <div>
-            <label className="block text-xs font-black text-gray-400 mb-2 uppercase tracking-widest">Statut</label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Statut</label>
             <select
               value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-4 focus:ring-blue-500/10 text-gray-900 font-medium transition-all"
+              onChange={(e) => handleFilterChange(() => setFilterStatus(e.target.value))}
+              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 text-sm transition-all"
+              style={{ '--tw-ring-color': '#31a7df', '--tw-ring-opacity': '0.2' }}
+              onFocus={(e) => e.target.style.borderColor = '#31a7df'}
+              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
             >
-              <option value="">Tous les statuts</option>
+              <option value="">Tous</option>
               <option value="futur">À venir</option>
               <option value="en_cours">En cours</option>
               <option value="termine">Terminés</option>
@@ -190,26 +226,35 @@ export default function EventsSection({
             </div>
             <p className="text-gray-500 text-lg font-medium mb-4">Aucun événement ne correspond à vos critères</p>
             <button 
-              onClick={() => {setSearchTerm(''); setFilterType('');}} 
-              className="text-blue-600 font-bold hover:underline uppercase text-xs tracking-widest"
+              onClick={() => {handleFilterChange(() => {setSearchTerm(''); setFilterType(''); setFilterStatus('');})}} 
+              className="text-[#31a7df] font-bold hover:underline uppercase text-xs tracking-widest"
             >
               Réinitialiser les filtres
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            {filteredEvents.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                onDelete={onDeleteEvent}
-                onViewClients={onViewClients}
-                onViewDetails={onViewDetails}
-                onEdit={onEdit}
-                onViewMap={onViewMap}
-              />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              {paginatedEvents.map((event) => (
+                <EventCard
+                  key={event.id}
+                  event={event}
+                  onDelete={onDeleteEvent}
+                  onViewClients={onViewClients}
+                  onViewDetails={onViewDetails}
+                  onEdit={onEdit}
+                  onViewMap={onViewMap}
+                />
+              ))}
+            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+              totalItems={totalItems}
+              itemsPerPage={itemsPerPage}
+            />
+          </>
         )
       ) : viewMode === 'table' ? (
         filteredEvents.length === 0 ? (
@@ -219,8 +264,8 @@ export default function EventsSection({
             </div>
             <p className="text-gray-500 text-lg font-medium mb-4">Aucun événement ne correspond à vos critères</p>
             <button 
-              onClick={() => {setSearchTerm(''); setFilterType('');}} 
-              className="text-blue-600 font-bold hover:underline uppercase text-xs tracking-widest"
+              onClick={() => {handleFilterChange(() => {setSearchTerm(''); setFilterType(''); setFilterStatus('');})}} 
+              className="text-[#31a7df] font-bold hover:underline uppercase text-xs tracking-widest"
             >
               Réinitialiser les filtres
             </button>
@@ -265,15 +310,15 @@ export default function EventsSection({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {filteredEvents.map((event) => {
+                  {paginatedEvents.map((event) => {
                     const eventStatus = getEventStatus(event);
                     
                     return (
                       <tr key={event.id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                              <i className="fas fa-calendar-alt text-blue-600"></i>
+                            <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                              <i className="fas fa-calendar-alt text-[#31a7df]"></i>
                             </div>
                             <div>
                               <div className="font-bold text-gray-900 line-clamp-1">{event.nom}</div>
@@ -308,7 +353,7 @@ export default function EventsSection({
                               {parseFloat(event.prix).toFixed(2)}
                             </span>
                           ) : (
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-blue-100 text-blue-700">
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-blue-50 text-[#2596d1]">
                               <i className="fas fa-gift mr-1"></i>
                               Gratuit
                             </span>
@@ -323,7 +368,7 @@ export default function EventsSection({
                           <div className="flex items-center justify-center gap-2">
                             <button
                               onClick={() => onViewDetails(event)}
-                              className="inline-flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors"
+                              className="inline-flex items-center gap-1 px-3 py-1 bg-[#31a7df] text-white rounded-lg text-xs font-bold hover:bg-[#2596d1] transition-colors"
                               title="Voir détails"
                             >
                               <i className="fas fa-eye"></i>
@@ -357,10 +402,17 @@ export default function EventsSection({
                 </tbody>
               </table>
             </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+              totalItems={totalItems}
+              itemsPerPage={itemsPerPage}
+            />
           </div>
         )
       ) : (
-        <CalendarView items={filteredEvents} onItemClick={(item) => console.log('Click on', item)} />
+        <CalendarView items={paginatedEvents} onItemClick={(item) => console.log('Click on', item)} />
       )}
 
       {/* Modal Form */}

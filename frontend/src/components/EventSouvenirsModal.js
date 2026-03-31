@@ -63,7 +63,7 @@ export default function EventSouvenirsModal({ event, onClose }) {
         <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-gradient-to-r from-gray-50 to-white">
           <div>
             <h2 className="text-2xl font-black text-gray-900 uppercase tracking-tighter">Souvenirs de l'événement</h2>
-            <p className="text-blue-600 font-bold text-sm uppercase tracking-widest mt-1">{event.nom}</p>
+            <p className="text-[#31a7df] font-bold text-sm uppercase tracking-widest mt-1">{event.nom}</p>
           </div>
           <button 
             onClick={onClose}
@@ -78,7 +78,7 @@ export default function EventSouvenirsModal({ event, onClose }) {
         <div className="flex-grow overflow-y-auto p-8">
           {/* Upload Section */}
           <form onSubmit={handleAddSouvenir} className="mb-10 p-6 bg-blue-50 rounded-3xl border border-blue-100">
-            <h3 className="text-xs font-black text-blue-600 uppercase tracking-widest mb-4">Ajouter un souvenir</h3>
+            <h3 className="text-xs font-black text-[#31a7df] uppercase tracking-widest mb-4">Ajouter un souvenir</h3>
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-grow">
                 <input
@@ -86,14 +86,14 @@ export default function EventSouvenirsModal({ event, onClose }) {
                   placeholder="URL de l'image ou de la vidéo..."
                   value={newSouvenir.url}
                   onChange={(e) => setNewSouvenir({ ...newSouvenir, url: e.target.value })}
-                  className="w-full px-5 py-3.5 bg-white border border-blue-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-sm"
+                  className="w-full px-5 py-3.5 bg-white border border-blue-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all font-medium text-sm"
                 />
               </div>
               <div className="flex gap-4">
                 <select
                   value={newSouvenir.type}
                   onChange={(e) => setNewSouvenir({ ...newSouvenir, type: e.target.value })}
-                  className="px-5 py-3.5 bg-white border border-blue-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-bold text-xs uppercase tracking-widest"
+                  className="px-5 py-3.5 bg-white border border-blue-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all font-bold text-xs uppercase tracking-widest"
                 >
                   <option value="image">Image</option>
                   <option value="video">Vidéo</option>
@@ -101,7 +101,7 @@ export default function EventSouvenirsModal({ event, onClose }) {
                 <button
                   type="submit"
                   disabled={isSubmitting || !newSouvenir.url}
-                  className="px-8 py-3.5 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 disabled:opacity-50 disabled:shadow-none active:scale-95"
+                  className="px-8 py-3.5 bg-[#31a7df] text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#2596d1] transition-all shadow-lg shadow-gray-200 disabled:opacity-50 disabled:shadow-none active:scale-95"
                 >
                   {isSubmitting ? 'Ajout...' : 'Ajouter'}
                 </button>

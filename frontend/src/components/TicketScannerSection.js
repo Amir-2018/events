@@ -135,8 +135,8 @@ export default function TicketScannerSection() {
       {/* Scanner Section */}
       <div className="bg-white rounded-3xl shadow-lg p-8 mb-8 border border-gray-100">
         <div className="text-center mb-6">
-          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <i className={`fas ${showCamera ? 'fa-camera' : 'fa-qrcode'} text-blue-600 text-2xl`}></i>
+          <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i className={`fas ${showCamera ? 'fa-camera' : 'fa-qrcode'} text-[#31a7df] text-2xl`}></i>
           </div>
           <h2 className="text-xl font-bold text-gray-900 mb-2">Scanner un QR Code</h2>
           <p className="text-gray-600 text-sm">Saisissez le numéro de ticket ou scannez le QR code avec la caméra</p>
@@ -181,7 +181,7 @@ export default function TicketScannerSection() {
                 onChange={(e) => setTicketNumber(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="TK-20240331-1234"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center font-mono text-lg"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-transparent text-center font-mono text-lg"
                 disabled={loading}
               />
             </div>
@@ -189,7 +189,7 @@ export default function TicketScannerSection() {
             <button
               onClick={() => handleScanTicket()}
               disabled={loading || !ticketNumber.trim()}
-              className="w-full bg-blue-600 text-white py-3 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-[#31a7df] text-white py-3 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-[#2596d1] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               <i className="fas fa-search"></i>
               {loading ? 'Recherche...' : 'Rechercher le ticket'}
@@ -260,7 +260,7 @@ export default function TicketScannerSection() {
                 ? 'bg-green-100 text-green-700'
                 : ticket.status === 'cancelled'
                   ? 'bg-red-100 text-red-700'
-                  : 'bg-blue-100 text-blue-700'
+                  : 'bg-blue-50 text-[#2596d1]'
             }`}>
               {ticket.status === 'verified' ? 'Vérifié' : 
                ticket.status === 'cancelled' ? 'Annulé' : 'Actif'}

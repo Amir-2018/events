@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { uploadAPI, eventsAPI, eventTypesAPI, propertiesAPI } from '../lib/api';
+import ClientSelectionSection from './ClientSelectionSection';
 
-export default function EventForm({ event = null, events = [], onSubmit, onCancel }) {
+export default function EventForm({ event = null, events = [], onSubmit, onCancel, isEditMode = false }) {
   // Safe date parser to avoid RangeError
   const formatDateTimeLocal = (dateString) => {
     if (!dateString) return '';
@@ -22,17 +23,21 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
     type_evenement_id: event?.type_evenement_id || '',
     bien_id: event?.bien_id || '',
     max_participants: event?.max_participants || 0,
-    prix: event?.prix || 0.00
+    prix: event?.prix || 0.00,
+    is_private: event?.is_private || false
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
   const [uploading, setUploading] = useState(false);
   const [eventTypes, setEventTypes] = useState([]);
   const [properties, setProperties] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [selectedClients, setSelectedClients] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
   const [showConflictPopup, setShowConflictPopup] = useState(false);
   const [conflictMessage, setConflictMessage] = useState('');
   const [conflictEvent, setConflictEvent] = useState(null);
+  const [showClientSelection, setShowClientSelection] = useState(false);
 
   useEffect(() => {
     loadInitialData();
@@ -40,13 +45,19 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
 
   const loadInitialData = async () => {
     try {
-      const [eventTypesResponse, propertiesResponse] = await Promise.all([
+      const [eventTypesResponse, propertiesResponse, clientsResponse] = await Promise.all([
         eventTypesAPI.getEventTypes(),
-        propertiesAPI.getProperties()
+        propertiesAPI.getProperties(),
+        fetch('/api/clients', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        }).then(res => res.json())
       ]);
       
       setEventTypes(eventTypesResponse.data.data || []);
       setProperties(propertiesResponse.data.data || []);
+      setClients(clientsResponse.data || []);
     } catch (error) {
       console.error('Erreur lors du chargement des données:', error);
     } finally {
@@ -127,9 +138,17 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
       return;
     }
 
+    // 4. Vérification pour les événements privés
+    if (formData.is_private && selectedClients.length === 0) {
+      setConflictMessage('Veuillez sélectionner au moins un client pour cet événement privé.');
+      setShowConflictPopup(true);
+      return;
+    }
+
     try {
       setUploading(true);
       let response;
+      
       // Si un nouvel événement est fourni, l'ajouter directement à la liste
       if (imageFile) {
         response = await uploadAPI.createEventWithImage(formData, imageFile);
@@ -138,6 +157,28 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
       } else {
         // Créer l'événement sans image
         response = await eventsAPI.createEvent(formData);
+      }
+      
+      // Si c'est un événement privé et qu'on a des clients sélectionnés, envoyer les invitations
+      if (formData.is_private && selectedClients.length > 0 && response.data.data?.id) {
+        try {
+          const clientEmails = selectedClients.map(clientId => {
+            const client = clients.find(c => c.id === clientId);
+            return client?.email;
+          }).filter(Boolean);
+          
+          await fetch(`/api/events/${response.data.data.id}/invite`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({ clientEmails })
+          });
+        } catch (inviteError) {
+          console.error('Erreur lors de l\'envoi des invitations:', inviteError);
+          // Ne pas bloquer la création de l'événement si les invitations échouent
+        }
       }
       
       // Passer les données de l'événement créé au parent
@@ -150,10 +191,27 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
   };
 
   const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: type === 'checkbox' ? checked : value
     });
+    
+    // Si on passe en mode privé, afficher la sélection des clients
+    if (name === 'is_private' && checked) {
+      setShowClientSelection(true);
+    } else if (name === 'is_private' && !checked) {
+      setShowClientSelection(false);
+      setSelectedClients([]);
+    }
+  };
+
+  const handleClientToggle = (clientId) => {
+    setSelectedClients(prev => 
+      prev.includes(clientId) 
+        ? prev.filter(id => id !== clientId)
+        : [...prev, clientId]
+    );
   };
 
   const handleFileChange = (e) => {
@@ -215,14 +273,18 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
           {/* Main Form Area */}
           <div className="flex-1 p-8 md:p-10 overflow-y-auto">
             <div className="flex items-center gap-4 mb-8">
-              <div className="bg-blue-100 w-12 h-12 rounded-2xl flex items-center justify-center shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-blue-600">
+              <div className="bg-blue-50 w-12 h-12 rounded-2xl flex items-center justify-center shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-[#31a7df]">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 leading-tight">Nouvel événement</h2>
-                <p className="text-gray-500 text-sm">Créez une expérience mémorable</p>
+                <h2 className="text-2xl font-bold text-gray-900 leading-tight">
+                  {isEditMode ? 'Modifier l\'événement' : 'Nouvel événement'}
+                </h2>
+                <p className="text-gray-500 text-sm">
+                  {isEditMode ? 'Apportez les modifications nécessaires' : 'Créez une expérience mémorable'}
+                </p>
               </div>
             </div>
             
@@ -245,7 +307,7 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
                     onChange={handleChange}
                     required
                     placeholder="Ex: Soirée Gala, Conférence..."
-                    className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-900"
+                    className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all font-medium text-gray-900"
                   />
                 </div>
 
@@ -259,7 +321,7 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
                     value={formData.date}
                     onChange={handleChange}
                     required
-                    className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
+                    className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all font-medium"
                   />
                 </div>
 
@@ -272,7 +334,7 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
                     name="date_fin"
                     value={formData.date_fin}
                     onChange={handleChange}
-                    className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
+                    className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all font-medium"
                   />
                 </div>
 
@@ -285,7 +347,7 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
                     value={formData.type_evenement_id}
                     onChange={handleChange}
                     required
-                    className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-900 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m19%209-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_1.25rem_center] bg-no-repeat"
+                    className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all font-medium text-gray-900 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m19%209-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_1.25rem_center] bg-no-repeat"
                   >
                     <option value="">Choisir un type</option>
                     {eventTypes.map((type) => (
@@ -302,7 +364,7 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
                     name="bien_id"
                     value={formData.bien_id}
                     onChange={handleChange}
-                    className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-900 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m19%209-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_1.25rem_center] bg-no-repeat"
+                    className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all font-medium text-gray-900 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m19%209-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_1.25rem_center] bg-no-repeat"
                   >
                     <option value="">Sélectionnez un bien</option>
                     {properties.map((property) => (
@@ -325,7 +387,7 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
                         value={formData.adresse}
                         onChange={handleChange}
                         placeholder="Adresse physique de l'événement"
-                        className="w-full pl-12 pr-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
+                        className="w-full pl-12 pr-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all font-medium"
                       />
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -346,7 +408,7 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
                     onChange={handleChange}
                     min="0"
                     placeholder="0 pour illimité"
-                    className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
+                    className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all font-medium"
                   />
                 </div>
 
@@ -363,7 +425,7 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
                       min="0"
                       step="0.01"
                       placeholder="0.00 pour gratuit"
-                      className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium pr-12"
+                      className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all font-medium pr-12"
                     />
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">
                       €
@@ -372,6 +434,31 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
                   <p className="text-xs text-gray-500 mt-1 ml-1">
                     Laissez 0.00 pour un événement gratuit
                   </p>
+                </div>
+
+                {/* Section Événement Privé */}
+                <div className="col-span-1 md:col-span-2">
+                  <div className="flex items-center gap-3 mb-4">
+                    <input
+                      type="checkbox"
+                      id="is_private"
+                      name="is_private"
+                      checked={formData.is_private}
+                      onChange={handleChange}
+                      className="w-5 h-5 text-[#31a7df] bg-gray-50 border-gray-200 rounded focus:ring-[#31a7df] focus:ring-2"
+                    />
+                    <label htmlFor="is_private" className="text-sm font-semibold text-gray-700">
+                      Événement privé (sur invitation uniquement)
+                    </label>
+                  </div>
+                  
+                  {formData.is_private && (
+                    <ClientSelectionSection 
+                      clients={clients}
+                      selectedClients={selectedClients}
+                      onClientToggle={handleClientToggle}
+                    />
+                  )}
                 </div>
               </div>
 
@@ -398,7 +485,7 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
                       En cours...
                     </>
                   ) : (
-                    event?.id ? 'Confirmer les modifications' : 'Confirmer la création'
+                    isEditMode ? 'Confirmer les modifications' : 'Confirmer la création'
                   )}
                 </button>
               </div>
@@ -411,13 +498,13 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
             <div className="w-full max-w-[240px] aspect-[3/4] rounded-3xl overflow-hidden relative group shadow-2xl border-4 border-white">
               {!imagePreview ? (
                 <div className="w-full h-full bg-blue-50 flex flex-col items-center justify-center p-6 text-center">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-blue-600">
+                  <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-[#31a7df]">
                       <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                     </svg>
                   </div>
                   <p className="text-blue-950 font-bold mb-1">Image cover</p>
-                  <p className="text-xs text-blue-500 font-medium">PNG, JPG ou WebP</p>
+                  <p className="text-xs text-[#31a7df] font-medium">PNG, JPG ou WebP</p>
                 </div>
               ) : (
                 <div className="w-full h-full relative">

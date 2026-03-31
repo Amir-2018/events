@@ -117,8 +117,8 @@ export default function TicketScanner() {
         {/* Scanner Section */}
         <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
           <div className="text-center mb-6">
-            <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-10 h-10 text-blue-600">
+            <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-10 h-10 text-[#31a7df]">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h4.5v4.5h-4.5v-4.5Z" />
               </svg>
@@ -138,7 +138,7 @@ export default function TicketScanner() {
                 onChange={(e) => setTicketNumber(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="TK-20240331-1234"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center font-mono text-lg"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-transparent text-center font-mono text-lg"
                 disabled={loading}
               />
             </div>
@@ -146,7 +146,7 @@ export default function TicketScanner() {
             <button
               onClick={handleScanTicket}
               disabled={loading || !ticketNumber.trim()}
-              className="w-full bg-blue-600 text-white py-3 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#31a7df] text-white py-3 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-[#2596d1] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Recherche...' : 'Rechercher le ticket'}
             </button>
@@ -174,7 +174,7 @@ export default function TicketScanner() {
                   ? 'bg-green-100 text-green-700'
                   : ticket.status === 'cancelled'
                     ? 'bg-red-100 text-red-700'
-                    : 'bg-blue-100 text-blue-700'
+                    : 'bg-blue-50 text-[#2596d1]'
               }`}>
                 {ticket.status === 'verified' ? 'Vérifié' : 
                  ticket.status === 'cancelled' ? 'Annulé' : 'Actif'}

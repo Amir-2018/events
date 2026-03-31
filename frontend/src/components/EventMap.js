@@ -58,22 +58,22 @@ export default function EventMap({
         <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
           <div className="text-center p-8">
             <div className="w-20 h-20 bg-blue-200 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-10 h-10 text-blue-600">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-10 h-10 text-[#31a7df]">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
               </svg>
             </div>
             <h3 className="text-blue-800 font-bold text-lg mb-2">{bienNom || 'Localisation'}</h3>
-            {bienType && <p className="text-blue-600 text-sm mb-2">{bienType}</p>}
-            <p className="text-blue-600 text-sm mb-4">{adresse || ''}</p>
-            <p className="text-blue-500 text-xs mb-6 font-mono">
+            {bienType && <p className="text-[#31a7df] text-sm mb-2">{bienType}</p>}
+            <p className="text-[#31a7df] text-sm mb-4">{adresse || ''}</p>
+            <p className="text-[#31a7df] text-xs mb-6 font-mono">
               Coordonnées: {lat.toFixed(6)}, {lng.toFixed(6)}
             </p>
             <a 
               href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}&zoom=16`} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors shadow-lg"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#31a7df] text-white rounded-xl text-sm font-semibold hover:bg-[#2596d1] transition-colors shadow-lg"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
@@ -143,7 +143,7 @@ export default function EventMap({
           href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}&zoom=16`}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-blue-600 text-white p-2 rounded-lg shadow-lg hover:bg-blue-700 transition-colors"
+          className="bg-[#31a7df] text-white p-2 rounded-lg shadow-lg hover:bg-[#2596d1] transition-colors"
           title="Ouvrir dans OpenStreetMap"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">

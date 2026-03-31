@@ -9,7 +9,7 @@ export default function AboutPage() {
       <main className="pt-40 pb-20">
         <div className="max-w-4xl mx-auto px-6">
           <h1 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter italic mb-12 animate-in slide-in-from-left duration-700">
-            À propos de <span className="text-blue-600">Nous</span>
+            À propos de <span className="text-[#31a7df]">Nous</span>
           </h1>
           
           <div className="prose prose-xl prose-blue max-w-none text-gray-500 font-medium leading-relaxed space-y-8 animate-in fade-in duration-1000 delay-300">

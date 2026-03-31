@@ -18,12 +18,12 @@ export default function ServicesPage() {
       <main className="pt-40 pb-20">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h1 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter italic mb-12 animate-in slide-in-from-bottom duration-700">
-            Nos <span className="text-blue-600">Services</span>
+            Nos <span className="text-[#31a7df]">Services</span>
           </h1>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-20 animate-in fade-in duration-1000 delay-300 text-left">
             {services.map((service, i) => (
-              <div key={i} className="group p-10 bg-gray-50 rounded-[40px] border border-gray-100 hover:bg-blue-600 hover:-translate-y-2 transition-all shadow-sm hover:shadow-2xl hover:shadow-blue-200">
+              <div key={i} className="group p-10 bg-gray-50 rounded-[40px] border border-gray-100 hover:bg-[#31a7df] hover:-translate-y-2 transition-all shadow-sm hover:shadow-2xl hover:shadow-gray-200">
                 <h3 className="text-2xl font-black uppercase tracking-tight mb-4 group-hover:text-white transition-colors">{service.title}</h3>
                 <p className="text-gray-500 group-hover:text-blue-50 transition-colors leading-relaxed">{service.desc}</p>
               </div>

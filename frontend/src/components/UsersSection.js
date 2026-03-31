@@ -133,7 +133,7 @@ export default function UsersSection() {
         </div>
         <button
           onClick={handleCreate}
-          className="bg-blue-600 text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 shadow-lg hover:shadow-blue-200 transition-all flex items-center gap-3"
+          className="bg-[#31a7df] text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#2596d1] shadow-lg hover:shadow-gray-200 transition-all flex items-center gap-3"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -178,7 +178,7 @@ export default function UsersSection() {
                 <tr key={u.id} className="hover:bg-blue-50/30 transition-colors">
                   <td className="px-8 py-5">
                     <div className="flex items-center">
-                      <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700 font-bold mr-4">
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#2596d1] font-bold mr-4">
                         {u.prenom?.[0]}{u.nom?.[0]}
                       </div>
                       <span className="font-bold text-gray-900">{u.prenom} {u.nom}</span>
@@ -197,7 +197,7 @@ export default function UsersSection() {
                   <td className="py-5">
                     <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
                       u.status === 'accepted' 
-                        ? 'bg-blue-100 text-blue-700 border border-blue-200' 
+                        ? 'bg-blue-50 text-[#2596d1] border border-blue-200' 
                         : u.status === 'pending'
                         ? 'bg-amber-100 text-amber-700 border border-amber-200 animate-pulse'
                         : 'bg-red-100 text-red-700 border border-red-200'
@@ -233,7 +233,7 @@ export default function UsersSection() {
                     )}
                     <button 
                       onClick={() => handleEdit(u)}
-                      className="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
+                      className="p-2 text-[#31a7df] hover:bg-blue-50 rounded-lg transition-colors"
                       title="Modifier"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">

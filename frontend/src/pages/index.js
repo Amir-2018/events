@@ -40,7 +40,7 @@ export default function LandingPage() {
 
   const loadEvents = async () => {
     try {
-      const response = await eventsAPI.getEvents();
+      const response = await eventsAPI.getPublicEvents();
       // Only get events that are in the future
       const upcomingEvents = (response.data.data || []).filter(
         event => new Date(event.date) > new Date()
@@ -187,7 +187,7 @@ export default function LandingPage() {
                 <div className="absolute inset-0 z-20 flex items-center">
                   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div className="text-center md:text-left md:max-w-3xl">
-                      <div className="inline-block px-4 py-2 bg-blue-600 text-white rounded-full text-xs font-black uppercase tracking-widest mb-6 shadow-lg">
+                      <div className="inline-block px-4 py-2 bg-[#31a7df] text-white rounded-full text-xs font-black uppercase tracking-widest mb-6 shadow-lg">
                         {event.type_evenement_nom || 'Événement Spécial'}
                       </div>
                       <h1 className="text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter text-white leading-tight mb-8 italic drop-shadow-2xl">
@@ -215,7 +215,7 @@ export default function LandingPage() {
                         ) : (
                           <button 
                             onClick={() => handleRegister(event.id)}
-                            className="bg-blue-600 text-white px-10 py-5 rounded-3xl text-sm font-black uppercase tracking-widest hover:bg-blue-500 transition-all hover:shadow-2xl hover:shadow-blue-500/50 active:scale-95 flex items-center justify-center border border-blue-400"
+                            className="bg-[#31a7df] text-white px-10 py-5 rounded-3xl text-sm font-black uppercase tracking-widest hover:bg-[#31a7df] transition-all hover:shadow-2xl hover:shadow-blue-500/50 active:scale-95 flex items-center justify-center border border-blue-400"
                           >
                             S'inscrire maintenant
                           </button>
@@ -247,7 +247,7 @@ export default function LandingPage() {
                   <button 
                     key={idx}
                     onClick={() => setCurrentSlide(idx)}
-                    className={`w-3 h-3 rounded-full transition-all ${currentSlide === idx ? 'w-8 bg-blue-500' : 'bg-white/50 hover:bg-white'}`}
+                    className={`w-3 h-3 rounded-full transition-all ${currentSlide === idx ? 'w-8 bg-[#31a7df]' : 'bg-white/50 hover:bg-white'}`}
                   aria-label={`Aller au slide ${idx + 1}`}
                   />
                 ))}
@@ -273,7 +273,7 @@ export default function LandingPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-black uppercase tracking-tighter italic mb-4">
-                Événements <span className="text-blue-600">à Venir</span>
+                Événements <span className="text-[#31a7df]">à Venir</span>
               </h2>
               <p className="text-gray-500 font-medium">Découvrez et inscrivez-vous à nos prochains événements exclusifs.</p>
             </div>
@@ -289,7 +289,7 @@ export default function LandingPage() {
                       placeholder="Rechercher un événement..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium pl-14"
+                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all font-medium pl-14"
                     />
                     <i className="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"></i>
                   </div>
@@ -299,7 +299,7 @@ export default function LandingPage() {
                     <select
                       value={selectedEventType}
                       onChange={(e) => setSelectedEventType(e.target.value)}
-                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m19%209-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_1.25rem_center] bg-no-repeat"
+                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all font-medium appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m19%209-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_1.25rem_center] bg-no-repeat"
                     >
                       <option value="">Tous les types</option>
                       {eventTypes.map((type) => (
@@ -313,7 +313,7 @@ export default function LandingPage() {
                     <select
                       value={selectedPropertyType}
                       onChange={(e) => setSelectedPropertyType(e.target.value)}
-                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m19%209-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_1.25rem_center] bg-no-repeat"
+                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all font-medium appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m19%209-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_1.25rem_center] bg-no-repeat"
                     >
                       <option value="">Tous les biens</option>
                       {propertyTypes.map((type) => (
@@ -337,7 +337,7 @@ export default function LandingPage() {
                   <p className="text-gray-600 font-medium">
                     {displayEvents.length} événement{displayEvents.length !== 1 ? 's' : ''} trouvé{displayEvents.length !== 1 ? 's' : ''}
                     {(searchTerm || selectedEventType || selectedPropertyType) && (
-                      <span className="text-blue-600"> avec les filtres appliqués</span>
+                      <span className="text-[#31a7df]"> avec les filtres appliqués</span>
                     )}
                   </p>
                 </div>
@@ -360,7 +360,7 @@ export default function LandingPage() {
                 {showAllEvents && (searchTerm || selectedEventType || selectedPropertyType) && (
                   <button
                     onClick={clearFilters}
-                    className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all"
+                    className="mt-4 px-6 py-3 bg-[#31a7df] text-white rounded-2xl font-bold hover:bg-[#2596d1] transition-all"
                   >
                     Voir tous les événements
                   </button>
@@ -381,7 +381,7 @@ export default function LandingPage() {
                             </svg>
                           </div>
                         )}
-                        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-blue-600">
+                        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-[#31a7df]">
                           {event.type_evenement_nom || 'Événement'}
                         </div>
                         {/* Price Badge */}
@@ -391,7 +391,7 @@ export default function LandingPage() {
                               {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(event.prix)}
                             </div>
                           ) : (
-                            <div className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                            <div className="bg-[#31a7df] text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                               <i className="fas fa-gift"></i>
                               Gratuit
                             </div>
@@ -405,7 +405,7 @@ export default function LandingPage() {
                           {formatDate(event.date)} <br/> 
                           {event.adresse || event.bien_nom}
                           {event.bien_type_nom && (
-                            <span className="block text-xs text-blue-600 font-bold mt-1">
+                            <span className="block text-xs text-[#31a7df] font-bold mt-1">
                               <i className="fas fa-building mr-1"></i>
                               {event.bien_type_nom}
                             </span>
@@ -434,7 +434,7 @@ export default function LandingPage() {
                           <button 
                             onClick={() => handleRegister(event.id)}
                             disabled={event.max_participants > 0 && event.current_participants >= event.max_participants}
-                            className="flex-1 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all disabled:opacity-50 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed group-hover:shadow-md"
+                            className="flex-1 bg-blue-50 text-[#31a7df] hover:bg-[#31a7df] hover:text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all disabled:opacity-50 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed group-hover:shadow-md"
                           >
                             {event.max_participants > 0 && event.current_participants >= event.max_participants 
                               ? 'Complet' 
@@ -464,7 +464,7 @@ export default function LandingPage() {
                           onClick={() => paginate(index + 1)}
                           className={`px-4 py-2 rounded-xl font-bold transition-all ${
                             currentPage === index + 1
-                              ? 'bg-blue-600 text-white'
+                              ? 'bg-[#31a7df] text-white'
                               : 'text-gray-600 hover:bg-gray-100'
                           }`}
                         >
@@ -488,7 +488,7 @@ export default function LandingPage() {
                   <div className="text-center mt-12">
                     <button
                       onClick={() => setShowAllEvents(true)}
-                      className="px-8 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl"
+                      className="px-8 py-4 bg-[#31a7df] text-white rounded-2xl font-black uppercase tracking-widest hover:bg-[#2596d1] transition-all shadow-lg hover:shadow-xl"
                     >
                       Voir tous les {events.length} événements
                     </button>
@@ -524,7 +524,7 @@ export default function LandingPage() {
                    { title: "Statistiques Avancées", desc: "Analysez la performance de vos événements avec des données précises." }
                  ].map((feature, i) => (
                    <div key={i} className="bg-white p-10 rounded-[40px] shadow-sm border border-gray-100 hover:shadow-xl transition-all hover:-translate-y-2">
-                      <div className="text-blue-600 mb-6 font-black text-4xl italic opacity-20">0{i+1}</div>
+                      <div className="text-[#31a7df] mb-6 font-black text-4xl italic opacity-20">0{i+1}</div>
                       <h3 className="text-2xl font-black uppercase tracking-tight mb-4">{feature.title}</h3>
                       <p className="text-gray-500 leading-relaxed">{feature.desc}</p>
                    </div>

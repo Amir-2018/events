@@ -70,7 +70,7 @@ export default function CalendarView({ items, type = 'event', onItemClick }) {
             </button>
             <button 
               onClick={() => setCurrentMonth(new Date())}
-              className="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+              className="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[#31a7df] hover:bg-blue-50 rounded-md transition-colors"
             >
               Aujourd'hui
             </button>
@@ -87,7 +87,7 @@ export default function CalendarView({ items, type = 'event', onItemClick }) {
         
         <div className="flex items-center gap-6">
            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-blue-500"></span>
+              <span className="w-3 h-3 rounded-full bg-[#31a7df]"></span>
               <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Événements</span>
            </div>
            <div className="flex items-center gap-2">
@@ -123,8 +123,8 @@ export default function CalendarView({ items, type = 'event', onItemClick }) {
               <div className="flex justify-between items-start mb-1">
                 <span className={`text-sm font-black w-7 h-7 flex items-center justify-center rounded-lg transition-colors ${
                   isToday 
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' 
-                    : !isCurrentMonth ? 'text-gray-300' : 'text-gray-900 group-hover:text-blue-600'
+                    ? 'bg-[#31a7df] text-white shadow-lg shadow-gray-200' 
+                    : !isCurrentMonth ? 'text-gray-300' : 'text-gray-900 group-hover:text-[#31a7df]'
                 }`}>
                   {format(day, 'd')}
                 </span>
@@ -139,7 +139,7 @@ export default function CalendarView({ items, type = 'event', onItemClick }) {
                   const isLastDay = isSameDay(day, endDate);
                   
                   const now = new Date();
-                  let statusColor = 'bg-blue-100 text-blue-700 hover:bg-blue-200'; // À venir
+                  let statusColor = 'bg-blue-50 text-[#2596d1] hover:bg-blue-200'; // À venir
                   if (endDate < now) {
                     statusColor = 'bg-gray-200 text-gray-700 hover:bg-gray-300'; // Terminé
                   } else if (startDate <= now && endDate >= now) {

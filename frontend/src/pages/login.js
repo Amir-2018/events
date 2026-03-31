@@ -188,11 +188,11 @@ export default function Login() {
   return (
     <>
       <PublicNavbar />
-      <div className="min-h-screen font-sans selection:bg-blue-100 selection:text-blue-900 bg-white flex">
+      <div className="min-h-screen font-sans selection:bg-blue-50 selection:text-blue-900 bg-white flex">
         
         {/* Left Side: Image */}
         <div className="hidden lg:flex w-1/2 bg-blue-50/50 flex-col items-center justify-center relative overflow-hidden p-12 pt-24 border-r border-blue-100/50">
-           <div className="absolute top-0 right-0 w-full h-full bg-blue-600/5 z-0"></div>
+           <div className="absolute top-0 right-0 w-full h-full bg-[#31a7df]/5 z-0"></div>
            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-300/20 rounded-full blur-3xl z-0"></div>
            <img src="/login.svg" alt="EventPro Login" className="relative z-10 w-full max-w-lg object-contain animate-in fade-in zoom-in-95 duration-1000 drop-shadow-2xl flex-1" />
            
@@ -206,20 +206,20 @@ export default function Login() {
         <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 pt-28 lg:pt-20 min-h-screen overflow-y-auto">
           <div className="w-full max-w-md relative my-auto">
             
-            <div className="bg-white p-8 md:p-10 rounded-[40px] shadow-2xl shadow-blue-100/50 border border-gray-100 relative z-10 animate-in fade-in zoom-in-95 duration-500">
+            <div className="bg-white p-8 md:p-10 rounded-[40px] shadow-2xl shadow-gray-100/50 border border-gray-100 relative z-10 animate-in fade-in zoom-in-95 duration-500">
             
             {/* Mode Toggle - Only show for LOGIN and REGISTER modes */}
             {mode !== 'FORGOT_PASSWORD' && (
               <div className="flex bg-gray-50 p-1 rounded-2xl mb-8 border border-gray-100">
                  <button 
                    onClick={() => { setMode('LOGIN'); setError(''); setSuccessMsg(''); }}
-                   className={`flex-1 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${mode === 'LOGIN' ? 'bg-white shadow-md text-blue-600' : 'text-gray-400 hover:text-gray-600'}`}
+                   className={`flex-1 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${mode === 'LOGIN' ? 'bg-white shadow-md text-[#31a7df]' : 'text-gray-400 hover:text-gray-600'}`}
                  >
                    Connexion
                  </button>
                  <button 
                    onClick={() => { setMode('REGISTER_CLIENT'); setError(''); setSuccessMsg(''); }}
-                   className={`flex-1 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${mode === 'REGISTER_CLIENT' ? 'bg-white shadow-md text-blue-600' : 'text-gray-400 hover:text-gray-600'}`}
+                   className={`flex-1 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${mode === 'REGISTER_CLIENT' ? 'bg-white shadow-md text-[#31a7df]' : 'text-gray-400 hover:text-gray-600'}`}
                  >
                    Inscription
                  </button>
@@ -294,7 +294,7 @@ export default function Login() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 active:translate-y-0 disabled:opacity-50 mt-4"
+                  className="w-full bg-[#31a7df] hover:bg-[#2596d1] text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 active:translate-y-0 disabled:opacity-50 mt-4"
                 >
                   {loading ? 'Connexion en cours...' : 'Se Connecter'}
                 </button>
@@ -304,7 +304,7 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={() => { setMode('FORGOT_PASSWORD'); setError(''); setSuccessMsg(''); }}
-                    className="text-blue-600 hover:text-blue-800 text-sm font-semibold transition-colors"
+                    className="text-[#31a7df] hover:text-blue-800 text-sm font-semibold transition-colors"
                   >
                     Mot de passe oublié ?
                   </button>
@@ -375,7 +375,7 @@ export default function Login() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-lg mt-4 disabled:opacity-50"
+                  className="w-full bg-[#31a7df] hover:bg-[#2596d1] text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-lg mt-4 disabled:opacity-50"
                 >
                   {loading ? 'Création en cours...' : 'Créer mon compte Client'}
                 </button>
@@ -384,7 +384,7 @@ export default function Login() {
                    <button 
                      type="button"
                      onClick={() => { setMode('REGISTER_ADMIN'); setError(''); setSuccessMsg(''); }}
-                     className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-blue-600 transition-colors"
+                     className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-[#31a7df] transition-colors"
                    >
                      Devenir Administrateur à la place ?
                    </button>
@@ -464,7 +464,7 @@ export default function Login() {
                    <button 
                      type="button"
                      onClick={() => { setMode('REGISTER_CLIENT'); setError(''); setSuccessMsg(''); }}
-                     className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-blue-600 transition-colors"
+                     className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-[#31a7df] transition-colors"
                    >
                      Retour à l'inscription Client
                    </button>
@@ -481,14 +481,14 @@ export default function Login() {
                     <div key={stepNumber} className="flex items-center">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                         forgotPasswordStep >= stepNumber 
-                          ? 'bg-blue-600 text-white' 
+                          ? 'bg-[#31a7df] text-white' 
                           : 'bg-gray-200 text-gray-500'
                       }`}>
                         {stepNumber}
                       </div>
                       {stepNumber < 3 && (
                         <div className={`w-12 h-1 mx-2 ${
-                          forgotPasswordStep > stepNumber ? 'bg-blue-600' : 'bg-gray-200'
+                          forgotPasswordStep > stepNumber ? 'bg-[#31a7df]' : 'bg-gray-200'
                         }`}></div>
                       )}
                     </div>
@@ -515,7 +515,7 @@ export default function Login() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 active:translate-y-0 disabled:opacity-50"
+                      className="w-full bg-[#31a7df] hover:bg-[#2596d1] text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 active:translate-y-0 disabled:opacity-50"
                     >
                       {loading ? 'Envoi en cours...' : 'Envoyer le code'}
                     </button>
@@ -543,7 +543,7 @@ export default function Login() {
                     <button
                       type="submit"
                       disabled={loading || forgotPasswordData.code.length !== 6}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 active:translate-y-0 disabled:opacity-50"
+                      className="w-full bg-[#31a7df] hover:bg-[#2596d1] text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 active:translate-y-0 disabled:opacity-50"
                     >
                       {loading ? 'Vérification...' : 'Vérifier le code'}
                     </button>
@@ -603,7 +603,7 @@ export default function Login() {
                       setError(''); 
                       setSuccessMsg(''); 
                     }}
-                    className="text-blue-600 hover:text-blue-800 font-semibold text-sm transition-colors"
+                    className="text-[#31a7df] hover:text-blue-800 font-semibold text-sm transition-colors"
                   >
                     ← Retour à la connexion
                   </button>

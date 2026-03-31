@@ -42,7 +42,7 @@ export default function RoomCard({ room, onDelete, onViewMap }) {
               }`}>
                 {isOpenNow(room.horaires) ? '🟢 Ouvert' : '🔴 Fermé'}
               </span>
-              <span className="inline-block bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-full">
+              <span className="inline-block bg-blue-50 text-[#2596d1] text-xs font-medium px-2.5 py-1 rounded-full">
                 👥 {room.capaciteMax} pers. max
               </span>
             </div>

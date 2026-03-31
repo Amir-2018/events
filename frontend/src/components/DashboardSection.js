@@ -80,7 +80,7 @@ export default function DashboardSection({ events, onNavigate }) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         <div className="bg-white rounded-3xl p-6 shadow-xl border border-gray-100 flex items-center gap-6 relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
           <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110" />
-          <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 relative z-10 shadow-inner">
+          <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-[#31a7df] relative z-10 shadow-inner">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
             </svg>
@@ -138,7 +138,7 @@ export default function DashboardSection({ events, onNavigate }) {
             <h2 className="text-2xl font-bold text-gray-900">Statistiques de Revenus</h2>
             <button 
               onClick={() => onNavigate('revenue-stats')}
-              className="text-xs font-black uppercase tracking-widest text-blue-600 hover:text-blue-800 transition-colors bg-blue-50 px-4 py-2 rounded-xl"
+              className="text-xs font-black uppercase tracking-widest text-[#31a7df] hover:text-blue-800 transition-colors bg-blue-50 px-4 py-2 rounded-xl"
             >
               Voir détails
             </button>
@@ -201,7 +201,7 @@ export default function DashboardSection({ events, onNavigate }) {
               <p className="text-gray-500 font-medium">Impossible de charger les statistiques de revenus</p>
               <button 
                 onClick={loadRevenueStats}
-                className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all"
+                className="mt-4 px-6 py-2 bg-[#31a7df] text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[#2596d1] transition-all"
               >
                 Réessayer
               </button>
@@ -217,7 +217,7 @@ export default function DashboardSection({ events, onNavigate }) {
             <h2 className="text-xl font-bold text-gray-900">Prochains Événements</h2>
             <button 
               onClick={() => onNavigate('events')}
-              className="text-xs font-black uppercase tracking-widest text-blue-600 hover:text-blue-800 transition-colors bg-blue-50 px-4 py-2 rounded-xl"
+              className="text-xs font-black uppercase tracking-widest text-[#31a7df] hover:text-blue-800 transition-colors bg-blue-50 px-4 py-2 rounded-xl"
             >
               Voir tout
             </button>
@@ -228,12 +228,12 @@ export default function DashboardSection({ events, onNavigate }) {
               {stats.nextEvents.map(event => (
                 <div key={event.id} className="flex items-center justify-between p-4 rounded-2xl hover:bg-gray-50 border border-transparent hover:border-gray-100 transition-all group">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 font-bold shrink-0 shadow-inner">
+                    <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-[#31a7df] font-bold shrink-0 shadow-inner">
                       {new Date(event.date).getDate()}
                       <span className="text-[10px] block opacity-80 uppercase -mt-1">{format(new Date(event.date), 'MMM', { locale: fr })}</span>
                     </div>
                     <div>
-                      <h4 className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{event.nom}</h4>
+                      <h4 className="font-bold text-gray-900 group-hover:text-[#31a7df] transition-colors">{event.nom}</h4>
                       <p className="text-sm text-gray-500 font-medium">{formatDate(event.date)} - {event.adresse || event.bien_nom}</p>
                     </div>
                   </div>
@@ -250,7 +250,7 @@ export default function DashboardSection({ events, onNavigate }) {
               <p className="text-gray-500 font-medium">Aucun événement à venir.</p>
               <button 
                 onClick={() => onNavigate('events')}
-                className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-md"
+                className="mt-4 px-6 py-2 bg-[#31a7df] text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[#2596d1] transition-all shadow-md"
               >
                 Créer un événement
               </button>
@@ -258,7 +258,7 @@ export default function DashboardSection({ events, onNavigate }) {
           )}
         </div>
         
-        <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl shadow-xl shadow-blue-200 p-8 text-white relative overflow-hidden">
+        <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl shadow-xl shadow-gray-200 p-8 text-white relative overflow-hidden">
            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
            <h2 className="text-xl font-bold mb-8 relative z-10">Statut en direct</h2>
            

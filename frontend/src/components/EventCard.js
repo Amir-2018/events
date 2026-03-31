@@ -32,7 +32,7 @@ export default function EventCard({ event, onDelete, onViewClients, onViewDetail
     
     if (endDate && endDate < now) return { label: 'Terminé', color: 'bg-gray-100 text-gray-600 border-gray-200' };
     if (startDate && startDate <= now && (!endDate || endDate >= now)) return { label: 'En cours', color: 'bg-green-100 text-green-700 border-green-200 animate-pulse' };
-    return { label: 'À venir', color: 'bg-blue-100 text-blue-700 border-blue-200' };
+    return { label: 'À venir', color: 'bg-blue-50 text-[#2596d1] border-blue-200' };
   };
 
   const status = getStatus();
@@ -64,6 +64,15 @@ export default function EventCard({ event, onDelete, onViewClients, onViewDetail
           {/* Action Overlay for Admin */}
           {user?.role === 'superadmin' && (
             <div className="absolute top-3 left-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEdit && onEdit(event); }}
+                className="p-2 bg-white/90 backdrop-blur-sm text-gray-700 rounded-lg shadow-lg hover:bg-white transition-colors border border-gray-50"
+                title="Modifier l'événement"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+              </button>
 
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onViewMap && onViewMap(event); }}
@@ -85,7 +94,7 @@ export default function EventCard({ event, onDelete, onViewClients, onViewDetail
         </div>
         
         <div className="flex justify-between items-start mb-3">
-          <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1 pr-2">
+          <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#31a7df] transition-colors line-clamp-1 pr-2">
             {event.nom}
           </h3>
           {user?.role === 'superadmin' && (
@@ -111,7 +120,7 @@ export default function EventCard({ event, onDelete, onViewClients, onViewDetail
           </div>
           
           <div className="flex items-center text-gray-500 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2 text-blue-500">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2 text-[#31a7df]">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
             </svg>
             <span className="font-medium">{formatDate(event.date)}</span>
@@ -119,7 +128,7 @@ export default function EventCard({ event, onDelete, onViewClients, onViewDetail
           
           {event.adresse && (
             <div className="flex items-center text-gray-500 text-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2 text-blue-500">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2 text-[#31a7df]">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
               </svg>
@@ -129,7 +138,7 @@ export default function EventCard({ event, onDelete, onViewClients, onViewDetail
 
           <div className="flex items-center text-gray-400 text-[10px] font-black uppercase tracking-widest mt-2">
             <div className="flex items-center px-2 py-1 bg-gray-50 rounded-lg border border-gray-100">
-               <span className={clients.length >= (event.max_participants || 100) ? 'text-red-500' : 'text-blue-600'}>
+               <span className={clients.length >= (event.max_participants || 100) ? 'text-red-500' : 'text-[#31a7df]'}>
                  {clients.length}
                </span>
                <span className="mx-1">/</span>
@@ -166,7 +175,7 @@ export default function EventCard({ event, onDelete, onViewClients, onViewDetail
           <div className="flex gap-2">
             <button
                onClick={(e) => { e.preventDefault(); e.stopPropagation(); onViewDetails && onViewDetails(event); }}
-               className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:from-blue-700 hover:to-blue-900 transition-all shadow-lg shadow-blue-200 active:scale-95 flex items-center gap-1.5"
+               className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:from-blue-700 hover:to-blue-900 transition-all shadow-lg shadow-gray-200 active:scale-95 flex items-center gap-1.5"
             >
                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />

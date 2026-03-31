@@ -74,7 +74,7 @@ export default function ProfileSection() {
   return (
     <div className="w-full animate-in fade-in duration-500">
       <div className="mb-10 text-center">
-        <div className="w-32 h-32 rounded-[2.5rem] bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center text-white font-black text-4xl shadow-2xl shadow-blue-200 mx-auto mb-6 border-4 border-white ring-8 ring-blue-50/50">
+        <div className="w-32 h-32 rounded-[2.5rem] bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center text-white font-black text-4xl shadow-2xl shadow-gray-200 mx-auto mb-6 border-4 border-white ring-8 ring-blue-50/50">
           {user ? `${user.prenom?.[0] || ''}${user.nom?.[0] || ''}`.toUpperCase() : '??'}
         </div>
         <h1 className="text-4xl font-black text-gray-900 uppercase tracking-tighter italic leading-none">{user?.prenom} {user?.nom}</h1>
@@ -93,7 +93,7 @@ export default function ProfileSection() {
                   value={formData.prenom}
                   onChange={handleChange}
                   required
-                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-bold text-gray-900 placeholder-gray-300"
+                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 focus:border-[#31a7df] transition-all font-bold text-gray-900 placeholder-gray-300"
                   placeholder="Votre prénom"
                 />
               </div>
@@ -105,7 +105,7 @@ export default function ProfileSection() {
                   value={formData.nom}
                   onChange={handleChange}
                   required
-                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-bold text-gray-900 placeholder-gray-300"
+                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 focus:border-[#31a7df] transition-all font-bold text-gray-900 placeholder-gray-300"
                   placeholder="Votre nom"
                 />
               </div>
@@ -119,7 +119,7 @@ export default function ProfileSection() {
                 value={formData.username}
                 onChange={handleChange}
                 required
-                className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-bold text-gray-900 placeholder-gray-300"
+                className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-[#31a7df]/10 focus:border-[#31a7df] transition-all font-bold text-gray-900 placeholder-gray-300"
                 placeholder="nom.utilisateur"
               />
             </div>
@@ -136,7 +136,7 @@ export default function ProfileSection() {
               <button 
                 type="submit"
                 disabled={isSaving}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white py-5 rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-blue-100 hover:shadow-blue-200 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white py-5 rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-gray-100 hover:shadow-gray-200 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
               >
                 {isSaving ? (
                   <>

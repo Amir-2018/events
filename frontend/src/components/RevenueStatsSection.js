@@ -77,7 +77,7 @@ export default function RevenueStatsSection() {
         </div>
         <button
           onClick={loadRevenueStats}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl font-bold text-sm hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-[#31a7df] text-white rounded-xl font-bold text-sm hover:bg-[#2596d1] transition-colors"
         >
           <i className="fas fa-sync-alt"></i>
           Actualiser
@@ -171,8 +171,8 @@ export default function RevenueStatsSection() {
                 <tr key={event.event_id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <i className="fas fa-calendar-alt text-blue-600"></i>
+                      <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i className="fas fa-calendar-alt text-[#31a7df]"></i>
                       </div>
                       <div>
                         <div className="font-bold text-gray-900 line-clamp-1">{event.event_name}</div>
@@ -189,7 +189,7 @@ export default function RevenueStatsSection() {
                         {formatCurrency(event.ticket_price)}
                       </span>
                     ) : (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-blue-100 text-blue-700">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-blue-50 text-[#2596d1]">
                         <i className="fas fa-gift mr-1"></i>
                         Gratuit
                       </span>

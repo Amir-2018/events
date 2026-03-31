@@ -73,7 +73,7 @@ export default function TicketsSection() {
       case 'cancelled':
         return 'bg-red-100 text-red-700 border-red-200';
       default:
-        return 'bg-blue-100 text-blue-700 border-blue-200';
+        return 'bg-blue-50 text-[#2596d1] border-blue-200';
     }
   };
 
@@ -115,8 +115,8 @@ export default function TicketsSection() {
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                      <i className="fas fa-ticket-alt text-blue-600"></i>
+                    <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
+                      <i className="fas fa-ticket-alt text-[#31a7df]"></i>
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900">{ticket.client_prenom} {ticket.client_nom}</h3>
@@ -239,8 +239,8 @@ export default function TicketsSection() {
                       {/* Statistics */}
                       <div className="grid grid-cols-2 gap-3 mb-4">
                         <div className="bg-blue-50 rounded-xl p-3 text-center">
-                          <div className="text-xs text-blue-600 mb-1">Non vérifiés</div>
-                          <div className="font-bold text-blue-700">{event.active_tickets || 0}</div>
+                          <div className="text-xs text-[#31a7df] mb-1">Non vérifiés</div>
+                          <div className="font-bold text-[#2596d1]">{event.active_tickets || 0}</div>
                         </div>
                         <div className="bg-green-50 rounded-xl p-3 text-center">
                           <div className="text-xs text-green-600 mb-1">Vérifiés</div>
@@ -271,7 +271,7 @@ export default function TicketsSection() {
                       {/* Actions */}
                       <button
                         onClick={() => handleViewEventTickets(event)}
-                        className="w-full bg-blue-600 text-white py-3 px-4 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                        className="w-full bg-[#31a7df] text-white py-3 px-4 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-[#2596d1] transition-colors flex items-center justify-center gap-2"
                       >
                         <i className="fas fa-eye"></i>
                         Voir les tickets
@@ -327,8 +327,8 @@ export default function TicketsSection() {
                         <tr key={event.event_id} className="hover:bg-gray-50 transition-colors">
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-                              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <i className="fas fa-calendar-alt text-blue-600"></i>
+                              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i className="fas fa-calendar-alt text-[#31a7df]"></i>
                               </div>
                               <div>
                                 <div className="font-bold text-gray-900 line-clamp-1">{event.event_name}</div>
@@ -347,7 +347,7 @@ export default function TicketsSection() {
                             </span>
                           </td>
                           <td className="px-6 py-4 text-center">
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-blue-100 text-blue-700">
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-blue-50 text-[#2596d1]">
                               {event.active_tickets || 0}
                             </span>
                           </td>
@@ -371,7 +371,7 @@ export default function TicketsSection() {
                           <td className="px-6 py-4 text-center">
                             <button
                               onClick={() => handleViewEventTickets(event)}
-                              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors"
+                              className="inline-flex items-center gap-2 px-4 py-2 bg-[#31a7df] text-white rounded-xl text-sm font-bold hover:bg-[#2596d1] transition-colors"
                             >
                               <i className="fas fa-eye"></i>
                               Voir

@@ -263,7 +263,7 @@ export default function TicketModal({ ticket, isOpen, onClose }) {
                   ? 'bg-green-100 text-green-700'
                   : ticket.status === 'cancelled'
                     ? 'bg-red-100 text-red-700'
-                    : 'bg-blue-100 text-blue-700'
+                    : 'bg-blue-50 text-[#2596d1]'
               }`}>
                 {ticket.status === 'verified' ? 'Vérifié' : 
                  ticket.status === 'cancelled' ? 'Annulé' : 'Actif'}
@@ -282,7 +282,7 @@ export default function TicketModal({ ticket, isOpen, onClose }) {
           <div className="flex gap-3">
             <button
               onClick={handlePrint}
-              className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-blue-700 transition-colors"
+              className="flex-1 bg-[#31a7df] text-white py-3 px-4 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-[#2596d1] transition-colors"
             >
               Imprimer
             </button>

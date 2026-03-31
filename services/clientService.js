@@ -2,6 +2,20 @@ const pool = require('../db/pool');
 const Client = require('../models/client.model');
 
 class ClientService {
+  static async getAllClients() {
+    try {
+      const result = await pool.query(`
+        SELECT id, nom, prenom, email, tel, created_at
+        FROM clients
+        ORDER BY nom, prenom
+      `);
+      return result.rows;
+    } catch (error) {
+      console.error('❌ Erreur dans getAllClients:', error);
+      throw error;
+    }
+  }
+
   static async getAllClientsWithEvents() {
     console.log('🔍 ClientService.getAllClientsWithEvents() appelé');
     

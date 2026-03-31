@@ -38,8 +38,20 @@ class EventService {
     return await Event.create(eventData);
   }
 
-  static async getAllEvents(userId = null) {
+  static async getAllEvents(userId = null, clientId = null) {
+    if (clientId) {
+      // Pour les clients, retourner seulement les événements accessibles
+      return await Event.getAccessibleEvents(clientId);
+    }
     return await Event.getAll(userId);
+  }
+
+  static async getPublicEvents(userId = null) {
+    return await Event.getPublicEvents(userId);
+  }
+
+  static async canClientAccessEvent(eventId, clientId) {
+    return await Event.canClientAccessEvent(eventId, clientId);
   }
 
   static async getEventById(id) {
@@ -167,6 +179,14 @@ class EventService {
     const event = await Event.getById(eventId);
     if (!event) {
       throw new Error('Événement non trouvé');
+    }
+
+    // Vérifier l'accès pour les événements privés
+    if (event.is_private) {
+      const canAccess = await Event.canClientAccessEvent(eventId, clientId);
+      if (!canAccess) {
+        throw new Error('Vous n\'avez pas accès à cet événement privé');
+      }
     }
 
     // Vérifier la capacité maximale

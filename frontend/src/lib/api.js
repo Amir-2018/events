@@ -38,6 +38,7 @@ export const authAPI = {
 export const eventsAPI = {
   // Endpoints publics (Landing page, etc)
   getEvents: () => publicAPI.get('/api/events'),
+  getPublicEvents: () => publicAPI.get('/api/events?public=true'),
   getEventDetails: (eventId) => publicAPI.get(`/api/events/${eventId}`),
   getEventClients: (eventId) => protectedAPI.get(`/api/events/${eventId}/clients`),
   

@@ -72,7 +72,7 @@ export default function EventTypesSection({
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="bg-blue-600 text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 shadow-lg hover:shadow-blue-200 transition-all flex items-center gap-3"
+          className="bg-[#31a7df] text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#2596d1] shadow-lg hover:shadow-gray-200 transition-all flex items-center gap-3"
         >
           <i className="fas fa-plus"></i>
           Nouveau type
@@ -87,7 +87,7 @@ export default function EventTypesSection({
           <p className="text-gray-500 text-lg font-medium mb-8">Aucun type d'événement créé</p>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition-all shadow-lg"
+            className="bg-[#31a7df] text-white px-8 py-3 rounded-full font-bold hover:bg-[#2596d1] transition-all shadow-lg"
           >
             Créer le premier type
           </button>
@@ -109,7 +109,7 @@ export default function EventTypesSection({
                   <tr key={type.id} className="hover:bg-blue-50/30 transition-colors">
                     <td className="px-8 py-5">
                       <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700 font-bold mr-4">
+                        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#2596d1] font-bold mr-4">
                           <i className="fas fa-tag"></i>
                         </div>
                         <span className="font-bold text-gray-900">{type.nom}</span>
@@ -124,7 +124,7 @@ export default function EventTypesSection({
                     <td className="px-8 py-5 text-right flex justify-end gap-2">
                       <button 
                         onClick={() => handleEditClick(type)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        className="p-2 text-[#31a7df] hover:bg-blue-50 rounded-lg transition-colors"
                         title="Modifier"
                       >
                         <i className="fas fa-edit"></i>

@@ -96,7 +96,7 @@ export default function EventDetails() {
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Événement non trouvé</h1>
-            <Link href="/" className="text-blue-600 hover:text-blue-800">
+            <Link href="/" className="text-[#31a7df] hover:text-blue-800">
               Retour à l'accueil
             </Link>
           </div>
@@ -125,7 +125,7 @@ export default function EventDetails() {
         <div className="absolute inset-0 z-20 flex items-center">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="text-center">
-              <div className="inline-block px-4 py-2 bg-blue-600 text-white rounded-full text-xs font-black uppercase tracking-widest mb-6 shadow-lg">
+              <div className="inline-block px-4 py-2 bg-[#31a7df] text-white rounded-full text-xs font-black uppercase tracking-widest mb-6 shadow-lg">
                 {event.type_evenement_nom || 'Événement Spécial'}
               </div>
               <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white leading-tight mb-4 italic drop-shadow-2xl">
@@ -151,8 +151,8 @@ export default function EventDetails() {
                 
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-blue-600">
+                    <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-[#31a7df]">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                       </svg>
                     </div>
@@ -319,7 +319,7 @@ export default function EventDetails() {
                   <button 
                     onClick={handleRegister}
                     disabled={registering}
-                    className="w-full bg-blue-600 text-white py-4 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-[#31a7df] text-white py-4 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-[#2596d1] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {registering ? 'Inscription...' : 'S\'inscrire maintenant'}
                   </button>

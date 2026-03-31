@@ -24,7 +24,7 @@ export default function ClientsList({ clients, event, onClose, loading = false }
       <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl transform transition-all animate-in zoom-in-95 duration-300">
         
         {/* Header with Event Info */}
-        <div className="relative h-48 sm:h-56 bg-blue-600">
+        <div className="relative h-48 sm:h-56 bg-[#31a7df]">
           {event.image ? (
             <img 
               src={event.image} 
@@ -74,7 +74,7 @@ export default function ClientsList({ clients, event, onClose, loading = false }
             <h3 className="text-lg font-bold text-gray-800 flex items-center">
               Participants
               {!loading && (
-                <span className="ml-2 bg-blue-100 text-blue-600 px-2.5 py-0.5 rounded-full text-xs">
+                <span className="ml-2 bg-blue-50 text-[#31a7df] px-2.5 py-0.5 rounded-full text-xs">
                   {clients.length}
                 </span>
               )}
@@ -84,8 +84,8 @@ export default function ClientsList({ clients, event, onClose, loading = false }
           {loading ? (
             <div className="flex flex-col items-center justify-center py-12">
               <div className="w-full max-w-xs mb-6">
-                <div className="bg-blue-100 rounded-full h-2 overflow-hidden">
-                  <div className="bg-blue-600 h-full animate-pulse rounded-full" style={{
+                <div className="bg-blue-50 rounded-full h-2 overflow-hidden">
+                  <div className="bg-[#31a7df] h-full animate-pulse rounded-full" style={{
                     animation: 'loading-bar 1.5s ease-in-out infinite'
                   }}></div>
                 </div>
@@ -116,7 +116,7 @@ export default function ClientsList({ clients, event, onClose, loading = false }
               {clients.map((client) => (
                 <div key={client.id} className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-100 transition-all group">
                   <div className="flex items-center gap-4">
-                    <div className="flex-shrink-0 h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-blue-100 shadow-lg group-hover:scale-110 transition-transform">
+                    <div className="flex-shrink-0 h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-gray-100 shadow-lg group-hover:scale-110 transition-transform">
                       {getInitials(client)}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -125,14 +125,14 @@ export default function ClientsList({ clients, event, onClose, loading = false }
                       </p>
                       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
                         <div className="flex items-center text-gray-500 text-xs">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 mr-1 text-blue-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 mr-1 text-[#31a7df]">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                           </svg>
                           {client.email}
                         </div>
                         {client.tel && (
                           <div className="flex items-center text-gray-500 text-xs">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 mr-1 text-blue-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 mr-1 text-[#31a7df]">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
                             </svg>
                             {client.tel}
