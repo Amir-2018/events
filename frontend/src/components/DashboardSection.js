@@ -124,12 +124,6 @@ export default function DashboardSection({ events, onNavigate }) {
         <div className="mb-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold text-gray-900">Statistiques de Revenus</h2>
-            <button 
-              onClick={() => onNavigate('revenue-stats')}
-              className="text-xs font-medium text-[#31a7df] hover:text-[#2596d1] transition-colors bg-blue-50 px-3 py-1.5 rounded-lg"
-            >
-              Voir détails
-            </button>
           </div>
           
           {loadingRevenue ? (
@@ -143,7 +137,7 @@ export default function DashboardSection({ events, onNavigate }) {
             </div>
           ) : revenueStats ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg p-4 text-white shadow-sm">
+              <div className="rounded-lg p-4 text-white shadow-sm" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)' }}>
                 <div className="flex items-center justify-between mb-3">
                   <i className="fas fa-calendar-alt text-lg opacity-80"></i>
                   <span className="text-xs font-medium opacity-80">Événements</span>
@@ -198,6 +192,110 @@ export default function DashboardSection({ events, onNavigate }) {
         </div>
       )}
 
+      {/* Events Revenue Table for Admins */}
+      {(user?.role === 'admin' || user?.role === 'superadmin') && revenueStats && revenueStats.events && (
+        <div className="mb-6">
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
+            <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+              <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <i className="fas fa-list"></i>
+                Détail par Événement
+              </h2>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                      <i className="fas fa-calendar-alt mr-2"></i>
+                      Événement
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                      <i className="fas fa-clock mr-2"></i>
+                      Date
+                    </th>
+                    <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
+                      <i className="fas fa-euro-sign mr-2"></i>
+                      Prix
+                    </th>
+                    <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
+                      <i className="fas fa-ticket-alt mr-2"></i>
+                      Tickets
+                    </th>
+                    <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
+                      <i className="fas fa-check mr-2"></i>
+                      Vérifiés
+                    </th>
+                    <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
+                      <i className="fas fa-coins mr-2"></i>
+                      Revenus
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {revenueStats.events.map((event) => (
+                    <tr key={event.event_id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i className="fas fa-calendar-alt text-[#31a7df]"></i>
+                          </div>
+                          <div>
+                            <div className="font-bold text-gray-900 line-clamp-1 text-sm">{event.event_name}</div>
+                            <div className="text-xs text-gray-500">ID: {event.event_id.slice(0, 8)}...</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-xs text-gray-600">
+                        {formatDate(event.event_date)}
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        {parseFloat(event.ticket_price) > 0 ? (
+                          <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-green-100 text-green-700">
+                            {formatCurrency(event.ticket_price)}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-blue-50 text-[#2596d1]">
+                            <i className="fas fa-gift mr-1"></i>
+                            Gratuit
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <div className="flex flex-col gap-1">
+                          <span className="font-bold text-gray-900 text-sm">{event.total_tickets}</span>
+                          <div className="text-xs text-gray-500">
+                            {event.active_tickets} actifs
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-green-100 text-green-700">
+                          {event.verified_tickets}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <div className="flex flex-col gap-1">
+                          <span className="font-bold text-green-700 text-sm">
+                            {formatCurrency(event.confirmed_revenue)}
+                          </span>
+                          {parseFloat(event.potential_revenue) > parseFloat(event.confirmed_revenue) && (
+                            <div className="text-xs text-gray-500">
+                              / {formatCurrency(event.potential_revenue)} max
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Row - Optimized */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 lg:col-span-2">
@@ -246,14 +344,14 @@ export default function DashboardSection({ events, onNavigate }) {
           )}
         </div>
         
-        <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg shadow-sm p-6 text-white relative overflow-hidden">
+        <div className="rounded-lg shadow-sm p-6 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)' }}>
            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
            <h2 className="text-lg font-bold mb-6 relative z-10">Statut en direct</h2>
            
            <div className="space-y-4 relative z-10">
               <div>
                  <div className="flex justify-between items-end mb-2">
-                    <p className="text-xs text-blue-100 font-medium">Événements en cours</p>
+                    <p className="text-xs text-white/80 font-medium">Événements en cours</p>
                     <p className="text-lg font-bold">{stats.inProgress}</p>
                  </div>
                  <div className="w-full bg-black/20 rounded-full h-1.5">
@@ -263,16 +361,16 @@ export default function DashboardSection({ events, onNavigate }) {
               
               <div>
                  <div className="flex justify-between items-end mb-2">
-                    <p className="text-xs text-blue-100 font-medium">Événements réalisés</p>
+                    <p className="text-xs text-white/80 font-medium">Événements réalisés</p>
                     <p className="text-lg font-bold">{stats.past}</p>
                  </div>
                  <div className="w-full bg-black/20 rounded-full h-1.5">
-                    <div className="bg-blue-400 h-1.5 rounded-full" style={{ width: stats.total ? `${(stats.past / stats.total) * 100}%` : '0%' }}></div>
+                    <div className="bg-white/60 h-1.5 rounded-full" style={{ width: stats.total ? `${(stats.past / stats.total) * 100}%` : '0%' }}></div>
                  </div>
               </div>
 
               <div className="pt-4 mt-4 border-t border-white/20">
-                 <p className="text-xs text-blue-200 font-medium mb-1">Résumé</p>
+                 <p className="text-xs text-white/70 font-medium mb-1">Résumé</p>
                  <p className="text-xs font-medium leading-relaxed">
                     Vous avez un total de <span className="font-bold">{stats.total} événements</span> dans la base de données, générant <span className="font-bold">{stats.totalInscriptions} inscriptions</span>.
                  </p>

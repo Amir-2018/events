@@ -119,7 +119,16 @@ export default function Reclamations() {
   return (
     <>
       <PublicNavbar />
-      <div className="min-h-screen bg-gray-50 pt-20">
+      <div className="min-h-screen bg-gray-50 pt-20 relative overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-32 right-32 w-80 h-80 rounded-full opacity-3 animate-spin" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '30s' }}></div>
+          <div className="absolute bottom-32 left-32 w-64 h-64 rounded-full opacity-5 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '10s' }}></div>
+          <div className="absolute top-1/4 left-1/2 w-48 h-48 rounded-full opacity-4 animate-ping" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '18s' }}></div>
+          <div className="absolute bottom-1/4 right-1/2 w-36 h-36 rounded-full opacity-8 animate-bounce" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '6s' }}></div>
+        </div>
+        
+        <div className="relative z-10">
         <div className="max-w-4xl mx-auto px-4 py-16">
           
           {/* Header */}
@@ -300,6 +309,7 @@ export default function Reclamations() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
       <Footer />

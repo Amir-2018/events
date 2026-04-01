@@ -3,10 +3,19 @@ import Footer from '../components/Footer';
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans">
+    <div className="min-h-screen bg-white text-gray-900 font-sans relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-10 right-10 w-72 h-72 rounded-full opacity-4 animate-spin" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '25s' }}></div>
+        <div className="absolute bottom-10 left-10 w-56 h-56 rounded-full opacity-8 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '7s' }}></div>
+        <div className="absolute top-1/3 left-1/3 w-40 h-40 rounded-full opacity-6 animate-ping" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '12s' }}></div>
+        <div className="absolute bottom-1/3 right-1/3 w-28 h-28 rounded-full opacity-12 animate-bounce" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '5s' }}></div>
+        <div className="absolute top-2/3 right-1/4 w-16 h-16 rounded-full opacity-20 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '3s' }}></div>
+      </div>
+      
       <PublicNavbar />
       
-      <main className="pt-40 pb-20">
+      <main className="pt-40 pb-20 relative z-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col lg:flex-row gap-20">
             <div className="lg:w-1/2">
@@ -17,17 +26,17 @@ export default function ContactPage() {
                 Vous avez une question ou besoin d'aide ? Notre équipe est là pour vous répondre dans les plus brefs délais.
               </p>
               
-                 <div className="flex items-center gap-6 p-6 bg-gray-50 rounded-3xl border border-gray-100">
-                    <div className="bg-white p-4 rounded-2xl shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-[#31a7df]"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg></div>
-                    <span className="font-black tracking-tight text-lg">Amir Maalaoui</span>
+                 <div className="flex items-center gap-6 p-6 bg-gray-50 rounded-3xl border border-gray-100 hover:shadow-lg hover:scale-105 transition-all group">
+                    <div className="bg-white p-4 rounded-2xl shadow-sm group-hover:shadow-md transition-shadow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-[#31a7df] group-hover:scale-110 transition-transform"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg></div>
+                    <span className="font-black tracking-tight text-lg group-hover:text-[#31a7df] transition-colors">Amir Maalaoui</span>
                  </div>
-                 <div className="flex items-center gap-6 p-6 bg-gray-50 rounded-3xl border border-gray-100">
-                    <div className="bg-white p-4 rounded-2xl shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-[#31a7df]"><path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg></div>
-                    <span className="font-black tracking-tighter text-lg">amir.maalaoui27@gmail.com</span>
+                 <div className="flex items-center gap-6 p-6 bg-gray-50 rounded-3xl border border-gray-100 hover:shadow-lg hover:scale-105 transition-all group">
+                    <div className="bg-white p-4 rounded-2xl shadow-sm group-hover:shadow-md transition-shadow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-[#31a7df] group-hover:scale-110 transition-transform"><path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg></div>
+                    <span className="font-black tracking-tighter text-lg group-hover:text-[#31a7df] transition-colors">amir.maalaoui27@gmail.com</span>
                  </div>
-                 <div className="flex items-center gap-6 p-6 bg-gray-50 rounded-3xl border border-gray-100">
-                    <div className="bg-white p-4 rounded-2xl shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-[#31a7df]"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg></div>
-                    <span className="font-black tracking-tighter text-lg">+216 93379344</span>
+                 <div className="flex items-center gap-6 p-6 bg-gray-50 rounded-3xl border border-gray-100 hover:shadow-lg hover:scale-105 transition-all group">
+                    <div className="bg-white p-4 rounded-2xl shadow-sm group-hover:shadow-md transition-shadow"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-[#31a7df] group-hover:scale-110 transition-transform"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg></div>
+                    <span className="font-black tracking-tighter text-lg group-hover:text-[#31a7df] transition-colors">+216 93379344</span>
                  </div>
 
             </div>
@@ -52,7 +61,12 @@ export default function ContactPage() {
                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 px-2">Message</label>
                      <textarea rows="4" className="w-full bg-gray-50 border-none rounded-2xl p-5 focus:ring-4 focus:ring-blue-100 transition-all font-bold text-gray-900 resize-none" placeholder="Votre message ici..."></textarea>
                   </div>
-                  <button type="submit" className="bg-[#31a7df] text-white py-6 rounded-3xl text-sm font-black uppercase tracking-widest hover:bg-[#2596d1] transition-all hover:shadow-xl active:scale-95 mt-4">Envoyer le message</button>
+                  <button type="submit" className="bg-[#31a7df] text-white py-6 rounded-3xl text-sm font-black uppercase tracking-widest hover:bg-[#2596d1] transition-all hover:shadow-xl active:scale-95 mt-4 group">
+                    <span className="flex items-center justify-center gap-2">
+                      <i className="fas fa-paper-plane group-hover:scale-110 transition-transform"></i>
+                      Envoyer le message
+                    </span>
+                  </button>
                </form>
             </div>
           </div>

@@ -15,7 +15,6 @@ import DashboardSection from '../components/DashboardSection';
 import SuccessPopup from '../components/SuccessPopup';
 import TicketsSection from '../components/TicketsSection';
 import TicketScannerSection from '../components/TicketScannerSection';
-import RevenueStatsSection from '../components/RevenueStatsSection';
 import { useAuth } from '../context/AuthContext';
 import ClientEventsSection from '../components/ClientEventsSection';
 import InvitationsSection from '../components/InvitationsSection';
@@ -487,9 +486,6 @@ export default function Home() {
             )}
             {activeSection === 'ticket-scanner' && (
               <TicketScannerSection />
-            )}
-            {activeSection === 'revenue-stats' && (
-              <RevenueStatsSection />
             )}
             {activeSection === 'invitations' && user?.role === 'client' && (
               <InvitationsSection />

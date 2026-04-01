@@ -124,44 +124,46 @@ export default function TicketScannerSection() {
 
   return (
     <div className="w-full">
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
+      {/* Header Section - Optimized */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-black text-gray-900 mb-2 uppercase tracking-tighter">Scanner QR</h1>
-          <p className="text-gray-500 font-medium tracking-tight">Vérifiez l'accès des participants aux événements</p>
+          <h1 className="text-xl font-bold text-gray-900 mb-1">Scanner QR</h1>
+          <p className="text-xs text-gray-500">Vérifiez l'accès des participants aux événements</p>
         </div>
       </div>
 
-      {/* Scanner Section */}
-      <div className="bg-white rounded-3xl shadow-lg p-8 mb-8 border border-gray-100">
-        <div className="text-center mb-6">
-          <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <i className={`fas ${showCamera ? 'fa-camera' : 'fa-qrcode'} text-[#31a7df] text-2xl`}></i>
+      {/* Scanner Section - Optimized */}
+      <div className="bg-white rounded-lg shadow-sm p-6 mb-6 border border-gray-100">
+        <div className="text-center mb-4">
+          <div className="w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center mx-auto mb-3">
+            <i className={`fas ${showCamera ? 'fa-camera' : 'fa-qrcode'} text-[#31a7df] text-xl`}></i>
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Scanner un QR Code</h2>
-          <p className="text-gray-600 text-sm">Saisissez le numéro de ticket ou scannez le QR code avec la caméra</p>
+          <h2 className="text-lg font-bold text-gray-900 mb-1">Scanner un QR Code</h2>
+          <p className="text-gray-600 text-xs">Saisissez le numéro de ticket ou scannez le QR code avec la caméra</p>
         </div>
 
         {/* Toggle Mode */}
-        <div className="flex items-center justify-center gap-2 bg-gray-100 rounded-xl p-1 mb-6 max-w-md mx-auto">
+        <div className="flex items-center justify-center bg-gray-100 p-1 rounded-lg border border-gray-200 mb-4 max-w-sm mx-auto">
           <button
             onClick={() => {setScanMode('manual'); setShowCamera(false);}}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               scanMode === 'manual' 
-                ? 'bg-white text-gray-900 shadow-sm' 
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-white text-white shadow-sm' 
+                : 'text-gray-500 hover:text-gray-700'
             }`}
+            style={scanMode === 'manual' ? { backgroundColor: '#31a7df' } : {}}
           >
             <i className="fas fa-keyboard"></i>
             Saisie manuelle
           </button>
           <button
             onClick={toggleCamera}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               scanMode === 'camera' 
-                ? 'bg-white text-gray-900 shadow-sm' 
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-white text-white shadow-sm' 
+                : 'text-gray-500 hover:text-gray-700'
             }`}
+            style={scanMode === 'camera' ? { backgroundColor: '#31a7df' } : {}}
           >
             <i className="fas fa-camera"></i>
             Scanner caméra
@@ -170,9 +172,9 @@ export default function TicketScannerSection() {
 
         {/* Manual Input */}
         {!showCamera && (
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs font-medium text-gray-700 mb-1">
                 Numéro de ticket
               </label>
               <input
@@ -181,7 +183,7 @@ export default function TicketScannerSection() {
                 onChange={(e) => setTicketNumber(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="TK-20240331-1234"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#31a7df] focus:border-transparent text-center font-mono text-lg"
+                className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#31a7df] focus:border-transparent text-center font-mono text-sm"
                 disabled={loading}
               />
             </div>
@@ -189,7 +191,7 @@ export default function TicketScannerSection() {
             <button
               onClick={() => handleScanTicket()}
               disabled={loading || !ticketNumber.trim()}
-              className="w-full bg-[#31a7df] text-white py-3 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-[#2596d1] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-[#31a7df] text-white py-2.5 px-4 rounded-lg font-medium text-xs hover:bg-[#2596d1] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               <i className="fas fa-search"></i>
               {loading ? 'Recherche...' : 'Rechercher le ticket'}
@@ -199,8 +201,8 @@ export default function TicketScannerSection() {
 
         {/* Camera Scanner */}
         {showCamera && (
-          <div className="space-y-4">
-            <div className="bg-gray-900 rounded-xl overflow-hidden relative" style={{ height: '300px' }}>
+          <div className="space-y-3">
+            <div className="bg-gray-900 rounded-lg overflow-hidden relative" style={{ height: '250px' }}>
               <QrScanner
                 delay={300}
                 onError={handleQrError}
@@ -213,22 +215,22 @@ export default function TicketScannerSection() {
               
               {/* Overlay de scan */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-48 h-48 border-2 border-white border-dashed rounded-xl flex items-center justify-center">
+                <div className="w-40 h-40 border-2 border-white border-dashed rounded-lg flex items-center justify-center">
                   <div className="text-white text-center">
-                    <i className="fas fa-qrcode text-3xl mb-2"></i>
-                    <p className="text-sm">Placez le QR code ici</p>
+                    <i className="fas fa-qrcode text-2xl mb-2"></i>
+                    <p className="text-xs">Placez le QR code ici</p>
                   </div>
                 </div>
               </div>
             </div>
             
             <div className="text-center">
-              <p className="text-gray-600 text-sm mb-4">
+              <p className="text-gray-600 text-xs mb-3">
                 Positionnez le QR code du ticket dans le cadre pour le scanner automatiquement
               </p>
               <button
                 onClick={toggleCamera}
-                className="bg-gray-600 text-white py-2 px-4 rounded-xl font-bold text-sm hover:bg-gray-700 transition-colors flex items-center justify-center gap-2 mx-auto"
+                className="bg-gray-600 text-white py-2 px-3 rounded-lg font-medium text-xs hover:bg-gray-700 transition-colors flex items-center justify-center gap-2 mx-auto"
               >
                 <i className="fas fa-times"></i>
                 Fermer la caméra
@@ -239,7 +241,7 @@ export default function TicketScannerSection() {
 
         {/* Message */}
         {message && (
-          <div className={`mt-4 p-4 rounded-xl text-sm font-medium flex items-center gap-2 ${
+          <div className={`mt-3 p-3 rounded-lg text-xs font-medium flex items-center gap-2 ${
             messageType === 'success' 
               ? 'bg-green-100 text-green-700 border border-green-200' 
               : 'bg-red-100 text-red-700 border border-red-200'
@@ -250,12 +252,12 @@ export default function TicketScannerSection() {
         )}
       </div>
 
-      {/* Ticket Details */}
+      {/* Ticket Details - Optimized */}
       {ticket && (
-        <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Détails du Ticket</h2>
-            <span className={`px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide ${
+        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-bold text-gray-900">Détails du Ticket</h2>
+            <span className={`px-3 py-1 rounded-md text-xs font-bold ${
               ticket.status === 'verified' 
                 ? 'bg-green-100 text-green-700'
                 : ticket.status === 'cancelled'
@@ -267,69 +269,69 @@ export default function TicketScannerSection() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Informations du Ticket</h3>
-              <div className="space-y-3">
+              <h3 className="font-semibold text-gray-900 mb-3 text-sm">Informations du Ticket</h3>
+              <div className="space-y-2">
                 <div>
-                  <span className="text-gray-500 text-sm">Numéro :</span>
-                  <p className="font-mono font-bold">{ticket.ticket_number}</p>
+                  <span className="text-gray-500 text-xs">Numéro :</span>
+                  <p className="font-mono font-bold text-sm">{ticket.ticket_number}</p>
                 </div>
                 <div>
-                  <span className="text-gray-500 text-sm">Créé le :</span>
-                  <p className="font-medium">{formatDate(ticket.created_at)}</p>
+                  <span className="text-gray-500 text-xs">Créé le :</span>
+                  <p className="font-medium text-sm">{formatDate(ticket.created_at)}</p>
                 </div>
                 {ticket.verified_at && (
                   <div>
-                    <span className="text-gray-500 text-sm">Vérifié le :</span>
-                    <p className="font-medium">{formatDate(ticket.verified_at)}</p>
+                    <span className="text-gray-500 text-xs">Vérifié le :</span>
+                    <p className="font-medium text-sm">{formatDate(ticket.verified_at)}</p>
                   </div>
                 )}
               </div>
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Événement</h3>
-              <div className="space-y-3">
+              <h3 className="font-semibold text-gray-900 mb-3 text-sm">Événement</h3>
+              <div className="space-y-2">
                 <div>
-                  <span className="text-gray-500 text-sm">Nom :</span>
-                  <p className="font-bold">{ticket.event_nom}</p>
+                  <span className="text-gray-500 text-xs">Nom :</span>
+                  <p className="font-bold text-sm">{ticket.event_nom}</p>
                 </div>
                 <div>
-                  <span className="text-gray-500 text-sm">Date :</span>
-                  <p className="font-medium">{formatDate(ticket.event_date)}</p>
+                  <span className="text-gray-500 text-xs">Date :</span>
+                  <p className="font-medium text-sm">{formatDate(ticket.event_date)}</p>
                 </div>
                 {ticket.event_adresse && (
                   <div>
-                    <span className="text-gray-500 text-sm">Lieu :</span>
-                    <p className="font-medium">{ticket.event_adresse}</p>
+                    <span className="text-gray-500 text-xs">Lieu :</span>
+                    <p className="font-medium text-sm">{ticket.event_adresse}</p>
                   </div>
                 )}
               </div>
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Participant</h3>
-              <div className="space-y-3">
+              <h3 className="font-semibold text-gray-900 mb-3 text-sm">Participant</h3>
+              <div className="space-y-2">
                 <div>
-                  <span className="text-gray-500 text-sm">Nom :</span>
-                  <p className="font-bold">{ticket.client_prenom} {ticket.client_nom}</p>
+                  <span className="text-gray-500 text-xs">Nom :</span>
+                  <p className="font-bold text-sm">{ticket.client_prenom} {ticket.client_nom}</p>
                 </div>
                 <div>
-                  <span className="text-gray-500 text-sm">Email :</span>
-                  <p className="font-medium">{ticket.client_email}</p>
+                  <span className="text-gray-500 text-xs">Email :</span>
+                  <p className="font-medium text-sm">{ticket.client_email}</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Actions */}
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             {ticket.status === 'active' && (
               <button
                 onClick={handleVerifyTicket}
                 disabled={verifying}
-                className="flex-1 bg-green-600 text-white py-3 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 bg-green-600 text-white py-2.5 px-4 rounded-lg font-medium text-xs hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {verifying ? 'Vérification...' : '✓ Vérifier l\'accès'}
               </button>
@@ -337,7 +339,7 @@ export default function TicketScannerSection() {
             
             <button
               onClick={resetScanner}
-              className="flex-1 bg-gray-600 text-white py-3 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-gray-700 transition-colors"
+              className="flex-1 bg-gray-600 text-white py-2.5 px-4 rounded-lg font-medium text-xs hover:bg-gray-700 transition-colors"
             >
               Scanner un autre ticket
             </button>
@@ -345,23 +347,23 @@ export default function TicketScannerSection() {
 
           {/* Status Messages */}
           {ticket.status === 'verified' && (
-            <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-xl">
+            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
               <div className="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-green-600">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
-                <span className="text-green-700 font-semibold">Accès autorisé - Ticket déjà vérifié</span>
+                <span className="text-green-700 font-semibold text-xs">Accès autorisé - Ticket déjà vérifié</span>
               </div>
             </div>
           )}
 
           {ticket.status === 'cancelled' && (
-            <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
               <div className="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-red-600">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-red-600">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
                 </svg>
-                <span className="text-red-700 font-semibold">Accès refusé - Ticket annulé</span>
+                <span className="text-red-700 font-semibold text-xs">Accès refusé - Ticket annulé</span>
               </div>
             </div>
           )}

@@ -167,19 +167,6 @@ export default function Sidebar({ activeSection, onSectionChange }) {
             Scanner QR
           </button>
 
-          <button
-            onClick={() => onSectionChange('revenue-stats')}
-            className={`w-full flex items-center px-4 py-3 rounded-xl font-medium transition-all ${
-              activeSection === 'revenue-stats' 
-                ? 'bg-white/20 backdrop-blur-sm text-white shadow-lg' 
-                : 'hover:bg-white/10'
-            }`}
-            style={{ color: activeSection === 'revenue-stats' ? '#ffffff' : '#b3d9f2' }}
-          >
-            <i className="fas fa-chart-line w-5 h-5 mr-3"></i>
-            Statistiques Revenus
-          </button>
-
           {user?.role === 'superadmin' && (
             <button
               onClick={() => onSectionChange('utilisateurs')}

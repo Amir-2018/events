@@ -142,33 +142,35 @@ export default function TicketsSection() {
 
   return (
     <div className="w-full">
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
+      {/* Header Section - Optimized */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-black text-gray-900 mb-2 uppercase tracking-tighter">Mes Tickets</h1>
-          <p className="text-gray-500 font-medium tracking-tight">Gérez les tickets de vos événements</p>
+          <h1 className="text-xl font-bold text-gray-900 mb-1">Mes Tickets</h1>
+          <p className="text-xs text-gray-500">Gérez les tickets de vos événements</p>
         </div>
         
         {/* Toggle View Mode */}
-        <div className="flex items-center gap-2 bg-gray-100 rounded-xl p-1">
+        <div className="flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200">
           <button
             onClick={() => setViewMode('cards')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               viewMode === 'cards' 
-                ? 'bg-white text-gray-900 shadow-sm' 
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-white text-white shadow-sm' 
+                : 'text-gray-500 hover:text-gray-700'
             }`}
+            style={viewMode === 'cards' ? { backgroundColor: '#31a7df' } : {}}
           >
             <i className="fas fa-th-large"></i>
             Cartes
           </button>
           <button
             onClick={() => setViewMode('table')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               viewMode === 'table' 
-                ? 'bg-white text-gray-900 shadow-sm' 
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-white text-white shadow-sm' 
+                : 'text-gray-500 hover:text-gray-700'
             }`}
+            style={viewMode === 'table' ? { backgroundColor: '#31a7df' } : {}}
           >
             <i className="fas fa-table"></i>
             Tableau
@@ -181,25 +183,25 @@ export default function TicketsSection() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
       ) : eventStats.length === 0 ? (
-        <div className="text-center py-20 bg-gray-50 rounded-[40px] border border-gray-100">
-          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <i className="fas fa-calendar-times text-gray-400 text-2xl"></i>
+        <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-100">
+          <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <i className="fas fa-calendar-times text-gray-400 text-xl"></i>
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Aucun événement</h2>
-          <p className="text-gray-600 mb-6">Vous n'avez pas encore créé d'événements avec des tickets.</p>
+          <h2 className="text-lg font-bold text-gray-900 mb-2">Aucun événement</h2>
+          <p className="text-sm text-gray-600 mb-4">Vous n'avez pas encore créé d'événements avec des tickets.</p>
         </div>
       ) : (
         <>
           {/* Vue Cartes */}
           {viewMode === 'cards' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {eventStats.map((event) => {
                 const fraudCount = getFraudCountForEvent(event.event_id);
                 
                 return (
-                  <div key={event.event_id} className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow border border-gray-100">
+                  <div key={event.event_id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow border border-gray-100">
                     {/* Event Image */}
-                    <div className="h-48 bg-gradient-to-br from-blue-500 to-blue-700 relative overflow-hidden">
+                    <div className="h-32 bg-gradient-to-br from-blue-500 to-blue-700 relative overflow-hidden">
                       {event.event_image ? (
                         <img 
                           src={event.event_image} 
@@ -208,25 +210,25 @@ export default function TicketsSection() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <i className="fas fa-calendar-alt text-white text-4xl opacity-50"></i>
+                          <i className="fas fa-calendar-alt text-white text-2xl opacity-50"></i>
                         </div>
                       )}
                       
                       {/* Ticket Icon */}
-                      <div className="absolute top-4 right-4">
-                        <div className="w-12 h-12 bg-white bg-opacity-20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                          <i className="fas fa-ticket-alt text-white text-lg"></i>
+                      <div className="absolute top-3 right-3">
+                        <div className="w-8 h-8 bg-white bg-opacity-20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                          <i className="fas fa-ticket-alt text-white text-sm"></i>
                         </div>
                       </div>
                     </div>
 
                     {/* Event Content */}
-                    <div className="p-6">
-                      <div className="mb-4">
-                        <h3 className="text-lg font-black text-gray-900 mb-2 line-clamp-2 uppercase tracking-tight">
+                    <div className="p-4">
+                      <div className="mb-3">
+                        <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-2">
                           {event.event_name}
                         </h3>
-                        <p className="text-gray-600 text-sm mb-2">
+                        <p className="text-gray-600 text-xs mb-1">
                           {formatDate(event.event_date)}
                         </p>
                         {event.event_address && (
@@ -237,22 +239,22 @@ export default function TicketsSection() {
                       </div>
 
                       {/* Statistics */}
-                      <div className="grid grid-cols-2 gap-3 mb-4">
-                        <div className="bg-blue-50 rounded-xl p-3 text-center">
+                      <div className="grid grid-cols-2 gap-2 mb-3">
+                        <div className="bg-blue-50 rounded-lg p-2 text-center">
                           <div className="text-xs text-[#31a7df] mb-1">Non vérifiés</div>
-                          <div className="font-bold text-[#2596d1]">{event.active_tickets || 0}</div>
+                          <div className="font-bold text-[#2596d1] text-sm">{event.active_tickets || 0}</div>
                         </div>
-                        <div className="bg-green-50 rounded-xl p-3 text-center">
+                        <div className="bg-green-50 rounded-lg p-2 text-center">
                           <div className="text-xs text-green-600 mb-1">Vérifiés</div>
-                          <div className="font-bold text-green-700">{event.verified_tickets || 0}</div>
+                          <div className="font-bold text-green-700 text-sm">{event.verified_tickets || 0}</div>
                         </div>
                       </div>
 
                       {/* Fraud Alert */}
                       {fraudCount > 0 && (
-                        <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-4">
+                        <div className="bg-red-50 border border-red-200 rounded-lg p-2 mb-3">
                           <div className="flex items-center gap-2">
-                            <i className="fas fa-exclamation-triangle text-red-600"></i>
+                            <i className="fas fa-exclamation-triangle text-red-600 text-xs"></i>
                             <div className="text-xs text-red-600">
                               <span className="font-bold">{fraudCount}</span> tentative{fraudCount > 1 ? 's' : ''} de fraude
                             </div>
@@ -261,17 +263,17 @@ export default function TicketsSection() {
                       )}
 
                       {/* Total Tickets */}
-                      <div className="bg-gray-50 rounded-xl p-3 mb-4">
+                      <div className="bg-gray-50 rounded-lg p-2 mb-3">
                         <div className="flex items-center justify-between">
                           <div className="text-xs text-gray-500">Total tickets</div>
-                          <div className="font-bold text-gray-700">{event.total_tickets || 0}</div>
+                          <div className="font-bold text-gray-700 text-sm">{event.total_tickets || 0}</div>
                         </div>
                       </div>
 
                       {/* Actions */}
                       <button
                         onClick={() => handleViewEventTickets(event)}
-                        className="w-full bg-[#31a7df] text-white py-3 px-4 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-[#2596d1] transition-colors flex items-center justify-center gap-2"
+                        className="w-full bg-[#31a7df] text-white py-2 px-3 rounded-lg font-medium text-xs hover:bg-[#2596d1] transition-colors flex items-center justify-center gap-2"
                       >
                         <i className="fas fa-eye"></i>
                         Voir les tickets
@@ -285,7 +287,7 @@ export default function TicketsSection() {
 
           {/* Vue Tableau */}
           {viewMode === 'table' && (
-            <div className="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100">
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-gray-50 border-b border-gray-200">
@@ -327,43 +329,43 @@ export default function TicketsSection() {
                         <tr key={event.event_id} className="hover:bg-gray-50 transition-colors">
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-                              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                              <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
                                 <i className="fas fa-calendar-alt text-[#31a7df]"></i>
                               </div>
                               <div>
-                                <div className="font-bold text-gray-900 line-clamp-1">{event.event_name}</div>
+                                <div className="font-bold text-gray-900 line-clamp-1 text-sm">{event.event_name}</div>
                                 {event.event_address && (
-                                  <div className="text-sm text-gray-500 line-clamp-1">{event.event_address}</div>
+                                  <div className="text-xs text-gray-500 line-clamp-1">{event.event_address}</div>
                                 )}
                               </div>
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-600">
+                          <td className="px-6 py-4 text-xs text-gray-600">
                             {formatDate(event.event_date)}
                           </td>
                           <td className="px-6 py-4 text-center">
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-gray-100 text-gray-700">
+                            <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-gray-100 text-gray-700">
                               {event.total_tickets || 0}
                             </span>
                           </td>
                           <td className="px-6 py-4 text-center">
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-blue-50 text-[#2596d1]">
+                            <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-blue-50 text-[#2596d1]">
                               {event.active_tickets || 0}
                             </span>
                           </td>
                           <td className="px-6 py-4 text-center">
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-green-100 text-green-700">
+                            <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-green-100 text-green-700">
                               {event.verified_tickets || 0}
                             </span>
                           </td>
                           <td className="px-6 py-4 text-center">
                             {fraudCount > 0 ? (
-                              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-red-100 text-red-700">
+                              <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-red-100 text-red-700">
                                 <i className="fas fa-exclamation-triangle mr-1"></i>
                                 {fraudCount}
                               </span>
                             ) : (
-                              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-gray-100 text-gray-500">
+                              <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-gray-100 text-gray-500">
                                 0
                               </span>
                             )}
@@ -371,7 +373,7 @@ export default function TicketsSection() {
                           <td className="px-6 py-4 text-center">
                             <button
                               onClick={() => handleViewEventTickets(event)}
-                              className="inline-flex items-center gap-2 px-4 py-2 bg-[#31a7df] text-white rounded-xl text-sm font-bold hover:bg-[#2596d1] transition-colors"
+                              className="inline-flex items-center gap-1 px-3 py-1 bg-[#31a7df] text-white rounded-lg text-xs font-bold hover:bg-[#2596d1] transition-colors"
                             >
                               <i className="fas fa-eye"></i>
                               Voir
