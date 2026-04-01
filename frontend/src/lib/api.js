@@ -25,9 +25,26 @@ protectedAPI.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+    console.log('Token ajouté aux headers:', token.substring(0, 20) + '...');
+  } else {
+    console.warn('Aucun token trouvé dans localStorage');
   }
   return config;
 });
+
+// Intercepteur pour gérer les erreurs d'authentification
+protectedAPI.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expiré ou invalide
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const authAPI = {
   login: (credentials) => publicAPI.post('/api/auth/login', credentials),
@@ -63,13 +80,13 @@ export const eventsAPI = {
 export const eventTypesAPI = {
   getEventTypes: () => publicAPI.get('/api/event-types'),
   getEventType: (id) => publicAPI.get(`/api/event-types/${id}`),
-  createEventType: (data) => publicAPI.post('/api/event-types', data),
-  updateEventType: (id, data) => publicAPI.put(`/api/event-types/${id}`, data),
-  deleteEventType: (id) => publicAPI.delete(`/api/event-types/${id}`),
+  createEventType: (data) => protectedAPI.post('/api/event-types', data),
+  updateEventType: (id, data) => protectedAPI.put(`/api/event-types/${id}`, data),
+  deleteEventType: (id) => protectedAPI.delete(`/api/event-types/${id}`),
 };
 
 export const clientsAPI = {
-  getAllClients: () => publicAPI.get('/api/clients'),
+  getAllClients: () => protectedAPI.get('/api/clients'),
   getClient: (id) => protectedAPI.get(`/api/clients/${id}`),
   createClient: (data) => protectedAPI.post('/api/clients', data),
   updateClient: (id, data) => protectedAPI.put(`/api/clients/${id}`, data),
@@ -80,17 +97,17 @@ export const clientsAPI = {
 export const propertiesAPI = {
   getProperties: () => publicAPI.get('/api/properties'),
   getProperty: (id) => publicAPI.get(`/api/properties/${id}`),
-  createProperty: (data) => publicAPI.post('/api/properties', data),
-  updateProperty: (id, data) => publicAPI.put(`/api/properties/${id}`, data),
-  deleteProperty: (id) => publicAPI.delete(`/api/properties/${id}`),
+  createProperty: (data) => protectedAPI.post('/api/properties', data),
+  updateProperty: (id, data) => protectedAPI.put(`/api/properties/${id}`, data),
+  deleteProperty: (id) => protectedAPI.delete(`/api/properties/${id}`),
 };
 
 export const typeBiensAPI = {
   getTypeBiens: () => publicAPI.get('/api/type-biens'),
   getTypeBien: (id) => publicAPI.get(`/api/type-biens/${id}`),
-  createTypeBien: (data) => publicAPI.post('/api/type-biens', data),
-  updateTypeBien: (id, data) => publicAPI.put(`/api/type-biens/${id}`, data),
-  deleteTypeBien: (id) => publicAPI.delete(`/api/type-biens/${id}`),
+  createTypeBien: (data) => protectedAPI.post('/api/type-biens', data),
+  updateTypeBien: (id, data) => protectedAPI.put(`/api/type-biens/${id}`, data),
+  deleteTypeBien: (id) => protectedAPI.delete(`/api/type-biens/${id}`),
 };
 
 export const usersAPI = {
@@ -164,6 +181,10 @@ export const ticketsAPI = {
   getEventTicketsStats: () => protectedAPI.get('/api/event-tickets-stats'),
   getEventTicketsList: (eventId) => protectedAPI.get(`/api/events/${eventId}/tickets`),
   getFraudAttempts: () => protectedAPI.get('/api/fraud-attempts'),
+};
+
+export const testAPI = {
+  testAuth: () => protectedAPI.get('/api/test-auth'),
 };
 
 export default api;

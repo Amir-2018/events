@@ -3,19 +3,12 @@ import Footer from '../components/Footer';
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 right-10 w-72 h-72 rounded-full opacity-4 animate-spin" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '25s' }}></div>
-        <div className="absolute bottom-10 left-10 w-56 h-56 rounded-full opacity-8 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '7s' }}></div>
-        <div className="absolute top-1/3 left-1/3 w-40 h-40 rounded-full opacity-6 animate-ping" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '12s' }}></div>
-        <div className="absolute bottom-1/3 right-1/3 w-28 h-28 rounded-full opacity-12 animate-bounce" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '5s' }}></div>
-        <div className="absolute top-2/3 right-1/4 w-16 h-16 rounded-full opacity-20 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '3s' }}></div>
-      </div>
+    <div className="min-h-screen bg-white text-gray-900 font-sans relative overflow-hidden flex flex-col">
+   
       
       <PublicNavbar />
       
-      <main className="pt-40 pb-20 relative z-10">
+      <main className="pt-40 pb-20 relative z-10 flex-grow">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col lg:flex-row gap-20">
             <div className="lg:w-1/2">
@@ -42,27 +35,33 @@ export default function ContactPage() {
             </div>
             
             <div className="lg:w-1/2 animate-in fade-in zoom-in duration-1000 delay-500">
-               <form className="bg-white p-12 rounded-[50px] shadow-2xl shadow-gray-100 border border-gray-50 flex flex-col gap-8">
-                  <div className="grid grid-cols-2 gap-8">
+               <form className="bg-white/80 backdrop-blur-xl p-8 md:p-10 rounded-3xl shadow-2xl border border-white/20 animate-in fade-in zoom-in-95 duration-500 flex flex-col gap-6">
+                  <div className="text-center mb-6">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Contactez-nous</h2>
+                    <p className="text-gray-600 text-sm">Nous sommes là pour vous aider</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
                     <div className="flex flex-col gap-2">
-                       <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 px-2">Prénom</label>
-                       <input type="text" className="w-full bg-gray-50 border-none rounded-2xl p-5 focus:ring-4 focus:ring-blue-100 transition-all font-bold text-gray-900" placeholder="Jean" />
+                       <label className="text-xs font-medium text-gray-600 ml-1 mb-1 block">Prénom</label>
+                       <input type="text" className="w-full px-4 py-2.5 bg-gray-50/80 backdrop-blur-sm border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] outline-none transition-all font-medium text-gray-900 text-sm hover:border-[#31a7df]/50" placeholder="Jean" />
                     </div>
                     <div className="flex flex-col gap-2">
-                       <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 px-2">Nom</label>
-                       <input type="text" className="w-full bg-gray-50 border-none rounded-2xl p-5 focus:ring-4 focus:ring-blue-100 transition-all font-bold text-gray-900" placeholder="Dupont" />
+                       <label className="text-xs font-medium text-gray-600 ml-1 mb-1 block">Nom</label>
+                       <input type="text" className="w-full px-4 py-2.5 bg-gray-50/80 backdrop-blur-sm border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] outline-none transition-all font-medium text-gray-900 text-sm hover:border-[#31a7df]/50" placeholder="Dupont" />
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 px-2">Email</label>
-                     <input type="email" className="w-full bg-gray-50 border-none rounded-2xl p-5 focus:ring-4 focus:ring-blue-100 transition-all font-bold text-gray-900" placeholder="jean.dupont@email.com" />
+                     <label className="text-xs font-medium text-gray-600 ml-1 mb-1 block">Email</label>
+                     <input type="email" className="w-full px-4 py-2.5 bg-gray-50/80 backdrop-blur-sm border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] outline-none transition-all font-medium text-gray-900 text-sm hover:border-[#31a7df]/50" placeholder="jean.dupont@email.com" />
                   </div>
                   <div className="flex flex-col gap-2">
-                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 px-2">Message</label>
-                     <textarea rows="4" className="w-full bg-gray-50 border-none rounded-2xl p-5 focus:ring-4 focus:ring-blue-100 transition-all font-bold text-gray-900 resize-none" placeholder="Votre message ici..."></textarea>
+                     <label className="text-xs font-medium text-gray-600 ml-1 mb-1 block">Message</label>
+                     <textarea rows="4" className="w-full px-4 py-2.5 bg-gray-50/80 backdrop-blur-sm border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] outline-none transition-all font-medium text-gray-900 text-sm resize-none hover:border-[#31a7df]/50" placeholder="Votre message ici..."></textarea>
                   </div>
-                  <button type="submit" className="bg-[#31a7df] text-white py-6 rounded-3xl text-sm font-black uppercase tracking-widest hover:bg-[#2596d1] transition-all hover:shadow-xl active:scale-95 mt-4 group">
-                    <span className="flex items-center justify-center gap-2">
+                  <button type="submit" className="w-full text-white py-3 rounded-lg font-medium text-sm transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 mt-4 group relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)' }}>
+                    <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <span className="relative flex items-center justify-center gap-2">
                       <i className="fas fa-paper-plane group-hover:scale-110 transition-transform"></i>
                       Envoyer le message
                     </span>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import PublicNavbar from '../components/PublicNavbar';
+import Footer from '../components/Footer';
 import Link from 'next/link';
 import { eventsAPI, eventTypesAPI, propertiesAPI } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
@@ -169,13 +170,7 @@ export default function LandingPage() {
       <main>
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden min-h-[600px] flex items-center">
-          {/* Animated Background Elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-20 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '4s' }}></div>
-            <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-10 animate-bounce" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '6s' }}></div>
-            <div className="absolute top-1/4 right-1/4 w-32 h-32 rounded-full opacity-15 animate-ping" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '3s' }}></div>
-            <div className="absolute bottom-1/4 left-1/4 w-24 h-24 rounded-full opacity-10 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '5s' }}></div>
-          </div>
+   
           
           <div className="absolute inset-0 bg-gray-900 z-0">
             {top3Events.map((event, index) => (
@@ -282,11 +277,7 @@ export default function LandingPage() {
 
         {/* Project Description Section */}
         <section className="py-24 bg-white relative overflow-hidden">
-          {/* Background Animation Elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-1/4 left-10 w-32 h-32 rounded-full opacity-5 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '6s' }}></div>
-            <div className="absolute bottom-1/4 right-10 w-24 h-24 rounded-full opacity-8 animate-bounce" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '4s' }}></div>
-          </div>
+      
           
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-16">
@@ -663,11 +654,7 @@ export default function LandingPage() {
 
         {/* Features Preview */}
         <section className="bg-gray-50 py-24 relative overflow-hidden">
-           {/* Background Animation Elements */}
-           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-             <div className="absolute top-20 left-20 w-40 h-40 rounded-full opacity-5 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '4s' }}></div>
-             <div className="absolute bottom-20 right-20 w-32 h-32 rounded-full opacity-8 animate-bounce" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '6s' }}></div>
-           </div>
+        
            
            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -690,25 +677,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="bg-white border-t border-gray-100 py-12 text-center text-xs font-black uppercase tracking-widest text-gray-400">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div>&copy; 2026 EventPro System. Tous droits réservés.</div>
-          <div className="flex flex-col md:flex-row gap-4 md:gap-8 opacity-60 hover:opacity-100 transition-opacity">
-            <span className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
-              Amir Maalaoui
-            </span>
-            <span className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
-              amir.maalaoui27@gmail.com
-            </span>
-            <span className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.54-4.24-7.136-7.136l1.292-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" /></svg>
-              +216 93379344
-            </span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

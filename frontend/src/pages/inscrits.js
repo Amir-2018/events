@@ -333,7 +333,7 @@ function ClientModal({ client, mode, onClose, onSave }) {
   const title = mode === 'create' ? 'Nouvel Inscrit' : mode === 'edit' ? 'Modifier l\'Inscrit' : 'Détails de l\'Inscrit';
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[80]">
       <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 text-white">

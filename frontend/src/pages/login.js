@@ -190,14 +190,7 @@ export default function Login() {
       <PublicNavbar />
       <div className="min-h-screen font-sans selection:bg-blue-50 selection:text-blue-900 bg-gradient-to-br from-gray-50 via-white to-blue-50/30 flex relative overflow-hidden">
         
-        {/* Background Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-20 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '4s' }}></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-10 animate-bounce" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '6s' }}></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full opacity-5 animate-spin" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '20s' }}></div>
-          <div className="absolute top-1/4 right-1/4 w-32 h-32 rounded-full opacity-15 animate-ping" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '8s' }}></div>
-          <div className="absolute bottom-1/4 left-1/4 w-24 h-24 rounded-full opacity-12 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '5s' }}></div>
-        </div>
+    
 
         {/* Left Side: Branding */}
         <div className="hidden lg:flex w-1/2 flex-col items-center justify-center relative p-12 pt-24">

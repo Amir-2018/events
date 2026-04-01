@@ -251,6 +251,22 @@ export default function Home() {
     setEventForMap(event);
     setShowMap(true);
   };
+  // Test de l'authentification
+  const testAuthentication = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      console.log('Token dans localStorage:', token ? token.substring(0, 20) + '...' : 'Aucun token');
+      
+      const { testAPI } = require('../lib/api');
+      const response = await testAPI.testAuth();
+      console.log('Test d\'authentification réussi:', response.data);
+      alert('Authentification OK');
+    } catch (err) {
+      console.error('Erreur de test d\'authentification:', err);
+      alert(`Erreur d'authentification: ${err.response?.data?.message || err.message}`);
+    }
+  };
+
   const handleCreateEventType = async (eventTypeData, id = null) => {
     try {
       setIsProcessing(true);
@@ -268,6 +284,8 @@ export default function Home() {
       setShowSuccess(true);
     } catch (err) {
       console.error('Erreur lors de la gestion du type d\'événement:', err);
+      const errorMessage = err.response?.data?.message || 'Erreur lors de la gestion du type d\'événement';
+      alert(`Erreur: ${errorMessage}`);
     } finally {
       setIsProcessing(false);
     }
@@ -303,6 +321,8 @@ export default function Home() {
       setShowSuccess(true);
     } catch (err) {
       console.error('Erreur lors de la gestion du type de bien:', err);
+      const errorMessage = err.response?.data?.message || 'Erreur lors de la gestion du type de bien';
+      alert(`Erreur: ${errorMessage}`);
     } finally {
       setIsProcessing(false);
     }
@@ -410,6 +430,16 @@ export default function Home() {
           </div>
         ) : (
           <div className="w-full px-12 py-12 max-w-none animate-in fade-in duration-500">
+            {/* Bouton de test temporaire */}
+            <div className="mb-4">
+              <button 
+                onClick={testAuthentication}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-bold hover:bg-red-600 transition-all"
+              >
+                🔧 Test Auth (Debug)
+              </button>
+            </div>
+            
             {/* Render Active Section */}
             {activeSection === 'dashboard' && (
               user?.role === 'client' ? (

@@ -65,18 +65,13 @@ export default function ServicesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-white text-gray-900 font-sans relative overflow-hidden flex flex-col">
       {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-20 w-72 h-72 rounded-full opacity-4 animate-spin" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '25s' }}></div>
-        <div className="absolute bottom-20 left-20 w-56 h-56 rounded-full opacity-6 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '8s' }}></div>
-        <div className="absolute top-1/3 left-1/2 w-40 h-40 rounded-full opacity-3 animate-ping" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '15s' }}></div>
-        <div className="absolute bottom-1/3 right-1/3 w-28 h-28 rounded-full opacity-8 animate-bounce" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '6s' }}></div>
-      </div>
+      
       
       <PublicNavbar />
       
-      <main className="pt-40 pb-20 relative z-10">
+      <main className="pt-40 pb-20 relative z-10 flex-grow">
         <div className="max-w-7xl mx-auto px-6">
           
           {/* Hero Section */}

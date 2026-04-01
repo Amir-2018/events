@@ -3,19 +3,13 @@ import Footer from '../components/Footer';
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-white text-gray-900 font-sans relative overflow-hidden flex flex-col">
       {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-20 w-64 h-64 rounded-full opacity-5 animate-spin" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '20s' }}></div>
-        <div className="absolute bottom-20 left-20 w-48 h-48 rounded-full opacity-10 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '8s' }}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full opacity-3 animate-ping" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '15s' }}></div>
-        <div className="absolute top-40 left-40 w-20 h-20 rounded-full opacity-15 animate-bounce" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '4s' }}></div>
-        <div className="absolute bottom-40 right-40 w-32 h-32 rounded-full opacity-8 animate-pulse" style={{ background: 'linear-gradient(135deg, #31a7df 0%, #2596d1 100%)', animationDuration: '6s' }}></div>
-      </div>
+   
       
       <PublicNavbar />
       
-      <main className="pt-40 pb-20 relative z-10">
+      <main className="pt-40 pb-20 relative z-10 flex-grow">
         <div className="max-w-4xl mx-auto px-6">
           <h1 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter italic mb-12 animate-in slide-in-from-left duration-700">
             À propos de <span className="text-[#31a7df]">Nous</span>
