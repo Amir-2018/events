@@ -106,6 +106,10 @@ class PropertyService {
       (property.adresse && property.adresse.toLowerCase().includes(searchTerm.toLowerCase()))
     );
   }
+
+  static async findByName(nom) {
+    return await Property.findByName(nom);
+  }
 }
 
 module.exports = PropertyService;

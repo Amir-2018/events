@@ -13,14 +13,13 @@ class Property {
       horaire_ouverture, 
       horaire_fermeture, 
       jours_ouverture,
-      user_id,
-      status = 'pending'
+      user_id
     } = propertyData;
     
     const id = uuidv4();
     const query = `
-      INSERT INTO biens (id, nom, type_bien_id, adresse, description, latitude, longitude, horaire_ouverture, horaire_fermeture, jours_ouverture, user_id, status, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+      INSERT INTO biens (id, nom, type_bien_id, adresse, description, latitude, longitude, horaire_ouverture, horaire_fermeture, jours_ouverture, user_id, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
     `;
     
     await pool.query(query, [
@@ -34,15 +33,14 @@ class Property {
       horaire_ouverture, 
       horaire_fermeture, 
       jours_ouverture || 'Lundi-Dimanche',
-      user_id,
-      status
+      user_id
     ]);
     return this.getById(id);
   }
 
   static async getAll(userId = null, userRole = null) {
     let query = `
-      SELECT b.*, tb.nom as type_bien_nom, tb.description as type_bien_description
+      SELECT b.*, tb.nom as type_bien_nom
       FROM biens b
       LEFT JOIN type_biens tb ON b.type_bien_id = tb.id
     `;
@@ -68,7 +66,7 @@ class Property {
 
   static async getById(id) {
     const query = `
-      SELECT b.*, tb.nom as type_bien_nom, tb.description as type_bien_description
+      SELECT b.*, tb.nom as type_bien_nom
       FROM biens b
       LEFT JOIN type_biens tb ON b.type_bien_id = tb.id
       WHERE b.id = ?
@@ -88,24 +86,16 @@ class Property {
       longitude, 
       horaire_ouverture, 
       horaire_fermeture, 
-      jours_ouverture,
-      status
+      jours_ouverture
     } = propertyData;
     
-    let query = `
+    const query = `
       UPDATE biens 
       SET nom = ?, type_bien_id = ?, adresse = ?, description = ?, latitude = ?, longitude = ?, 
           horaire_ouverture = ?, horaire_fermeture = ?, jours_ouverture = ?, updated_at = NOW()
+      WHERE id = ?
     `;
-    let params = [nom, type_bien_id, adresse, description, latitude, longitude, horaire_ouverture, horaire_fermeture, jours_ouverture];
-    
-    if (status) {
-      query += ', status = ?';
-      params.push(status);
-    }
-    
-    query += ' WHERE id = ?';
-    params.push(id);
+    const params = [nom, type_bien_id, adresse, description, latitude, longitude, horaire_ouverture, horaire_fermeture, jours_ouverture, id];
     
     await pool.query(query, params);
     return this.getById(id);
@@ -118,6 +108,12 @@ class Property {
     const query = `DELETE FROM biens WHERE id = ?`;
     await pool.query(query, [id]);
     return property;
+  }
+
+  static async findByName(nom) {
+    const query = `SELECT * FROM biens WHERE nom = ?`;
+    const result = await pool.query(query, [nom]);
+    return result.rows[0];
   }
 }
 

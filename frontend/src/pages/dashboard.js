@@ -52,6 +52,8 @@ export default function Home() {
   const [eventTypesLoaded, setEventTypesLoaded] = useState(false);
   const [bienTypes, setBienTypes] = useState([]);
   const [bienTypesLoaded, setBienTypesLoaded] = useState(false);
+  const [properties, setProperties] = useState([]);
+  const [propertiesLoaded, setPropertiesLoaded] = useState(false);
 
   // Charger les événements au démarrage seulement
   useEffect(() => {
@@ -71,6 +73,13 @@ export default function Home() {
       loadBienTypes();
     }
   }, [activeSection, bienTypesLoaded]);
+
+  // Charger les propriétés seulement quand nécessaire
+  useEffect(() => {
+    if (activeSection === 'properties' && !propertiesLoaded) {
+      loadProperties();
+    }
+  }, [activeSection, propertiesLoaded]);
 
   // Charger les inscrits pour la section 'inscrits'
   useEffect(() => {
@@ -125,11 +134,31 @@ export default function Home() {
     const { typeBiensAPI } = require('../lib/api');
     try {
       setLoading(true);
+      console.log('🔍 LOADING BIEN TYPES...');
       const response = await typeBiensAPI.getTypeBiens();
+      console.log('🔍 LOAD BIEN TYPES RESPONSE:', response);
+      console.log('🔍 BIEN TYPES DATA:', response.data.data);
       setBienTypes(response.data.data || []);
       setBienTypesLoaded(true);
     } catch (err) {
       console.error('Erreur lors du chargement des types de biens:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadProperties = async () => {
+    const { propertiesAPI } = require('../lib/api');
+    try {
+      setLoading(true);
+      console.log('🔍 LOADING PROPERTIES...');
+      const response = await propertiesAPI.getProperties();
+      console.log('🔍 LOAD PROPERTIES RESPONSE:', response);
+      console.log('🔍 PROPERTIES DATA:', response.data.data);
+      setProperties(response.data.data || []);
+      setPropertiesLoaded(true);
+    } catch (err) {
+      console.error('Erreur lors du chargement des propriétés:', err);
     } finally {
       setLoading(false);
     }
@@ -314,8 +343,14 @@ export default function Home() {
         setBienTypes(prev => prev.map(t => t.id === id ? response.data.data : t));
         setSuccessMessage("La catégorie de bien a été mise à jour avec succès.");
       } else {
+        console.log('🔍 CREATING TYPE BIEN:', typeBienData);
         const response = await typeBiensAPI.createTypeBien(typeBienData);
-        setBienTypes(prev => [response.data.data, ...prev]);
+        console.log('🔍 CREATE RESPONSE:', response);
+        console.log('🔍 RESPONSE DATA:', response.data);
+        
+        // Recharger la liste complète pour être sûr
+        await loadBienTypes();
+        
         setSuccessMessage("La catégorie de bien a été créée avec succès.");
       }
       setShowSuccess(true);
@@ -348,9 +383,7 @@ export default function Home() {
     try {
       setIsProcessing(true);
       const response = await propertiesAPI.createProperty(propertyData);
-      // Nous rechargeons les événements car la création d'un bien peut changer l'état global
-      // Mais ici on pourrait juste mettre à jour l'état si on en avait un pour les propriétés
-      // Pour l'instant on laisse le composant PropertyList gérer son propre état ou on en crée un
+      setProperties(prev => [response.data.data, ...prev]);
       setSuccessMessage("Le bien a été créé avec succès.");
       setShowSuccess(true);
       return response.data.data;
@@ -367,6 +400,7 @@ export default function Home() {
     try {
       setIsProcessing(true);
       const response = await propertiesAPI.updateProperty(id, propertyData);
+      setProperties(prev => prev.map(p => p.id === id ? response.data.data : p));
       setSuccessMessage("Le bien a été mis à jour avec succès.");
       setShowSuccess(true);
       return response.data.data;
@@ -383,6 +417,7 @@ export default function Home() {
     try {
       setIsProcessing(true);
       await propertiesAPI.deleteProperty(id);
+      setProperties(prev => prev.filter(p => p.id !== id));
       setSuccessMessage("Le bien a été supprimé avec succès.");
       setShowSuccess(true);
     } catch (err) {
@@ -481,6 +516,7 @@ export default function Home() {
 
             {activeSection === 'properties' && (
               <PropertyList 
+                properties={properties}
                 events={events}
                 eventTypes={eventTypes}
                 bienTypes={bienTypes}

@@ -2,8 +2,7 @@ import { useState } from 'react';
 
 export default function EventTypeForm({ onSubmit, onCancel, initialData = null }) {
   const [formData, setFormData] = useState({
-    nom: initialData?.nom || '',
-    description: initialData?.description || ''
+    nom: initialData?.nom || ''
   });
   const [loading, setLoading] = useState(false);
 
@@ -56,20 +55,6 @@ export default function EventTypeForm({ onSubmit, onCancel, initialData = null }
               required
               placeholder="Ex: Conférence, Concert, Formation..."
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all text-sm"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-              Description
-            </label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              rows={3}
-              placeholder="Description du type d'événement..."
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all resize-none text-sm"
             />
           </div>
 

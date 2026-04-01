@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const pool = require('./db/pool');
 const initDb = require('./db/init');
+const authMiddleware = require('./middleware/authMiddleware');
 
 const authRoutes = require('./routes/authRoutes');
 const eventRoutes = require('./routes/eventRoutes');
@@ -55,6 +56,18 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+
+// Route de test pour l'authentification
+app.get('/api/test-auth', authMiddleware, (req, res) => {
+  console.log('🔍 TEST AUTH ENDPOINT:');
+  console.log('- req.user:', req.user);
+  res.json({
+    success: true,
+    message: 'Authentification réussie',
+    user: req.user
+  });
+});
+
 app.use('/api', eventRoutes);
 app.use('/api', uploadRoutes);
 app.use('/api/event-types', eventTypeRoutes);

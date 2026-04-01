@@ -3,13 +3,44 @@ const PropertyService = require('../services/propertyService');
 class PropertyController {
   static async createProperty(req, res) {
     try {
+      console.log('🔍 DEBUG CREATE PROPERTY:');
+      console.log('- req.user:', req.user);
+      console.log('- req.user.id:', req.user?.id);
+      console.log('- req.user.role:', req.user?.role);
+      
+      const { nom } = req.body;
+      
+      if (!nom || nom.trim() === '') {
+        return res.status(400).json({
+          success: false,
+          message: 'Le nom du bien est obligatoire'
+        });
+      }
+      
+      // Vérifier si le bien existe déjà
+      const existingProperty = await PropertyService.findByName(nom.trim());
+      if (existingProperty) {
+        return res.status(400).json({
+          success: false,
+          message: 'Ce bien existe déjà'
+        });
+      }
+      
+      const user_id = req.user?.role === 'superadmin' ? null : req.user?.id;
+      
+      console.log('- Calculated user_id:', user_id);
+      
       const propertyData = {
         ...req.body,
-        user_id: req.user?.role === 'superadmin' ? null : req.user?.id,
-        status: req.user?.role === 'superadmin' ? 'accepted' : 'pending'
+        nom: nom.trim(),
+        user_id
       };
       
+      console.log('- propertyData to create:', propertyData);
+      
       const property = await PropertyService.createProperty(propertyData);
+      
+      console.log('- Created property:', property);
       
       res.status(201).json({
         success: true,

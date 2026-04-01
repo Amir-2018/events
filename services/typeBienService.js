@@ -6,6 +6,10 @@ class TypeBienService {
     return TypeBien.create(typeBienData);
   }
 
+  async findByName(nom) {
+    return TypeBien.findByName(nom);
+  }
+
   async getAllTypeBiens(userId = null, userRole = null) {
     return TypeBien.getAll(userId, userRole);
   }

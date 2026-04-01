@@ -3,16 +3,39 @@ const EventType = require('../models/eventType.model');
 class EventTypeController {
   static async createEventType(req, res) {
     try {
-      const { nom, description } = req.body;
+      console.log('🔍 DEBUG CREATE EVENT TYPE:');
+      console.log('- req.user:', req.user);
+      console.log('- req.user.id:', req.user?.id);
+      console.log('- req.user.role:', req.user?.role);
+      
+      const { nom } = req.body;
+      
+      if (!nom || nom.trim() === '') {
+        return res.status(400).json({
+          success: false,
+          message: 'Le nom du type d\'événement est obligatoire'
+        });
+      }
+      
+      // Vérifier si le type d'événement existe déjà
+      const existingEventType = await EventType.findByName(nom.trim());
+      if (existingEventType) {
+        return res.status(400).json({
+          success: false,
+          message: 'Ce type d\'événement existe déjà'
+        });
+      }
+      
       const user_id = req.user?.role === 'superadmin' ? null : req.user?.id;
-      const status = req.user?.role === 'superadmin' ? 'accepted' : 'pending';
+      
+      console.log('- Calculated user_id:', user_id);
       
       const eventType = await EventType.create({
-        nom,
-        description,
-        user_id,
-        status
+        nom: nom.trim(),
+        user_id
       });
+      
+      console.log('- Created eventType:', eventType);
       
       res.status(201).json({
         success: true,

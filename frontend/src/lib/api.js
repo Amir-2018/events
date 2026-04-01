@@ -25,9 +25,6 @@ protectedAPI.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-    console.log('Token ajouté aux headers:', token.substring(0, 20) + '...');
-  } else {
-    console.warn('Aucun token trouvé dans localStorage');
   }
   return config;
 });
@@ -78,7 +75,7 @@ export const eventsAPI = {
 };
 
 export const eventTypesAPI = {
-  getEventTypes: () => publicAPI.get('/api/event-types'),
+  getEventTypes: () => protectedAPI.get('/api/event-types'),
   getEventType: (id) => publicAPI.get(`/api/event-types/${id}`),
   createEventType: (data) => protectedAPI.post('/api/event-types', data),
   updateEventType: (id, data) => protectedAPI.put(`/api/event-types/${id}`, data),
@@ -95,7 +92,7 @@ export const clientsAPI = {
 };
 
 export const propertiesAPI = {
-  getProperties: () => publicAPI.get('/api/properties'),
+  getProperties: () => protectedAPI.get('/api/properties'),
   getProperty: (id) => publicAPI.get(`/api/properties/${id}`),
   createProperty: (data) => protectedAPI.post('/api/properties', data),
   updateProperty: (id, data) => protectedAPI.put(`/api/properties/${id}`, data),
@@ -103,7 +100,7 @@ export const propertiesAPI = {
 };
 
 export const typeBiensAPI = {
-  getTypeBiens: () => publicAPI.get('/api/type-biens'),
+  getTypeBiens: () => protectedAPI.get('/api/type-biens'),
   getTypeBien: (id) => publicAPI.get(`/api/type-biens/${id}`),
   createTypeBien: (data) => protectedAPI.post('/api/type-biens', data),
   updateTypeBien: (id, data) => protectedAPI.put(`/api/type-biens/${id}`, data),

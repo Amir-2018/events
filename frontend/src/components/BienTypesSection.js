@@ -9,7 +9,7 @@ export default function BienTypesSection({
 }) {
   const [showForm, setShowForm] = useState(false);
   const [editingType, setEditingType] = useState(null);
-  const [formData, setFormData] = useState({ nom: '', description: '' });
+  const [formData, setFormData] = useState({ nom: '' });
   const [pendingData, setPendingData] = useState(null);
   const [confirmModal, setConfirmModal] = useState({
     show: false,
@@ -32,7 +32,7 @@ export default function BienTypesSection({
           await onCreateTypeBien(formData, editingType.id);
           setShowForm(false);
           setEditingType(null);
-          setFormData({ nom: '', description: '' });
+          setFormData({ nom: '' });
           setPendingData(null);
           setConfirmModal(prev => ({ ...prev, show: false }));
         }
@@ -40,12 +40,12 @@ export default function BienTypesSection({
     } else {
       await onCreateTypeBien(formData);
       setShowForm(false);
-      setFormData({ nom: '', description: '' });
+      setFormData({ nom: '' });
     }
   };
 
   const handleEdit = (type) => {
-    setFormData({ nom: type.nom, description: type.description || '' });
+    setFormData({ nom: type.nom });
     setEditingType(type);
     setShowForm(true);
   };
@@ -105,7 +105,6 @@ export default function BienTypesSection({
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-100">
                   <th className="text-left px-6 py-3 font-semibold text-gray-700 text-xs">Catégorie</th>
-                  <th className="text-left py-3 font-semibold text-gray-700 text-xs">Description</th>
                   <th className="text-left py-3 font-semibold text-gray-700 text-xs">Mise à jour</th>
                   <th className="text-right px-6 py-3 font-semibold text-gray-700 text-xs">Actions</th>
                 </tr>
@@ -120,9 +119,6 @@ export default function BienTypesSection({
                         </div>
                         <span className="font-medium text-gray-900 text-sm">{type.nom}</span>
                       </div>
-                    </td>
-                    <td className="py-3 text-gray-500 max-w-md truncate text-sm">
-                      {type.description || 'Aucune description'}
                     </td>
                     <td className="py-3 text-gray-400 text-xs">
                       {new Date(type.updated_at || type.created_at || Date.now()).toLocaleDateString()}
@@ -172,7 +168,7 @@ export default function BienTypesSection({
                 onClick={() => {
                   setShowForm(false);
                   setEditingType(null);
-                  setFormData({ nom: '', description: '' });
+                  setFormData({ nom: '' });
                 }} 
                 className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all"
               >
@@ -184,7 +180,7 @@ export default function BienTypesSection({
             
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Nom du type</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Nom du type *</label>
                 <input
                   type="text"
                   name="nom"
@@ -196,25 +192,13 @@ export default function BienTypesSection({
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Description</label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  rows="3"
-                  placeholder="Décrivez ce type de bien..."
-                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] text-sm transition-all resize-none"
-                />
-              </div>
-
               <div className="flex gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => {
                     setShowForm(false);
                     setEditingType(null);
-                    setFormData({ nom: '', description: '' });
+                    setFormData({ nom: '' });
                   }}
                   className="flex-1 py-2.5 px-4 bg-gray-50 text-gray-600 rounded-lg font-semibold text-sm hover:bg-gray-100 transition-all"
                 >

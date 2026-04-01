@@ -101,7 +101,6 @@ export default function EventTypesSection({
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-100">
                   <th className="text-left px-6 py-3 font-semibold text-gray-700 text-xs">Type</th>
-                  <th className="text-left py-3 font-semibold text-gray-700 text-xs">Description</th>
                   <th className="text-left py-3 font-semibold text-gray-700 text-xs">Créé le</th>
                   <th className="text-right px-6 py-3 font-semibold text-gray-700 text-xs">Actions</th>
                 </tr>
@@ -116,9 +115,6 @@ export default function EventTypesSection({
                         </div>
                         <span className="font-medium text-gray-900 text-sm">{type.nom}</span>
                       </div>
-                    </td>
-                    <td className="py-3 text-gray-500 max-w-md truncate text-sm">
-                      {type.description || 'Aucune description'}
                     </td>
                     <td className="py-3 text-gray-400 text-xs">
                       {new Date(type.created_at || Date.now()).toLocaleDateString()}

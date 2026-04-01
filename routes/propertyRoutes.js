@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Routes pour les biens
 router.post('/', authMiddleware, PropertyController.createProperty);
-router.get('/', authMiddleware.optional, PropertyController.getProperties);
+router.get('/', authMiddleware, PropertyController.getProperties);
 router.get('/:id', authMiddleware.optional, PropertyController.getProperty);
 router.put('/:id', authMiddleware, PropertyController.updateProperty);
 router.delete('/:id', authMiddleware, PropertyController.deleteProperty);

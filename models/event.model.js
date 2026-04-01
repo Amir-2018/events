@@ -46,7 +46,6 @@ class Event {
       SELECT 
         e.*,
         te.nom as type_evenement_nom,
-        te.description as type_evenement_description,
         b.nom as bien_nom,
         tb.nom as bien_type,
         b.adresse as bien_adresse,
@@ -98,7 +97,6 @@ class Event {
       SELECT 
         e.*,
         te.nom as type_evenement_nom,
-        te.description as type_evenement_description,
         b.nom as bien_nom,
         tb.nom as bien_type,
         b.adresse as bien_adresse,
@@ -213,7 +211,6 @@ class Event {
       SELECT 
         e.*,
         te.nom as type_evenement_nom,
-        te.description as type_evenement_description,
         b.nom as bien_nom,
         b.type as bien_type,
         b.adresse as bien_adresse,
@@ -328,7 +325,6 @@ class Event {
       SELECT 
         e.*,
         te.nom as type_evenement_nom,
-        te.description as type_evenement_description,
         b.nom as bien_nom,
         tb.nom as bien_type,
         b.adresse as bien_adresse,
@@ -396,7 +392,6 @@ class Event {
       SELECT DISTINCT
         e.*,
         te.nom as type_evenement_nom,
-        te.description as type_evenement_description,
         b.nom as bien_nom,
         tb.nom as bien_type,
         b.adresse as bien_adresse,
