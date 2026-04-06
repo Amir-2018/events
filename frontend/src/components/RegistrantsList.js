@@ -5,6 +5,7 @@ import { clientsAPI } from '../lib/api';
 
 export default function RegistrantsList({ clients, loading = false, onClose, onRefresh }) {
   const [cancellingRegistration, setCancellingRegistration] = useState(null);
+  const [expandedClients, setExpandedClients] = useState(new Set());
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Non définie';
@@ -21,6 +22,16 @@ export default function RegistrantsList({ clients, loading = false, onClose, onR
     return `${first}${last}`;
   };
 
+  const toggleClientExpansion = (clientId) => {
+    const newExpanded = new Set(expandedClients);
+    if (newExpanded.has(clientId)) {
+      newExpanded.delete(clientId);
+    } else {
+      newExpanded.add(clientId);
+    }
+    setExpandedClients(newExpanded);
+  };
+
   const handleCancelRegistration = async (clientId, eventId, clientName, eventName) => {
     if (!confirm(`Êtes-vous sûr de vouloir annuler l'inscription de ${clientName} à l'événement "${eventName}" ?\n\nCette action supprimera également le ticket associé.`)) {
       return;
@@ -29,12 +40,12 @@ export default function RegistrantsList({ clients, loading = false, onClose, onR
     try {
       setCancellingRegistration(`${clientId}-${eventId}`);
       await clientsAPI.cancelRegistration(clientId, eventId);
-      
+
       // Actualiser la liste
       if (onRefresh) {
         onRefresh();
       }
-      
+
       alert('Inscription annulée avec succès !');
     } catch (error) {
       console.error('Erreur lors de l\'annulation:', error);
@@ -82,27 +93,28 @@ export default function RegistrantsList({ clients, loading = false, onClose, onR
           <p className="text-sm text-gray-500">Il n'y a actuellement aucun inscrit dans le système.</p>
         </div>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-3">
           {clients.map((client) => (
-            <div key={client.id} className="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all p-6">
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center text-white font-bold text-sm mt-1 shadow-sm">
+            <div key={client.id} className="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all">
+              {/* Client Header - Always Visible */}
+              <div className="flex items-center gap-4 p-4">
+                <div className="flex-shrink-0 h-10 w-10 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm" style={{backgroundColor: 'rgb(59 130 246)'}}>
                   {getInitials(client)}
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-baseline gap-3 mb-2">
-                    <h3 className="text-lg font-bold text-gray-900">
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 mb-1">
+                    <h3 className="text-base font-bold text-gray-900 truncate">
                       {client.prenom} {client.nom}
                     </h3>
-                    <span className="px-2 py-1 bg-blue-50 text-[#2596d1] text-xs font-bold rounded-md">
-                      <i className="fas fa-calendar-check mr-1"></i>
+                    <span className="px-2 py-1 bg-blue-50 text-[#2596d1] text-xs font-bold rounded-md flex-shrink-0">
                       {client.events.length} événement{client.events.length > 1 ? 's' : ''}
                     </span>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 text-xs text-gray-600">
+                  <div className="flex items-center gap-4 text-xs text-gray-600">
                     <div className="flex items-center">
                       <i className="fas fa-envelope w-3 h-3 mr-2 text-gray-400"></i>
-                      {client.email}
+                      <span className="truncate">{client.email}</span>
                     </div>
                     {client.tel && (
                       <div className="flex items-center">
@@ -111,56 +123,77 @@ export default function RegistrantsList({ clients, loading = false, onClose, onR
                       </div>
                     )}
                   </div>
+                </div>
 
-                  {client.events.length > 0 ? (
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-3 flex items-center text-sm">
-                        <i className="fas fa-calendar-alt w-4 h-4 mr-2 text-[#31a7df]"></i>
-                        Événements inscrits
-                      </h4>
-                      <div className="space-y-2">
-                        {client.events.map((event) => (
-                          <div key={event.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
-                            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                              <i className="fas fa-calendar-alt"></i>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="font-bold text-gray-900 truncate text-sm">{event.nom}</p>
-                              <p className="text-xs text-gray-500">
-                                <i className="fas fa-clock mr-1"></i>
-                                {formatDate(event.date)}
-                              </p>
-                            </div>
-                            <button
-                              onClick={() => handleCancelRegistration(client.id, event.id, `${client.prenom} ${client.nom}`, event.nom)}
-                              disabled={cancellingRegistration === `${client.id}-${event.id}`}
-                              className="px-3 py-1 bg-red-100 text-red-700 rounded-lg font-bold text-xs hover:bg-red-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
-                              title="Annuler l'inscription"
-                            >
-                              {cancellingRegistration === `${client.id}-${event.id}` ? (
-                                <>
-                                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-700"></div>
-                                  Annulation...
-                                </>
-                              ) : (
-                                <>
-                                  <i className="fas fa-times"></i>
-                                  Annuler
-                                </>
-                              )}
-                            </button>
+                {/* Expand/Collapse Button */}
+                {client.events.length > 0 && (
+                  <button
+                    onClick={() => toggleClientExpansion(client.id)}
+                    className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+                    title={expandedClients.has(client.id) ? "Masquer les événements" : "Voir les événements"}
+                  >
+                    <i className={`fas fa-chevron-${expandedClients.has(client.id) ? 'up' : 'down'} text-sm`}></i>
+                  </button>
+                )}
+              </div>
+
+              {/* Events Section - Expandable */}
+              {client.events.length > 0 && expandedClients.has(client.id) && (
+                <div className="px-4 pb-4 border-t border-gray-100">
+                  <div className="pt-4">
+                    <h4 className="font-bold text-gray-900 mb-3 flex items-center text-sm">
+                      <i className="fas fa-calendar-alt w-4 h-4 mr-2 text-[#31a7df]"></i>
+                      Événements inscrits
+                    </h4>
+                    <div className="space-y-2">
+                      {client.events.map((event) => (
+                        <div key={event.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0" style={{backgroundColor: 'rgb(59 130 246)'}}>
+                            <i className="fas fa-calendar-alt"></i>
                           </div>
-                        ))}
-                      </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-bold text-gray-900 truncate text-sm">{event.nom}</p>
+                            <p className="text-xs text-gray-500">
+                              <i className="fas fa-clock mr-1"></i>
+                              {formatDate(event.date)}
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => handleCancelRegistration(client.id, event.id, `${client.prenom} ${client.nom}`, event.nom)}
+                            disabled={cancellingRegistration === `${client.id}-${event.id}`}
+                            className="px-3 py-1 bg-red-100 text-red-700 rounded-lg font-bold text-xs hover:bg-red-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                            title="Annuler l'inscription"
+                          >
+                            {cancellingRegistration === `${client.id}-${event.id}` ? (
+                              <>
+                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-700"></div>
+                                Annulation...
+                              </>
+                            ) : (
+                              <>
+                                <i className="fas fa-times"></i>
+                                Annuler
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      ))}
                     </div>
-                  ) : (
-                    <div className="p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 text-center">
+                  </div>
+                </div>
+              )}
+
+              {/* No Events Message */}
+              {client.events.length === 0 && (
+                <div className="px-4 pb-4 border-t border-gray-100">
+                  <div className="pt-4">
+                    <div className="p-3 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 text-center">
                       <i className="fas fa-calendar-times text-gray-400 text-lg mb-2"></i>
                       <p className="text-gray-500 font-medium text-xs">Aucun événement inscrit</p>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           ))}
         </div>

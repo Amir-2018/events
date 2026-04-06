@@ -29,10 +29,7 @@ export default function DashboardSection({ events, onNavigate }) {
   };
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('fr-FR', {
-      style: 'currency',
-      currency: 'EUR'
-    }).format(amount || 0);
+    return `${parseFloat(amount || 0).toFixed(2)} TND`;
   };
   const stats = useMemo(() => {
     const now = new Date();
@@ -161,7 +158,7 @@ export default function DashboardSection({ events, onNavigate }) {
 
               <div className="bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg p-4 text-white shadow-sm">
                 <div className="flex items-center justify-between mb-3">
-                  <i className="fas fa-euro-sign text-lg opacity-80"></i>
+                  <i className="fas fa-coins text-lg opacity-80"></i>
                   <span className="text-xs font-medium opacity-80">Revenus Potentiels</span>
                 </div>
                 <div className="text-lg font-bold mb-1">{formatCurrency(revenueStats.totals.potentialRevenue)}</div>
@@ -216,7 +213,7 @@ export default function DashboardSection({ events, onNavigate }) {
                       Date
                     </th>
                     <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
-                      <i className="fas fa-euro-sign mr-2"></i>
+                      <i className="fas fa-coins mr-2"></i>
                       Prix
                     </th>
                     <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">

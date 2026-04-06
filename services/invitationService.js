@@ -147,7 +147,7 @@ class InvitationService {
             })}
           </p>
           ${event.adresse ? `<p style="margin: 5px 0; color: #64748b;"><strong>Lieu:</strong> ${event.adresse}</p>` : ''}
-          ${event.prix > 0 ? `<p style="margin: 5px 0; color: #64748b;"><strong>Prix:</strong> ${event.prix}€</p>` : ''}
+          ${event.prix > 0 ? `<p style="margin: 5px 0; color: #64748b;"><strong>Prix:</strong> ${event.prix} TND</p>` : ''}
         </div>
     `;
 

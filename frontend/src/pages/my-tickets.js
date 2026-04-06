@@ -8,7 +8,7 @@ import TicketModal from '../components/TicketModal';
 import PublicNavbar from '../components/PublicNavbar';
 
 export default function MyTickets() {
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const router = useRouter();
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,8 @@ export default function MyTickets() {
     try {
       setLoading(true);
       const response = await ticketsAPI.getMyTickets();
-      setTickets(response.data.data);
+      console.log('🎫 MY TICKETS RESPONSE:', response);
+      setTickets(response.data.data || []);
     } catch (err) {
       console.error('Erreur lors du chargement des tickets:', err);
     } finally {

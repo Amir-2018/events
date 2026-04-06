@@ -526,7 +526,7 @@ export default function LandingPage() {
                         <div className="absolute top-4 right-4">
                           {parseFloat(event.prix || 0) > 0 ? (
                             <div className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                              {new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(event.prix)}
+                              {parseFloat(event.prix || 0).toFixed(2)} TND
                             </div>
                           ) : (
                             <div className="bg-[#31a7df] text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">

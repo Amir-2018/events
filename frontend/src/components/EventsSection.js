@@ -297,7 +297,7 @@ export default function EventsSection({
                       Participants
                     </th>
                     <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
-                      <i className="fas fa-euro-sign mr-2"></i>
+                      <i className="fas fa-coins mr-2"></i>
                       Prix
                     </th>
                     <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
@@ -349,8 +349,8 @@ export default function EventsSection({
                         <td className="px-6 py-4 text-center">
                           {parseFloat(event.prix) > 0 ? (
                             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-green-100 text-green-700">
-                              <i className="fas fa-euro-sign mr-1"></i>
-                              {parseFloat(event.prix).toFixed(2)}
+                              <i className="fas fa-coins mr-1"></i>
+                              {parseFloat(event.prix).toFixed(2)} TND
                             </span>
                           ) : (
                             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-blue-50 text-[#2596d1]">

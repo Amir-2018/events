@@ -26,8 +26,8 @@ async function getById(id) {
   return result.rows[0] || null;
 }
 
-async function getAllWithEvents() {
-  const result = await pool.query(`
+async function getAllWithEvents(userId = null, userRole = null) {
+  let query = `
     SELECT 
       c.id, c.nom, c.prenom, c.email, c.tel, c.created_at,
       GROUP_CONCAT(
@@ -41,9 +41,24 @@ async function getAllWithEvents() {
     FROM clients c
     LEFT JOIN event_registrations er ON c.id = er.client_id
     LEFT JOIN events e ON er.event_id = e.id
+  `;
+  
+  let params = [];
+  
+  // Si c'est un admin (pas superadmin), filtrer pour ne montrer que les clients inscrits aux événements créés par cet admin
+  if (userRole === 'admin' && userId) {
+    query += ` WHERE e.user_id = ? OR e.user_id IS NULL`;
+    params.push(userId);
+  }
+  // Si c'est un superadmin, montrer tous les clients (pas de filtre)
+  
+  query += `
     GROUP BY c.id, c.nom, c.prenom, c.email, c.tel, c.created_at
+    HAVING COUNT(e.id) > 0
     ORDER BY c.created_at DESC
-  `);
+  `;
+
+  const result = await pool.query(query, params);
 
   return result.rows.map(client => ({
     ...client,

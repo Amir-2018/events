@@ -228,22 +228,19 @@ export default function Sidebar({ activeSection, onSectionChange }) {
             </button>
           )}
 
-          {user?.role === 'superadmin' && (
-            <button
-              onClick={() => handleSectionChange('reclamations')}
-              className={`w-full flex items-center px-4 py-3 rounded-xl font-medium transition-all ${
-                activeSection === 'reclamations' 
-                  ? 'bg-white/20 backdrop-blur-sm text-white shadow-lg' 
-                  : 'hover:bg-white/10'
-              }`}
-              style={{ color: activeSection === 'reclamations' ? '#ffffff' : '#b3d9f2' }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 mr-3">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-              </svg>
-              <span className="truncate">Réclamations</span>
-            </button>
-          )}
+          {/* Réclamations pour tous les utilisateurs connectés */}
+          <button
+            onClick={() => handleSectionChange('reclamations')}
+            className={`w-full flex items-center px-4 py-3 rounded-xl font-medium transition-all ${
+              activeSection === 'reclamations' 
+                ? 'bg-white/20 backdrop-blur-sm text-white shadow-lg' 
+                : 'hover:bg-white/10'
+            }`}
+            style={{ color: activeSection === 'reclamations' ? '#ffffff' : '#b3d9f2' }}
+          >
+            <i className="fas fa-headset w-5 h-5 mr-3 text-center"></i>
+            <span className="truncate">{user?.role === 'superadmin' ? 'Gestion Réclamations' : 'Support'}</span>
+          </button>
           </>
         )}
         </nav>

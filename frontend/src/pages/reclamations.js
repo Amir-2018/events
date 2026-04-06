@@ -19,7 +19,18 @@ export default function Reclamations() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  // Rediriger vers login si pas authentifié
+  // Rediriger les utilisateurs connectés vers le dashboard avec la section réclamations
+  if (isAuthenticated) {
+    router.push('/dashboard?section=reclamations');
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Redirection vers votre espace...</p>
+        </div>
+      </div>
+    );
+  }
   if (!isAuthenticated) {
     return (
       <>

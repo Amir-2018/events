@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import EventImage from './EventImage';
+import { invitationsAPI } from '../lib/api';
 
 export default function InvitationsSection() {
   const [invitations, setInvitations] = useState([]);
@@ -14,14 +15,9 @@ export default function InvitationsSection() {
 
   const loadInvitations = async () => {
     try {
-      const response = await fetch('/api/my-invitations', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      const data = await response.json();
-      if (data.success) {
-        setInvitations(data.data);
+      const response = await invitationsAPI.getMyInvitations();
+      if (response.data.success) {
+        setInvitations(response.data.data);
       }
     } catch (error) {
       console.error('Erreur lors du chargement des invitations:', error);
@@ -33,17 +29,9 @@ export default function InvitationsSection() {
   const respondToInvitation = async (invitationId, response) => {
     try {
       setResponding(invitationId);
-      const res = await fetch(`/api/invitations/${invitationId}/respond`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({ response })
-      });
+      const res = await invitationsAPI.respondToInvitation(invitationId, response);
       
-      const data = await res.json();
-      if (data.success) {
+      if (res.data.success) {
         // Recharger les invitations
         loadInvitations();
       }
@@ -147,7 +135,7 @@ export default function InvitationsSection() {
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 7.756a4.5 4.5 0 1 0 0 8.488M7.5 10.5h5.25m-5.25 3h5.25M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
-                            {invitation.event_prix}€
+                            {invitation.event_prix} TND
                           </div>
                         )}
                       </div>

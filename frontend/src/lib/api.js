@@ -119,7 +119,12 @@ export const usersAPI = {
 export const reclamationsAPI = {
   getReclamations: () => protectedAPI.get('/api/reclamations'),
   updateReclamationStatus: (id, status) => protectedAPI.put(`/api/reclamations/${id}/status`, { status }),
-  createReclamation: (data) => publicAPI.post('/api/reclamations', data),
+  createReclamation: (data) => protectedAPI.post('/api/reclamations', data),
+};
+
+export const invitationsAPI = {
+  getMyInvitations: () => protectedAPI.get('/api/invitations/my-invitations'),
+  respondToInvitation: (invitationId, response) => protectedAPI.post(`/api/invitations/${invitationId}/respond`, { response }),
 };
 
 export const uploadAPI = {
@@ -178,10 +183,6 @@ export const ticketsAPI = {
   getEventTicketsStats: () => protectedAPI.get('/api/event-tickets-stats'),
   getEventTicketsList: (eventId) => protectedAPI.get(`/api/events/${eventId}/tickets`),
   getFraudAttempts: () => protectedAPI.get('/api/fraud-attempts'),
-};
-
-export const testAPI = {
-  testAuth: () => protectedAPI.get('/api/test-auth'),
 };
 
 export default api;

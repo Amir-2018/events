@@ -414,7 +414,7 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
 
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 mb-1.5 ml-1">
-                    Prix du ticket (€)
+                    Prix du ticket (TND)
                   </label>
                   <div className="relative">
                     <input
@@ -428,7 +428,7 @@ export default function EventForm({ event = null, events = [], onSubmit, onCance
                       className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#31a7df]/20 focus:border-[#31a7df] transition-all text-sm pr-10"
                     />
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">
-                      €
+                      TND
                     </div>
                   </div>
                   <p className="text-xs text-gray-500 mt-1 ml-1">

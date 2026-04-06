@@ -40,12 +40,6 @@ export default function PublicNavbar() {
       description: 'Nos solutions événementielles'
     },
     { 
-      name: 'Support', 
-      href: '/reclamations', 
-      icon: 'fas fa-headset',
-      description: 'Aide et réclamations'
-    },
-    { 
       name: 'Contact', 
       href: '/contact', 
       icon: 'fas fa-envelope',

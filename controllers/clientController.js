@@ -6,7 +6,10 @@ class ClientController {
   // Récupérer tous les clients avec leurs événements
   static async getAllClients(req, res) {
     try {
-      const clients = await Client.getAllWithEvents();
+      const userId = req.user?.id;
+      const userRole = req.user?.role;
+      
+      const clients = await Client.getAllWithEvents(userId, userRole);
       res.json({
         success: true,
         data: clients

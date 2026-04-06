@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/reclamations', authMiddleware, roleMiddleware('superadmin'), reclamationController.getAllReclamations);
 router.put('/reclamations/:id/status', authMiddleware, roleMiddleware('superadmin'), reclamationController.updateStatus);
 
-// Public/Client: Create reclamation
-router.post('/reclamations', reclamationController.createReclamation);
+// Authenticated users: Create reclamation
+router.post('/reclamations', authMiddleware, reclamationController.createReclamation);
 
 module.exports = router;
