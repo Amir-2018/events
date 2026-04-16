@@ -239,7 +239,7 @@ export default function Sidebar({ activeSection, onSectionChange }) {
             style={{ color: activeSection === 'reclamations' ? '#ffffff' : '#b3d9f2' }}
           >
             <i className="fas fa-headset w-5 h-5 mr-3 text-center"></i>
-            <span className="truncate">{user?.role === 'superadmin' ? 'Gestion Réclamations' : 'Support'}</span>
+            <span className="truncate">{user?.role === 'superadmin' ? 'Gestion Réclamations' : 'Réclamations'}</span>
           </button>
           </>
         )}

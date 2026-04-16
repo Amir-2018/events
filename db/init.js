@@ -147,10 +147,11 @@ async function initDb() {
       client_id VARCHAR(36),
       sujet VARCHAR(255) NOT NULL,
       description TEXT NOT NULL,
-      status ENUM('En attente', 'En cours', 'Terminé') DEFAULT 'En attente',
+      image LONGTEXT,
+      status ENUM('En attente', 'En cours', 'Terminé', 'Résolu', 'Rejeté') DEFAULT 'En attente',
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-      CONSTRAINT fk_reclamations_client FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
+      CONSTRAINT fk_reclamations_client FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE SET NULL
     ) ENGINE=InnoDB;
   `);
 

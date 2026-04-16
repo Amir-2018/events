@@ -62,6 +62,7 @@ export const eventsAPI = {
   createEvent: (eventData) => protectedAPI.post('/api/events', eventData),
   updateEvent: (eventId, eventData) => protectedAPI.put(`/api/events/${eventId}`, eventData),
   deleteEvent: (eventId) => protectedAPI.delete(`/api/events/${eventId}`),
+  bulkDeleteEvents: (ids) => protectedAPI.delete('/api/events/bulk-delete', { data: { ids } }),
   
   // Inscriptions
   registerToEvent: (eventId) => protectedAPI.post(`/api/events/${eventId}/register`),
@@ -75,11 +76,12 @@ export const eventsAPI = {
 };
 
 export const eventTypesAPI = {
-  getEventTypes: () => protectedAPI.get('/api/event-types'),
+  getEventTypes: () => publicAPI.get('/api/event-types'),
   getEventType: (id) => publicAPI.get(`/api/event-types/${id}`),
   createEventType: (data) => protectedAPI.post('/api/event-types', data),
   updateEventType: (id, data) => protectedAPI.put(`/api/event-types/${id}`, data),
   deleteEventType: (id) => protectedAPI.delete(`/api/event-types/${id}`),
+  bulkDeleteEventTypes: (ids) => protectedAPI.delete('/api/event-types/bulk-delete', { data: { ids } }),
 };
 
 export const clientsAPI = {
@@ -92,7 +94,7 @@ export const clientsAPI = {
 };
 
 export const propertiesAPI = {
-  getProperties: () => protectedAPI.get('/api/properties'),
+  getProperties: () => publicAPI.get('/api/properties'),
   getProperty: (id) => publicAPI.get(`/api/properties/${id}`),
   createProperty: (data) => protectedAPI.post('/api/properties', data),
   updateProperty: (id, data) => protectedAPI.put(`/api/properties/${id}`, data),
@@ -105,6 +107,7 @@ export const typeBiensAPI = {
   createTypeBien: (data) => protectedAPI.post('/api/type-biens', data),
   updateTypeBien: (id, data) => protectedAPI.put(`/api/type-biens/${id}`, data),
   deleteTypeBien: (id) => protectedAPI.delete(`/api/type-biens/${id}`),
+  bulkDeleteTypeBiens: (ids) => protectedAPI.delete('/api/type-biens/bulk-delete', { data: { ids } }),
 };
 
 export const usersAPI = {

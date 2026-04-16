@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import EventTypeForm from './EventTypeForm';
 import ConfirmationModal from './ConfirmationModal';
+import BulkSelectionToolbar from './BulkSelectionToolbar';
+import { useBulkSelection } from '../hooks/useBulkSelection';
+import { eventTypesAPI } from '../lib/api';
 
 export default function EventTypesSection({ 
   eventTypes, 
@@ -18,6 +21,18 @@ export default function EventTypesSection({
     onConfirm: () => {},
     type: 'primary'
   });
+
+  // Hook pour la sélection multiple
+  const {
+    selectedItems: selectedTypes,
+    isDeleting,
+    handleSelectItem: handleSelectType,
+    handleSelectAll,
+    handleClearSelection,
+    handleBulkDelete,
+    isSelected,
+    isAllSelected
+  } = useBulkSelection();
 
   const handleCreateEventType = async (eventTypeData) => {
     if (selectedType) {
@@ -63,6 +78,18 @@ export default function EventTypesSection({
     });
   };
 
+  // Gestion de la suppression multiple
+  const handleBulkDeleteTypes = async () => {
+    try {
+      await handleBulkDelete(eventTypesAPI.bulkDeleteEventTypes, () => {
+        // Recharger les types après suppression
+        window.location.reload();
+      });
+    } catch (error) {
+      alert('Erreur lors de la suppression des types d\'événements');
+    }
+  };
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
@@ -79,6 +106,16 @@ export default function EventTypesSection({
           Nouveau type
         </button>
       </div>
+      
+      {/* Toolbar de sélection multiple */}
+      <BulkSelectionToolbar
+        selectedItems={selectedTypes}
+        onBulkDelete={handleBulkDeleteTypes}
+        onClearSelection={handleClearSelection}
+        itemName="type d'événement"
+        itemNamePlural="types d'événements"
+        isDeleting={isDeleting}
+      />
       
       {eventTypes.length === 0 ? (
         <div className="text-center py-16 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
@@ -100,6 +137,14 @@ export default function EventTypesSection({
             <table className="w-full">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-100">
+                  <th className="text-left px-6 py-3">
+                    <input
+                      type="checkbox"
+                      checked={isAllSelected(eventTypes)}
+                      onChange={() => handleSelectAll(eventTypes)}
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                  </th>
                   <th className="text-left px-6 py-3 font-semibold text-gray-700 text-xs">Type</th>
                   <th className="text-left py-3 font-semibold text-gray-700 text-xs">Créé le</th>
                   <th className="text-right px-6 py-3 font-semibold text-gray-700 text-xs">Actions</th>
@@ -108,6 +153,14 @@ export default function EventTypesSection({
               <tbody className="divide-y divide-gray-100">
                 {eventTypes.map((type) => (
                   <tr key={type.id} className="hover:bg-blue-50/30 transition-colors">
+                    <td className="px-6 py-3">
+                      <input
+                        type="checkbox"
+                        checked={isSelected(type.id)}
+                        onChange={() => handleSelectType(type.id)}
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                    </td>
                     <td className="px-6 py-3">
                       <div className="flex items-center">
                         <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-[#2596d1] text-sm mr-3">

@@ -36,7 +36,7 @@ import PublicNavbar from '../components/PublicNavbar';
 export default function App({ Component, pageProps }) {
   const router = useRouter();
   const publicRoutes = ['/', '/about', '/contact', '/services', '/login', '/register-admin'];
-  const isPublicRoute = publicRoutes.includes(router.pathname);
+  const isPublicRoute = publicRoutes.includes(router.pathname) || router.pathname.startsWith('/event/');
 
   return (
     <AuthProvider>

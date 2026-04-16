@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { reclamationsAPI } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
+import ImageModal from './ImageModal';
 
 const STATUS_COLORS = {
   'En attente': 'bg-amber-100 text-amber-700 border-amber-200',
@@ -26,6 +27,20 @@ export default function ReclamationsSection() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [selectedImageModal, setSelectedImageModal] = useState(null);
+
+  // Fonction pour gérer l'affichage des images
+  const getImageSrc = (imageData) => {
+    if (!imageData) return null;
+    
+    // Si l'image commence déjà par data:, c'est déjà en base64
+    if (imageData.startsWith('data:')) {
+      return imageData;
+    }
+    
+    // Sinon, on assume que c'est une chaîne base64 sans préfixe
+    return `data:image/jpeg;base64,${imageData}`;
+  };
 
   useEffect(() => {
     if (user?.role === 'superadmin') {
@@ -100,7 +115,8 @@ export default function ReclamationsSection() {
         client_nom: user.nom,
         client_prenom: user.prenom,
         sujet: formData.sujet.trim(),
-        description: formData.description.trim()
+        description: formData.description.trim(),
+        image: imagePreview // Envoyer l'image en base64
       };
 
       await reclamationsAPI.createReclamation(reclamationData);
@@ -181,10 +197,10 @@ export default function ReclamationsSection() {
                       {r.image ? (
                         <div className="flex justify-center">
                           <img 
-                            src={r.image} 
+                            src={getImageSrc(r.image)} 
                             alt="Image réclamation" 
                             className="w-12 h-12 object-cover rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-                            onClick={() => window.open(r.image, '_blank')}
+                            onClick={() => setSelectedImageModal({ src: getImageSrc(r.image), alt: `Image réclamation - ${r.sujet}` })}
                           />
                         </div>
                       ) : (
@@ -396,6 +412,14 @@ export default function ReclamationsSection() {
           </div>
         </form>
       </div>
+
+      {selectedImageModal && (
+        <ImageModal
+          src={selectedImageModal.src}
+          alt={selectedImageModal.alt}
+          onClose={() => setSelectedImageModal(null)}
+        />
+      )}
     </div>
   );
 }

@@ -105,7 +105,7 @@ export default function PublicNavbar() {
             )}
 
             {/* Admin Dashboard Link */}
-            {!isDashboard && isAuthenticated && isAdmin && (
+            {/*!isDashboard && isAuthenticated && isAdmin && (
               <Link 
                 href="/dashboard"
                 className="ml-4 bg-gradient-to-r from-[#31a7df] to-[#2596d1] text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all hover:shadow-lg hover:scale-105 flex items-center gap-2"
@@ -115,7 +115,7 @@ export default function PublicNavbar() {
                 </svg>
                 Dashboard
               </Link>
-            )}
+            )*/}
           </div>
           
           {/* Right Section: Auth / User */}

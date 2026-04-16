@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import ConfirmationModal from './ConfirmationModal';
+import BulkSelectionToolbar from './BulkSelectionToolbar';
+import { useBulkSelection } from '../hooks/useBulkSelection';
+import { typeBiensAPI } from '../lib/api';
 
 export default function BienTypesSection({ 
   bienTypes, 
@@ -18,6 +21,18 @@ export default function BienTypesSection({
     onConfirm: () => {},
     type: 'primary'
   });
+
+  // Hook pour la sélection multiple
+  const {
+    selectedItems: selectedTypes,
+    isDeleting,
+    handleSelectItem: handleSelectType,
+    handleSelectAll,
+    handleClearSelection,
+    handleBulkDelete,
+    isSelected,
+    isAllSelected
+  } = useBulkSelection();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,6 +82,18 @@ export default function BienTypesSection({
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Gestion de la suppression multiple
+  const handleBulkDeleteTypes = async () => {
+    try {
+      await handleBulkDelete(typeBiensAPI.bulkDeleteTypeBiens, () => {
+        // Recharger les types après suppression
+        window.location.reload();
+      });
+    } catch (error) {
+      alert('Erreur lors de la suppression des types de biens');
+    }
+  };
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
@@ -83,6 +110,16 @@ export default function BienTypesSection({
           Nouvelle catégorie
         </button>
       </div>
+
+      {/* Toolbar de sélection multiple */}
+      <BulkSelectionToolbar
+        selectedItems={selectedTypes}
+        onBulkDelete={handleBulkDeleteTypes}
+        onClearSelection={handleClearSelection}
+        itemName="type de bien"
+        itemNamePlural="types de biens"
+        isDeleting={isDeleting}
+      />
 
       {bienTypes.length === 0 ? (
         <div className="text-center py-16 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
@@ -104,6 +141,14 @@ export default function BienTypesSection({
             <table className="w-full">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-100">
+                  <th className="text-left px-6 py-3">
+                    <input
+                      type="checkbox"
+                      checked={isAllSelected(bienTypes)}
+                      onChange={() => handleSelectAll(bienTypes)}
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                  </th>
                   <th className="text-left px-6 py-3 font-semibold text-gray-700 text-xs">Catégorie</th>
                   <th className="text-left py-3 font-semibold text-gray-700 text-xs">Mise à jour</th>
                   <th className="text-right px-6 py-3 font-semibold text-gray-700 text-xs">Actions</th>
@@ -112,6 +157,14 @@ export default function BienTypesSection({
               <tbody className="divide-y divide-gray-100">
                 {bienTypes.map((type) => (
                   <tr key={type.id} className="hover:bg-blue-50/30 transition-colors">
+                    <td className="px-6 py-3">
+                      <input
+                        type="checkbox"
+                        checked={isSelected(type.id)}
+                        onChange={() => handleSelectType(type.id)}
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                    </td>
                     <td className="px-6 py-3">
                       <div className="flex items-center">
                         <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-[#2596d1] text-sm mr-3">

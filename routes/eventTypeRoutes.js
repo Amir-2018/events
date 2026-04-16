@@ -7,6 +7,7 @@ const router = express.Router();
 // Routes pour les types d'événements
 router.post('/', authMiddleware, EventTypeController.createEventType);
 router.get('/', authMiddleware, EventTypeController.getEventTypes);
+router.delete('/bulk-delete', authMiddleware, EventTypeController.bulkDeleteEventTypes);
 router.get('/:id', authMiddleware.optional, EventTypeController.getEventType);
 router.put('/:id', authMiddleware, EventTypeController.updateEventType);
 router.delete('/:id', authMiddleware, EventTypeController.deleteEventType);

@@ -13,6 +13,7 @@ router.get('/events/:eventId', eventController.getEventDetails.bind(eventControl
 router.get('/events/my-registrations', authMiddleware, eventController.getMyRegistrations.bind(eventController));
 router.get('/revenue-stats', authMiddleware, eventController.getRevenueStats.bind(eventController));
 router.post('/events', authMiddleware, eventController.createEvent.bind(eventController));
+router.delete('/events/bulk-delete', authMiddleware, eventController.bulkDeleteEvents.bind(eventController));
 router.put('/events/:eventId', authMiddleware, eventController.updateEvent.bind(eventController));
 router.delete('/events/:eventId', authMiddleware, eventController.deleteEvent.bind(eventController));
 router.get('/events/:eventId/clients', authMiddleware, eventController.getEventClients.bind(eventController));

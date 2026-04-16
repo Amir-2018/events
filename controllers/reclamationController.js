@@ -68,7 +68,7 @@ class ReclamationController {
         return res.status(400).json({ success: false, message: 'Sujet and description are required' });
       }
 
-      let finalClientId = client_id;
+      let finalClientId = null;
 
       // Si des informations client sont fournies, créer/mettre à jour l'enregistrement client
       if (client_id && client_email && client_nom && client_prenom) {
@@ -76,12 +76,12 @@ class ReclamationController {
           const pool = require('../db/pool');
           
           // Vérifier si le client existe déjà
-          const [existingClient] = await pool.query(
+          const existingClientResult = await pool.query(
             'SELECT id FROM clients WHERE id = ?', 
             [client_id]
           );
 
-          if (existingClient.length === 0) {
+          if (existingClientResult.rows.length === 0) {
             // Créer un nouvel enregistrement client
             await pool.query(`
               INSERT INTO clients (id, nom, prenom, email, tel, password)
@@ -96,6 +96,7 @@ class ReclamationController {
             ]);
             
             console.log(`Client créé automatiquement: ${client_prenom} ${client_nom}`);
+            finalClientId = client_id;
           } else {
             // Mettre à jour les informations si nécessaire
             await pool.query(`
@@ -105,16 +106,18 @@ class ReclamationController {
             `, [client_nom, client_prenom, client_email, client_id]);
             
             console.log(`Client mis à jour: ${client_prenom} ${client_nom}`);
+            finalClientId = client_id;
           }
         } catch (clientError) {
           console.error('Erreur gestion client:', clientError);
-          // Continuer même si la création/mise à jour du client échoue
+          // Si la gestion du client échoue, on ne peut pas utiliser le client_id
+          finalClientId = null;
         }
       }
 
       // Créer la réclamation
       const reclamation = await Reclamation.create({ 
-        client_id: finalClientId || null, 
+        client_id: finalClientId, 
         sujet, 
         description, 
         image: image || null 

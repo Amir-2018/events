@@ -30,15 +30,15 @@ class TypeBien {
     let params = [];
     
     if (userRole === 'superadmin') {
-      // Superadmin voit tout
+      // Superadmin voit TOUT (tous les types de biens, peu importe qui les a créés et leur statut)
       query += ' WHERE 1=1';
     } else if (userId) {
-      // Admin voit ses propres créations + celles du superadmin (user_id = NULL)
-      query += ' WHERE user_id = ? OR user_id IS NULL';
+      // Admin voit ses propres créations (tous statuts) + celles du superadmin acceptées (user_id = NULL)
+      query += ' WHERE (user_id = ?) OR (user_id IS NULL AND status = "accepted")';
       params.push(userId);
     } else {
-      // Public voit seulement celles créées par superadmin (user_id = NULL)
-      query += ' WHERE user_id IS NULL';
+      // Public voit seulement celles créées par superadmin et acceptées
+      query += ' WHERE user_id IS NULL AND status = "accepted"';
     }
     
     query += ' ORDER BY nom ASC';

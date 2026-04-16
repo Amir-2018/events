@@ -47,15 +47,15 @@ class Property {
     let params = [];
     
     if (userRole === 'superadmin') {
-      // Superadmin voit tout
+      // Superadmin voit TOUT (tous les biens, peu importe qui les a créés et leur statut)
       query += ' WHERE 1=1';
     } else if (userId) {
-      // Admin voit : ses propres créations + celles créées par superadmin (user_id = NULL)
-      query += ' WHERE b.user_id = ? OR b.user_id IS NULL';
+      // Admin voit : ses propres créations (tous statuts) + celles créées par superadmin et acceptées (user_id = NULL)
+      query += ' WHERE (b.user_id = ?) OR (b.user_id IS NULL AND b.status = "accepted")';
       params.push(userId);
     } else {
-      // Public voit seulement celles créées par superadmin
-      query += ' WHERE b.user_id IS NULL';
+      // Public voit seulement celles créées par superadmin et acceptées
+      query += ' WHERE b.user_id IS NULL AND b.status = "accepted"';
     }
     
     query += ' ORDER BY b.nom ASC';

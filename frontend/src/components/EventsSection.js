@@ -3,8 +3,11 @@ import EventCard from './EventCard';
 import EventForm from './EventForm';
 import CalendarView from './CalendarView';
 import Pagination from './Pagination';
+import BulkSelectionToolbar from './BulkSelectionToolbar';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { eventsAPI } from '../lib/api';
+import { useBulkSelection } from '../hooks/useBulkSelection';
 
 export default function EventsSection({ 
   events, 
@@ -26,10 +29,34 @@ export default function EventsSection({
   const [itemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
+  
+  // Hook pour la sélection multiple
+  const {
+    selectedItems: selectedEvents,
+    isDeleting,
+    handleSelectItem: handleSelectEvent,
+    handleSelectAll,
+    handleClearSelection,
+    handleBulkDelete,
+    isSelected,
+    isAllSelected
+  } = useBulkSelection();
 
   const handleCreateEvent = async (eventData) => {
     await onCreateEvent(eventData);
     setShowForm(false);
+  };
+
+  // Gestion de la suppression multiple
+  const handleBulkDeleteEvents = async () => {
+    try {
+      await handleBulkDelete(eventsAPI.bulkDeleteEvents, () => {
+        // Recharger les événements après suppression
+        window.location.reload();
+      });
+    } catch (error) {
+      alert('Erreur lors de la suppression des événements');
+    }
   };
 
   const formatDate = (dateString) => {
@@ -82,13 +109,6 @@ export default function EventsSection({
     return filtered;
   }, [events, searchTerm, filterType, filterStatus]);
 
-  // Pagination logic
-  const paginatedEvents = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return filteredEvents.slice(startIndex, endIndex);
-  }, [filteredEvents, currentPage, itemsPerPage]);
-
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   // Reset to first page when filters change
@@ -96,6 +116,13 @@ export default function EventsSection({
     setCurrentPage(1);
     filterFn();
   };
+
+  // Pagination logic - moved here to be accessible in all functions
+  const paginatedEvents = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredEvents.slice(startIndex, endIndex);
+  }, [filteredEvents, currentPage, itemsPerPage]);
 
   return (
     <div className="w-full">
@@ -215,6 +242,16 @@ export default function EventsSection({
         </div>
       </div>
 
+      {/* Toolbar de sélection multiple */}
+      <BulkSelectionToolbar
+        selectedItems={selectedEvents}
+        onBulkDelete={handleBulkDeleteEvents}
+        onClearSelection={handleClearSelection}
+        itemName="événement"
+        itemNamePlural="événements"
+        isDeleting={isDeleting}
+      />
+
       {/* Main Content Area */}
       {viewMode === 'grid' ? (
         filteredEvents.length === 0 ? (
@@ -276,6 +313,14 @@ export default function EventsSection({
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
+                    <th className="px-6 py-4 text-left">
+                      <input
+                        type="checkbox"
+                        checked={isAllSelected(paginatedEvents)}
+                        onChange={() => handleSelectAll(paginatedEvents)}
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                    </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                       <i className="fas fa-calendar-alt mr-2"></i>
                       Événement
@@ -315,6 +360,14 @@ export default function EventsSection({
                     
                     return (
                       <tr key={event.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4">
+                          <input
+                            type="checkbox"
+                            checked={isSelected(event.id)}
+                            onChange={() => handleSelectEvent(event.id)}
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                          />
+                        </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">

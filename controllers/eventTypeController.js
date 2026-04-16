@@ -193,6 +193,39 @@ class EventTypeController {
       });
     }
   }
+  static async bulkDeleteEventTypes(req, res) {
+    try {
+      const { ids } = req.body;
+      const userId = req.user?.id;
+      const userRole = req.user?.role;
+
+      if (!Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: 'La liste des IDs ne peut pas être vide'
+        });
+      }
+
+      const BulkDeleteService = require('../services/bulkDeleteService');
+
+      const result = await BulkDeleteService.bulkDeleteEventTypes(ids, {
+        userId,
+        userRole
+      });
+
+      res.json({
+        success: true,
+        message: `${result.deleted} type(s) d'événement supprimé(s) avec succès`,
+        data: result
+      });
+    } catch (error) {
+      console.error('Erreur lors de la suppression multiple de types d\'événements:', error);
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
 }
 
 module.exports = EventTypeController;
