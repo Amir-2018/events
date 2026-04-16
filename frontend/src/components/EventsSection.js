@@ -1,9 +1,11 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import EventCard from './EventCard';
 import EventForm from './EventForm';
 import CalendarView from './CalendarView';
 import Pagination from './Pagination';
 import BulkSelectionToolbar from './BulkSelectionToolbar';
+import SuccessPopup from './SuccessPopup';
+import EventParticipantsModal from './EventParticipantsModal';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { eventsAPI } from '../lib/api';
@@ -18,6 +20,7 @@ export default function EventsSection({
   onViewDetails,
   onEdit,
   onViewMap,
+  onBulkDeleteEvents, // Nouvelle prop pour la suppression multiple
   isProcessing 
 }) {
   const [showForm, setShowForm] = useState(false);
@@ -30,14 +33,25 @@ export default function EventsSection({
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
   
+  // État pour le modal des participants
+  const [participantsModal, setParticipantsModal] = useState({
+    show: false,
+    event: null,
+    participants: [],
+    loading: false
+  });
+  
   // Hook pour la sélection multiple
   const {
     selectedItems: selectedEvents,
     isDeleting,
+    successPopup,
     handleSelectItem: handleSelectEvent,
     handleSelectAll,
     handleClearSelection,
     handleBulkDelete,
+    cleanupSelection,
+    closeSuccessPopup,
     isSelected,
     isAllSelected
   } = useBulkSelection();
@@ -47,13 +61,78 @@ export default function EventsSection({
     setShowForm(false);
   };
 
+  // Gestion de l'affichage des participants
+  const handleViewParticipants = async (event) => {
+    setParticipantsModal({
+      show: true,
+      event: event,
+      participants: [],
+      loading: true
+    });
+
+    try {
+      // Récupérer les participants de l'événement
+      const response = await eventsAPI.getEventClients(event.id);
+      setParticipantsModal(prev => ({
+        ...prev,
+        participants: response.data || [],
+        loading: false
+      }));
+    } catch (error) {
+      console.error('Erreur lors du chargement des participants:', error);
+      setParticipantsModal(prev => ({
+        ...prev,
+        participants: [],
+        loading: false
+      }));
+    }
+  };
+
+  const handleCloseParticipantsModal = () => {
+    setParticipantsModal({
+      show: false,
+      event: null,
+      participants: [],
+      loading: false
+    });
+  };
+
+  const handleRefreshParticipants = async () => {
+    if (!participantsModal.event) return;
+    
+    setParticipantsModal(prev => ({ ...prev, loading: true }));
+    
+    try {
+      const response = await eventsAPI.getEventClients(participantsModal.event.id);
+      setParticipantsModal(prev => ({
+        ...prev,
+        participants: response.data || [],
+        loading: false
+      }));
+    } catch (error) {
+      console.error('Erreur lors du rechargement des participants:', error);
+      setParticipantsModal(prev => ({
+        ...prev,
+        participants: [],
+        loading: false
+      }));
+    }
+  };
+
   // Gestion de la suppression multiple
   const handleBulkDeleteEvents = async () => {
     try {
-      await handleBulkDelete(eventsAPI.bulkDeleteEvents, () => {
-        // Recharger les événements après suppression
-        window.location.reload();
-      });
+      await handleBulkDelete(
+        eventsAPI.bulkDeleteEvents, 
+        (result) => {
+          // Appeler la fonction de callback du parent avec les IDs supprimés
+          if (onBulkDeleteEvents && result.success && result.success.length > 0) {
+            onBulkDeleteEvents(result.success);
+          }
+        },
+        'événement',
+        'événements'
+      );
     } catch (error) {
       alert('Erreur lors de la suppression des événements');
     }
@@ -123,6 +202,13 @@ export default function EventsSection({
     const endIndex = startIndex + itemsPerPage;
     return filteredEvents.slice(startIndex, endIndex);
   }, [filteredEvents, currentPage, itemsPerPage]);
+
+  // Nettoyer les sélections quand la liste d'événements change
+  useEffect(() => {
+    if (paginatedEvents && paginatedEvents.length >= 0) {
+      cleanupSelection(paginatedEvents);
+    }
+  }, [paginatedEvents, cleanupSelection]);
 
   return (
     <div className="w-full">
@@ -240,6 +326,24 @@ export default function EventsSection({
             </select>
           </div>
         </div>
+        
+        {/* Bouton Sélectionner tout pour le mode carte */}
+        {viewMode === 'grid' && paginatedEvents.length > 0 && (
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <button
+              onClick={() => handleSelectAll(paginatedEvents)}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <input
+                type="checkbox"
+                checked={isAllSelected(paginatedEvents)}
+                onChange={() => handleSelectAll(paginatedEvents)}
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              />
+              {isAllSelected(paginatedEvents) ? 'Désélectionner tout' : 'Sélectionner tout'}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Toolbar de sélection multiple */}
@@ -277,10 +381,14 @@ export default function EventsSection({
                   key={event.id}
                   event={event}
                   onDelete={onDeleteEvent}
-                  onViewClients={onViewClients}
+                  onViewClients={handleViewParticipants}
                   onViewDetails={onViewDetails}
                   onEdit={onEdit}
                   onViewMap={onViewMap}
+                  // Props pour la sélection multiple
+                  isSelected={isSelected(event.id)}
+                  onSelect={handleSelectEvent}
+                  selectionMode={true}
                 />
               ))}
             </div>
@@ -427,7 +535,7 @@ export default function EventsSection({
                               <i className="fas fa-eye"></i>
                             </button>
                             <button
-                              onClick={() => onViewClients(event)}
+                              onClick={() => handleViewParticipants(event)}
                               className="inline-flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 transition-colors"
                               title="Voir participants"
                             >
@@ -476,6 +584,23 @@ export default function EventsSection({
           onCancel={() => setShowForm(false)}
         />
       )}
+
+      {/* Success Popup */}
+      <SuccessPopup
+        isOpen={successPopup.show}
+        message={successPopup.message}
+        onClose={closeSuccessPopup}
+      />
+
+      {/* Participants Modal */}
+      <EventParticipantsModal
+        show={participantsModal.show}
+        onClose={handleCloseParticipantsModal}
+        event={participantsModal.event}
+        participants={participantsModal.participants}
+        loading={participantsModal.loading}
+        onRefresh={handleRefreshParticipants}
+      />
     </div>
   );
 }

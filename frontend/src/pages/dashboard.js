@@ -406,6 +406,42 @@ export default function Home() {
     }
   };
 
+  const handleBulkDeleteEvents = async (deletedIds) => {
+    // Mettre à jour l'état local en supprimant les événements supprimés
+    setEvents(prevEvents => 
+      prevEvents.filter(event => !deletedIds.includes(event.id))
+    );
+    
+    // Afficher un message de succès
+    const count = deletedIds.length;
+    setSuccessMessage(`${count} événement${count > 1 ? 's' : ''} supprimé${count > 1 ? 's' : ''} avec succès`);
+    setShowSuccess(true);
+  };
+
+  const handleBulkDeleteEventTypes = async (deletedIds) => {
+    // Mettre à jour l'état local en supprimant les types supprimés
+    setEventTypes(prevTypes => 
+      prevTypes.filter(type => !deletedIds.includes(type.id))
+    );
+    
+    // Afficher un message de succès
+    const count = deletedIds.length;
+    setSuccessMessage(`${count} type${count > 1 ? 's' : ''} d'événement supprimé${count > 1 ? 's' : ''} avec succès`);
+    setShowSuccess(true);
+  };
+
+  const handleBulkDeleteBienTypes = async (deletedIds) => {
+    // Mettre à jour l'état local en supprimant les types supprimés
+    setBienTypes(prevTypes => 
+      prevTypes.filter(type => !deletedIds.includes(type.id))
+    );
+    
+    // Afficher un message de succès
+    const count = deletedIds.length;
+    setSuccessMessage(`${count} type${count > 1 ? 's' : ''} de bien supprimé${count > 1 ? 's' : ''} avec succès`);
+    setShowSuccess(true);
+  };
+
   const handleDeleteProperty = async (id) => {
     const { propertiesAPI } = require('../lib/api');
     try {
@@ -485,6 +521,7 @@ export default function Home() {
                 onViewDetails={handleViewDetails}
                 onEdit={handleEditEvent}
                 onViewMap={handleViewMap}
+                onBulkDeleteEvents={handleBulkDeleteEvents}
                 isProcessing={isProcessing}
               />
             )}
@@ -494,6 +531,7 @@ export default function Home() {
                 eventTypes={eventTypes}
                 onCreateEventType={handleCreateEventType}
                 onDeleteEventType={handleDeleteEventType}
+                onBulkDeleteEventTypes={handleBulkDeleteEventTypes}
                 isProcessing={isProcessing}
               />
             )}
@@ -515,6 +553,7 @@ export default function Home() {
                 bienTypes={bienTypes}
                 onCreateTypeBien={handleCreateTypeBien}
                 onDeleteTypeBien={handleDeleteTypeBien}
+                onBulkDeleteBienTypes={handleBulkDeleteBienTypes}
                 isProcessing={isProcessing}
               />
             )}

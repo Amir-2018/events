@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import EventTypeForm from './EventTypeForm';
 import ConfirmationModal from './ConfirmationModal';
 import BulkSelectionToolbar from './BulkSelectionToolbar';
+import SuccessPopup from './SuccessPopup';
 import { useBulkSelection } from '../hooks/useBulkSelection';
 import { eventTypesAPI } from '../lib/api';
 
 export default function EventTypesSection({ 
   eventTypes, 
   onCreateEventType, 
-  onDeleteEventType, 
+  onDeleteEventType,
+  onBulkDeleteEventTypes, // Nouvelle prop pour la suppression multiple
   isProcessing 
 }) {
   const [showForm, setShowForm] = useState(false);
@@ -26,13 +28,21 @@ export default function EventTypesSection({
   const {
     selectedItems: selectedTypes,
     isDeleting,
+    successPopup,
     handleSelectItem: handleSelectType,
     handleSelectAll,
     handleClearSelection,
     handleBulkDelete,
+    cleanupSelection,
+    closeSuccessPopup,
     isSelected,
     isAllSelected
   } = useBulkSelection();
+
+  // Nettoyer les sélections quand la liste de types change
+  useEffect(() => {
+    cleanupSelection(eventTypes);
+  }, [eventTypes, cleanupSelection]);
 
   const handleCreateEventType = async (eventTypeData) => {
     if (selectedType) {
@@ -81,10 +91,17 @@ export default function EventTypesSection({
   // Gestion de la suppression multiple
   const handleBulkDeleteTypes = async () => {
     try {
-      await handleBulkDelete(eventTypesAPI.bulkDeleteEventTypes, () => {
-        // Recharger les types après suppression
-        window.location.reload();
-      });
+      await handleBulkDelete(
+        eventTypesAPI.bulkDeleteEventTypes, 
+        (result) => {
+          // Appeler la fonction de callback du parent avec les IDs supprimés
+          if (onBulkDeleteEventTypes && result.success && result.success.length > 0) {
+            onBulkDeleteEventTypes(result.success);
+          }
+        },
+        "type d'événement",
+        "types d'événements"
+      );
     } catch (error) {
       alert('Erreur lors de la suppression des types d\'événements');
     }
@@ -217,6 +234,13 @@ export default function EventTypesSection({
           }}
         />
       )}
+
+      {/* Success Popup */}
+      <SuccessPopup
+        isOpen={successPopup.show}
+        message={successPopup.message}
+        onClose={closeSuccessPopup}
+      />
     </div>
   );
 }

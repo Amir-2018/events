@@ -90,7 +90,7 @@ import BulkSelectionToolbar from './BulkSelectionToolbar';
 import { useBulkSelection } from '../hooks/useBulkSelection';
 import { xxxAPI } from '../lib/api';
 
-export default function XXXSection({ items, onReload }) {
+export default function XXXSection({ items, onBulkDeleteXXX }) {
   // Hook pour la sélection multiple
   const {
     selectedItems,
@@ -106,8 +106,11 @@ export default function XXXSection({ items, onReload }) {
   // Gestion de la suppression multiple
   const handleBulkDeleteItems = async () => {
     try {
-      await handleBulkDelete(xxxAPI.bulkDeleteXXX, () => {
-        onReload(); // ou window.location.reload()
+      await handleBulkDelete(xxxAPI.bulkDeleteXXX, (result) => {
+        // Appeler la fonction de callback du parent avec les IDs supprimés
+        if (onBulkDeleteXXX && result.success && result.success.length > 0) {
+          onBulkDeleteXXX(result.success);
+        }
       });
     } catch (error) {
       alert('Erreur lors de la suppression');
@@ -162,6 +165,31 @@ export default function XXXSection({ items, onReload }) {
 }
 ```
 
+### 3. Gérer dans le composant parent
+
+```javascript
+// Dans le composant parent (ex: Dashboard)
+const [items, setItems] = useState([]);
+
+const handleBulkDeleteItems = async (deletedIds) => {
+  // Mettre à jour l'état local en supprimant les éléments supprimés
+  setItems(prevItems => 
+    prevItems.filter(item => !deletedIds.includes(item.id))
+  );
+  
+  // Afficher un message de succès
+  const count = deletedIds.length;
+  setSuccessMessage(`${count} élément${count > 1 ? 's' : ''} supprimé${count > 1 ? 's' : ''} avec succès`);
+  setShowSuccess(true);
+};
+
+// Passer la fonction au composant enfant
+<XXXSection 
+  items={items}
+  onBulkDeleteXXX={handleBulkDeleteItems}
+/>
+```
+
 ## Fonctionnalités incluses
 
 - ✅ Modal de confirmation avec design cohérent
@@ -186,3 +214,21 @@ Le système adapte automatiquement les messages selon le type d'élément :
 - **Superadmin** : Peut supprimer tous les éléments
 - **Admin** : Peut supprimer ses propres créations + celles du superadmin
 - **Validation automatique** : Le service vérifie les permissions avant suppression
+
+## Avantages de cette approche
+
+### ✅ Performance optimisée
+- **Pas de rechargement de page** : Mise à jour instantanée de l'interface
+- **Pas de requête supplémentaire** : Utilise les données déjà en mémoire
+- **Expérience utilisateur fluide** : Transitions visuelles sans interruption
+
+### ✅ Gestion automatique de la sélection
+- **Vidage immédiat** : La sélection est vidée dès la suppression réussie
+- **Nettoyage automatique** : Les sélections d'éléments supprimés sont automatiquement retirées
+- **Toolbar réactive** : Disparaît instantanément quand la sélection est vide
+- **Pas de clignotement** : Interface fluide sans artefacts visuels
+
+### ✅ Réutilisabilité maximale
+- **Composants génériques** : Même code pour toutes les entités
+- **Configuration flexible** : Messages et comportements personnalisables
+- **Maintenance simplifiée** : Un seul endroit pour les modifications

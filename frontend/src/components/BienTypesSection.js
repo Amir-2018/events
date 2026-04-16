@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ConfirmationModal from './ConfirmationModal';
 import BulkSelectionToolbar from './BulkSelectionToolbar';
+import SuccessPopup from './SuccessPopup';
 import { useBulkSelection } from '../hooks/useBulkSelection';
 import { typeBiensAPI } from '../lib/api';
 
 export default function BienTypesSection({ 
   bienTypes, 
   onCreateTypeBien, 
-  onDeleteTypeBien, 
+  onDeleteTypeBien,
+  onBulkDeleteBienTypes, // Nouvelle prop pour la suppression multiple
   isProcessing 
 }) {
   const [showForm, setShowForm] = useState(false);
@@ -26,13 +28,21 @@ export default function BienTypesSection({
   const {
     selectedItems: selectedTypes,
     isDeleting,
+    successPopup,
     handleSelectItem: handleSelectType,
     handleSelectAll,
     handleClearSelection,
     handleBulkDelete,
+    cleanupSelection,
+    closeSuccessPopup,
     isSelected,
     isAllSelected
   } = useBulkSelection();
+
+  // Nettoyer les sélections quand la liste de types change
+  useEffect(() => {
+    cleanupSelection(bienTypes);
+  }, [bienTypes, cleanupSelection]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,10 +95,17 @@ export default function BienTypesSection({
   // Gestion de la suppression multiple
   const handleBulkDeleteTypes = async () => {
     try {
-      await handleBulkDelete(typeBiensAPI.bulkDeleteTypeBiens, () => {
-        // Recharger les types après suppression
-        window.location.reload();
-      });
+      await handleBulkDelete(
+        typeBiensAPI.bulkDeleteTypeBiens, 
+        (result) => {
+          // Appeler la fonction de callback du parent avec les IDs supprimés
+          if (onBulkDeleteBienTypes && result.success && result.success.length > 0) {
+            onBulkDeleteBienTypes(result.success);
+          }
+        },
+        'type de bien',
+        'types de biens'
+      );
     } catch (error) {
       alert('Erreur lors de la suppression des types de biens');
     }
@@ -270,6 +287,13 @@ export default function BienTypesSection({
           </div>
         </div>
       )}
+
+      {/* Success Popup */}
+      <SuccessPopup
+        isOpen={successPopup.show}
+        message={successPopup.message}
+        onClose={closeSuccessPopup}
+      />
     </div>
   );
 }

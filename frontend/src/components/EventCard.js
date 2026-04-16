@@ -3,7 +3,18 @@ import { fr } from 'date-fns/locale';
 import EventImage from './EventImage';
 import { useAuth } from '../context/AuthContext';
 
-export default function EventCard({ event, onDelete, onViewClients, onViewDetails, onEdit, onViewMap }) {
+export default function EventCard({ 
+  event, 
+  onDelete, 
+  onViewClients, 
+  onViewDetails, 
+  onEdit, 
+  onViewMap,
+  // Nouvelles props pour la sélection multiple
+  isSelected = false,
+  onSelect,
+  selectionMode = false
+}) {
   const { user } = useAuth();
   
   const formatDate = (dateString) => {
@@ -37,8 +48,24 @@ export default function EventCard({ event, onDelete, onViewClients, onViewDetail
 
   const status = getStatus();
 
+  const handleCardClick = (e) => {
+    // Si on est en mode sélection et qu'on clique sur la carte (pas sur les boutons)
+    if (selectionMode && onSelect && !e.target.closest('button')) {
+      e.preventDefault();
+      e.stopPropagation();
+      onSelect(event.id);
+    }
+  };
+
   return (
-    <div className="group bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 p-5 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col h-full">
+    <div 
+      className={`group bg-white rounded-2xl shadow-sm hover:shadow-xl border p-5 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col h-full ${
+        isSelected 
+          ? 'border-red-500 border-2 shadow-red-100' 
+          : 'border-gray-100'
+      } ${selectionMode ? 'cursor-pointer' : ''}`}
+      onClick={handleCardClick}
+    >
       {/* Background Gradient Detail */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50/50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110 duration-500" />
       
@@ -87,8 +114,30 @@ export default function EventCard({ event, onDelete, onViewClients, onViewDetail
             </div>
           )}
 
+          {/* Icône de suppression individuelle - toujours visible */}
+          {user?.role === 'superadmin' && (
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(event.id); }}
+              className="absolute bottom-3 right-3 p-2.5 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 transition-all duration-200 hover:scale-110 z-10"
+              title="Supprimer cet événement"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+              </svg>
+            </button>
+          )}
+
+          {/* Indicateur de sélection */}
+          {isSelected && (
+            <div className="absolute top-3 right-3 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center shadow-lg z-20">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-4 h-4 text-white">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+              </svg>
+            </div>
+          )}
+
           {/* Status Badge */}
-          <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border shadow-sm ${status.color}`}>
+          <div className={`absolute ${isSelected ? 'top-12 right-3' : 'top-3 right-3'} px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border shadow-sm ${status.color} transition-all duration-300`}>
             {status.label}
           </div>
         </div>
@@ -97,17 +146,7 @@ export default function EventCard({ event, onDelete, onViewClients, onViewDetail
           <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#31a7df] transition-colors line-clamp-1 pr-2">
             {event.nom}
           </h3>
-          {user?.role === 'superadmin' && (
-            <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(event.id); }}
-              className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all duration-200 flex-shrink-0"
-              title="Supprimer l'événement"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-              </svg>
-            </button>
-          )}
+          {/* Suppression de l'ancien bouton de suppression car il est maintenant dans l'overlay */}
         </div>
         
         <div className="space-y-2.5 mb-6 flex-grow">

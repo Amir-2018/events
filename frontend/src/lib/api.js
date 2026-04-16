@@ -55,6 +55,7 @@ export const eventsAPI = {
   getPublicEvents: () => publicAPI.get('/api/events?public=true'),
   getEventDetails: (eventId) => publicAPI.get(`/api/events/${eventId}`),
   getEventClients: (eventId) => protectedAPI.get(`/api/events/${eventId}/clients`),
+  getEventParticipants: (eventId) => protectedAPI.get(`/api/events/${eventId}/participants`),
   
   // Endpoints de gestion (Dashboard)
   getManagedEvents: () => protectedAPI.get('/api/events?managed=true'),
